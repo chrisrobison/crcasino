@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name='viewport' content='width=device-width, initial-scale=0.25, user-scalable=yes'>
+    <title>Blackjack</title>
+    <link rel='manifest' href='manifest.json'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' type='text/css' href='default.css'/>
+    <script src='bj.js'></script>
+</head>
+
+<body>
+   <div id='wrapper'>
+   <div id='toolbar'>
+       <button class='button' id='initButton' onclick="bj.init(parseInt($$('decks').options[$$('decks').selectedIndex].value), parseInt($$('plist').options[$$('plist').selectedIndex].value))"><div>New Shuffle</div></button>
+       <button style='display:none;' class='button' id='playButton'><div>Play</div></button>
+       <button style='display:none;' class='button' id='stopButton' onclick="bj.stopped=true;return false;"><div>Stop</div></button>
+      <div id='options' style='font-size:2em; float:right;display:inline-block;'>
+      <label for='players'>Players:</label>
+      <select id='plist'>
+         <option value='1'>1</option>
+         <option value='2'>2</option>
+         <option value='3'>3</option>
+         <option value='4'>4</option>
+         <option value='5' SELECTED>5</option>
+      </select>
+      <!--input type='number' min='1' max='3' id='players' name='players' value='3'-->
+      &nbsp; &nbsp;
+      <label for='decks'>Decks:</label>
+      <select id='decks' name='decks'>
+         <option value="1" SELECTED>1</option>
+         <option value="2">2</option>
+         <option value="3">3</option>
+         <option value="4">4</option>
+         <option value="5">5</option>
+         <option value="6">6</option>
+      </select>
+      </div>
+    </div>
+    <div id='houserules'>
+      <div class='rules'>
+         Min Bet: <span id='minbet'>$1</span><br>
+         Max Bet: <span id='maxbet'>$100</span>
+      </div>
+    </div>
+    <div id='main'>
+
+    </div>
+    <div id='shoe'><div id='cardholder'></div><div id='shoecards'></div><div id='shoelid'></div><div id='shoeside'></div></div>
+    <div id='railing'></div>
+    <div id='chips'>
+      <div class='chip selected' id='chip1'><span>1</span></div>
+      <div class='chip' id='chip5'><span>5</span></div>
+      <div class='chip' id='chip25'><span>25</span></div>
+      <div class='chip' id='chip100'><span>100</span></div>
+    </div>
+    <table id='leaderboard' border='0' cellpadding='0' cellspacing='0'>
+    </table>
+    <div id='buttons'>
+      <button class='button' id='loginButton' onclick="bj.login()" id='loginButton'><div>Login</div></button>
+      <button class='button' id='dealButton'><div>Deal</div></button>
+      <span id='hitstay'>
+         <button class='button left' style='display:none' id='surrenderButton'><div><span style='top:-10px;position:relative;display:inline-block;font-size:36px;font-weight:bold;'>&#x1f3f3;</span></div></button>
+         <button class='button left' id='splitButton'><div>Split</div></button>
+         <button class='button left' id='doubleButton'><div>2X</div></button>
+
+         <button class='button right' id='stayButton'><div>Stay</div></button>
+         <button class='button right' id='hitButton'><div>Hit</div></button>
+      </span>
+   </div>
+   <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+   <script>
+     // Initialize Firebase
+     var config = {
+       apiKey: "AIzaSyDxGzBuvFA2qrOZZPBdTmIjsXAgWpcrmcs",
+       authDomain: "crblackjack-9e220.firebaseapp.com",
+       databaseURL: "https://crblackjack-9e220.firebaseio.com",
+       projectId: "crblackjack-9e220",
+       storageBucket: "crblackjack-9e220.appspot.com",
+       messagingSenderId: "32143422101"
+     };
+     firebase.initializeApp(config);
+   </script>
+   <script>
+      $$("dealButton").addEventListener("click", function(e) {
+         e.preventDefault();
+         bj.deal();
+         return false;
+      });
+      
+      $$("hitButton").addEventListener("click", function(e) {
+         e.preventDefault();
+         bj.hit();
+         return false;
+      });
+      
+      $$("stayButton").addEventListener("click", function(e) {
+         e.preventDefault();
+         bj.nextPlayer();
+         return false;
+      });
+      
+      $$("doubleButton").addEventListener("click", function(e) {
+         e.preventDefault();
+         bj.doubledown();
+         return false;
+      });
+      
+      $$("splitButton").addEventListener("click", function(e) {
+         e.preventDefault();
+         bj.split();
+         return false;
+      });
+      $$("main").addEventListener("click", function(e) {
+         e.preventDefault();
+         var tgt = e.target, match;
+         if (match = tgt.id.match(/player(\d)/)) {
+            var player = "player" + match[1];
+            $("#"+player + " .click").innerHTML = "";
+
+            var bet = parseInt(bj.selectedChip);  
+            if (!bet) bet = 1;
+            var chip = $$('chip' + bj.selectedChip);
+            $$(player + "-bet").style.display = "inline-block";
+
+            bj.players[player].bet += bet;
+            console.log("player bet: "+bj.players[player].bet + " max bet: " + bj.config.maxBet + " selected chip: "+bj.selectedChip);
+            if (bj.players[player].bet > bj.config.maxBet) {
+               // bj.players[player].bank += bj.players[player].bet;
+               // $("#" + player + " .bank").innerHTML = bj.players[player].bank; 
+               bj.players[player].bet = 0;
+               bj.players[player].chips = [];
+               var pchips = bj.players[player].ui.querySelectorAll('.chip');
+               for (var i=0; i<pchips.length; i++) {
+                  pchips[i].parentNode.removeChild(pchips[i]);
+               }
+               $$(player + "-bet").innerHTML = bj.players[player].bet;
+               $$(player + "-bet").style.display = "none";
+               $("#"+player+" .info").style.opacity = 0.5;
+               $("#"+player + " .click").innerHTML = "CLICK TO<br>PLACE BET";
+					bj.hideButton("dealButton");
+               return false;
+            }
+            // bj.players[player].bank -= bet;
+            //$("#" + player + " .bank").innerHTML = bj.players[player].bank; 
+				bj.showButton("dealButton");
+            $$(player + "-bet").innerHTML = bj.players[player].bet;
+            $("#"+player+" .info").style.opacity = 1;
+            var el = chip.cloneNode(true);
+            $$(player + "-chips").appendChild(el);
+            // tgt.appendChild(el);
+            bj.players[player].chips.push(bet);
+            var pn = parseInt(match[1]) - 3;
+
+            el.style.marginTop = -bj.players[player].chips.length * 0.2 + "em";
+            el.style.marginLeft = bj.players[player].chips.length * (pn * 0.08) + "em";
+            el.classList.remove('selected');
+         }
+         return false;
+      });
+      
+      $$("chips").addEventListener("click", function(e) {
+         console.log(e);
+         $(".chip.selected").classList.remove('selected');
+         e.target.classList.add('selected');
+         var value = e.target.querySelector('span').innerHTML;
+         console.log("chip value is "+value);
+         if (bj.currentPlayer) bj.players[bj.currentPlayer].activeChip = value;
+         bj.selectedChip = value;
+      });
+		
+		function writeUserData(userId, name, email, imageUrl, fbtoken) {
+			firebase.database().ref('users/' + userId).update({
+				name: name,
+				email: email,
+				profile_picture : imageUrl,
+				fbtoken: fbtoken
+			});
+		}
+
+		if (firebase.auth().currentUser) {
+			console.dir(firebase.auth().currentUser);
+		} else {
+				firebase.auth().signInWithPopup(provider).then(function(result) {
+				var token = result.credential.accessToken;
+				var user = result.user;
+				console.dir(user);
+				writeUserData(user.uid, user.displayName, user.email, user.photoURL, token);
+			}).catch(function(error) {
+			  var errorCode = error.code;
+			  var errorMessage = error.message;
+			  var email = error.email;
+			  var credential = error.credential;
+			});	
+		
+		}
+//         bj.init(parseInt($$("decks").options[$$('decks').selectedIndex].value), parseInt($$('players').value));
+   </script>
+   </div>
+</body>
+</html>

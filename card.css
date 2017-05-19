@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+#main { padding-left:3.5em; font-size:24px; }
+.card {
+   font-size:22px;
+   font-family:"Oswald",cursive;
+   display:inline-block;
+   width:5em;
+   height:7em;
+   border-radius:.25em;
+   background-color:#fff;
+   border:1px solid rgba(0,0,0,.8);
+   box-shadow: .125em .125em 4px rgba(0,0,0,.4);
+   text-align:center;
+   position:relative;
+   margin-left:-3.5em;
+}
+.card:before {
+   line-height: 1em;
+   font-size: 1.25em;
+   white-space: pre;
+   text-align: center;
+   display: inline-block;
+   padding: .125em .125em .25em .05em;
+   position:absolute;
+   left:0px;
+   top:0px;
+   font-weight:bold;
+}
+.card-2D:before { color:#c00; content: "2\A\2666"; }
+.card-3D:before { color:#c00; content: "3\A\2666"; }
+.card-4D:before { color:#c00; content: "4\A\2666"; }
+.card-5D:before { color:#c00; content: "5\A\2666"; }
+.card-6D:before { color:#c00; content: "6\A\2666"; }
+.card-7D:before { color:#c00; content: "7\A\2666"; }
+.card-8D:before { color:#c00; content: "8\A\2666"; }
+.card-9D:before { color:#c00; content: "9\A\2666"; }
+.card-10D:before { color:#c00; content: "10\A\2666"; }
+.card-11D:before { color:#c00; content: "J\A\2666"; }
+.card-12D:before { color:#c00; content: "Q\A\2666"; }
+.card-13D:before { color:#c00; content: "K\A\2666"; }
+.card-1D:before { color:#c00; content: "A\A\2666"; }
+.card-2H:before { color:#c00; content: "2\A\2665"; }
+.card-3H:before { color:#c00; content: "3\A\2665"; }
+.card-4H:before { color:#c00; content: "4\A\2665"; }
+.card-5H:before { color:#c00; content: "5\A\2665"; }
+.card-6H:before { color:#c00; content: "6\A\2665"; }
+.card-7H:before { color:#c00; content: "7\A\2665"; }
+.card-8H:before { color:#c00; content: "8\A\2665"; }
+.card-9H:before { color:#c00; content: "9\A\2665"; }
+.card-10H:before { color:#c00; content: "10\A\2665"; }
+.card-11H:before { color:#c00; content: "J\A\2665"; }
+.card-12H:before { color:#c00; content: "Q\A\2665"; }
+.card-13H:before { color:#c00; content: "K\A\2665"; }
+.card-1H:before {color:#c00; content: "A\A\2665"; }
+
+.card-2S:before { color:#000; content: "2\A\2660"; }
+.card-3S:before { color:#000; content: "3\A\2660"; }
+.card-4S:before { color:#000; content: "4\A\2660"; }
+.card-5S:before { color:#000; content: "5\A\2660"; }
+.card-6S:before { color:#000; content: "6\A\2660"; }
+.card-7S:before { color:#000; content: "7\A\2660"; }
+.card-8S:before { color:#000; content: "8\A\2660"; }
+.card-9S:before { color:#000; content: "9\A\2660"; }
+.card-10S:before { color:#000; content: "10\A\2660"; }
+.card-11S:before { color:#000; content: "J\A\2660"; }
+.card-12S:before { color:#000; content: "Q\A\2660"; }
+.card-13S:before { color:#000; content: "K\A\2660"; }
+.card-1S:before { color:#000; content: "A\A\2660"; }
+.card-2C:before { color:#000; content: "2\A\2663"; }
+.card-3C:before { color:#000; content: "3\A\2663"; }
+.card-4C:before { color:#000; content: "4\A\2663"; }
+.card-5C:before { color:#000; content: "5\A\2663"; }
+.card-6C:before { color:#000; content: "6\A\2663"; }
+.card-7C:before { color:#000; content: "7\A\2663"; }
+.card-8C:before { color:#000; content: "8\A\2663"; }
+.card-9C:before { color:#000; content: "9\A\2663"; }
+.card-10C:before { color:#000; content: "10\A\2663"; }
+.card-11C:before { color:#000; content: "J\A\2663"; }
+.card-12C:before { color:#000; content: "Q\A\2663"; }
+.card-13C:before { color:#000; content: "K\A\2663"; }
+.card-1C:before {color:#000; content: "A\A\2663"; }
+
+
+.card:after {
+   line-height: 1em;
+   font-size: 1.25em;
+   font-weight:bold;
+   white-space: pre;
+   text-align: center;
+   display: inline-block;
+   padding: .125em .125em .25em .05em;
+   transform: rotate(180deg);
+   position:absolute;
+   right:0px;
+   bottom:0px;
+}
+.card-2D:after { color:#c00; content: "2\A\2666"; }
+.card-3D:after { color:#c00; content: "3\A\2666"; }
+.card-4D:after { color:#c00; content: "4\A\2666"; }
+.card-5D:after { color:#c00; content: "5\A\2666"; }
+.card-6D:after { color:#c00; content: "6\A\2666"; }
+.card-7D:after { color:#c00; content: "7\A\2666"; }
+.card-8D:after { color:#c00; content: "8\A\2666"; }
+.card-9D:after { color:#c00; content: "9\A\2666"; }
+.card-10D:after { color:#c00; content: "10\A\2666"; }
+.card-11D:after { color:#c00; content: "J\A\2666"; }
+.card-12D:after { color:#c00; content: "Q\A\2666"; }
+.card-13D:after { color:#c00; content: "K\A\2666"; }
+.card-1D:after { color:#c00; content: "A\A\2666"; }
+.card-2H:after { color:#c00; content: "2\A\2665"; }
+.card-3H:after { color:#c00; content: "3\A\2665"; }
+.card-4H:after { color:#c00; content: "4\A\2665"; }
+.card-5H:after { color:#c00; content: "5\A\2665"; }
+.card-6H:after { color:#c00; content: "6\A\2665"; }
+.card-7H:after { color:#c00; content: "7\A\2665"; }
+.card-8H:after { color:#c00; content: "8\A\2665"; }
+.card-9H:after { color:#c00; content: "9\A\2665"; }
+.card-10H:after { color:#c00; content: "10\A\2665"; }
+.card-11H:after { color:#c00; content: "J\A\2665"; }
+.card-12H:after { color:#c00; content: "Q\A\2665"; }
+.card-13H:after { color:#c00; content: "K\A\2665"; }
+.card-1H:after {color:#c00; content: "A\A\2665"; }
+
+.card-2S:after { color:#000; content: "2\A\2660"; }
+.card-3S:after { color:#000; content: "3\A\2660"; }
+.card-4S:after { color:#000; content: "4\A\2660"; }
+.card-5S:after { color:#000; content: "5\A\2660"; }
+.card-6S:after { color:#000; content: "6\A\2660"; }
+.card-7S:after { color:#000; content: "7\A\2660"; }
+.card-8S:after { color:#000; content: "8\A\2660"; }
+.card-9S:after { color:#000; content: "9\A\2660"; }
+.card-10S:after { color:#000; content: "10\A\2660"; }
+.card-11S:after { color:#000; content: "J\A\2660"; }
+.card-12S:after { color:#000; content: "Q\A\2660"; }
+.card-13S:after { color:#000; content: "K\A\2660"; }
+.card-1S:after { color:#000; content: "A\A\2660"; }
+.card-2C:after { color:#000; content: "2\A\2663"; }
+.card-3C:after { color:#000; content: "3\A\2663"; }
+.card-4C:after { color:#000; content: "4\A\2663"; }
+.card-5C:after { color:#000; content: "5\A\2663"; }
+.card-6C:after { color:#000; content: "6\A\2663"; }
+.card-7C:after { color:#000; content: "7\A\2663"; }
+.card-8C:after { color:#000; content: "8\A\2663"; }
+.card-9C:after { color:#000; content: "9\A\2663"; }
+.card-10C:after { color:#000; content: "10\A\2663"; }
+.card-11C:after { color:#000; content: "J\A\2663"; }
+.card-12C:after { color:#000; content: "Q\A\2663"; }
+.card-13C:after { color:#000; content: "K\A\2663"; }
+.card-1C:after {color:#000; content: "A\A\2663"; }
+
+.pic {
+   position:absolute;
+   left:1.25em;
+   top:1.5em;
+   width:2.5em;
+   height:3.8em;
+   border:2px groove rgba(180,180,180,.5);
+   border-radius:0.125em;
+}
+.card-10C .pic,.card-10S .pic,.card-10D .pic, .card-10H .pic { width:2.3em; left:1.32em; }
+.card-11H .pic { background-image: url(img/JH.png); background-size:100% 100%; }
+.card-11D .pic { background-image: url(img/JD.png); background-size:100% 100%; }
+.card-11C .pic { background-image: url(img/JC.png); background-size:100% 100%; }
+.card-11S .pic { background-image: url(img/JS.png); background-size:100% 100%; }
+.card-12H .pic { background-image: url(img/QH.png); background-size:100% 100%; }
+.card-12D .pic { background-image: url(img/QD.png); background-size:100% 100%; }
+.card-12C .pic { background-image: url(img/QC.png); background-size:100% 100%; }
+.card-12S .pic { background-image: url(img/QS.png); background-size:100% 100%; }
+.card-13H .pic { background-image: url(img/KH.png); background-size:100% 100%; }
+.card-13D .pic { background-image: url(img/KD.png); background-size:100% 100%; }
+.card-13C .pic { background-image: url(img/KC.png); background-size:100% 100%; }
+.card-13S .pic { background-image: url(img/KS.png); background-size:100% 100%; }
+
+
+
+.diamond { color: #cc0000; }
+.card-2H .pic:after,.card-3H .pic:after,.card-4H .pic:after,.card-5H .pic:after,.card-6H .pic:after,.card-7H .pic:after,.card-8H .pic:after,.card-9H .pic:after,.card-10H .pic:after,.card-1H .pic:after { display:inline-block; position:absolute; top:1.2em; left:.65em;content:" \A\2665"; transform:scale(2.5); color:#c00; } 
+.card-2D .pic:after,.card-3D .pic:after,.card-4D .pic:after,.card-5D .pic:after,.card-6D .pic:after,.card-7D .pic:after,.card-8D .pic:after,.card-9D .pic:after,.card-10D .pic:after,.card-1D .pic:after { display:inline-block; position:absolute; top:1.2em; left:.65em;content:" \A\2666"; transform:scale(2.5); color:#c00; } 
+.card-2C .pic:after,.card-3C .pic:after,.card-4C .pic:after,.card-5C .pic:after,.card-6C .pic:after,.card-7C .pic:after,.card-8C .pic:after,.card-9C .pic:after,.card-10C .pic:after,.card-1C .pic:after { display:inline-block; position:absolute; top:1.2em; left:.65em;content:" \A\2663"; transform:scale(2.5); color:#000; } 
+.card-2S .pic:after,.card-3S .pic:after,.card-4S .pic:after,.card-5S .pic:after,.card-6S .pic:after,.card-7S .pic:after,.card-8S .pic:after,.card-9S .pic:after,.card-10S .pic:after,.card-1S .pic:after { display:inline-block; position:absolute; top:1.2em; left:.65em;content:" \A\2660"; transform:scale(2.5); color:#000; } 
+
+.card-1S .pic, .card-1C .pic, .card-1H .pic, .card-1D .pic { left:1.2em; }
+.card-1S .pic:after, .card-1C .pic:after, .card-1H .pic:after, .card-1D .pic:after { left:.71em; }
+

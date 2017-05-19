@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title></title>
+      <style>
+        body { font-family:"Helvetica Neue",Helvetica,sans-serif; font-size:24px; perspective:2000px; text-align:center; }
+        button {
+            transform:rotateX(45deg);
+            text-transform:uppercase;
+            background-color:#ee0;
+            color:#000;
+            border-radius:5em;
+            border:.25em solid #880;
+            display:inline-block;
+            height:4em;
+            width:4em;
+            font-size:2em;
+            font-weight:900;
+            background: rgb(252,227,0);
+            background: -moz-radial-gradient(center, ellipse cover,  rgba(252,227,0,1) 0%, rgba(254,252,234,1) 58%, rgba(254,252,234,1) 58%, rgba(196,186,0,1) 100%);
+            background: -webkit-radial-gradient(center, ellipse cover,  rgba(252,227,0,1) 0%,rgba(254,252,234,1) 58%,rgba(254,252,234,1) 58%,rgba(196,186,0,1) 100%);
+            background: radial-gradient(ellipse at center,  rgba(252,227,0,1) 0%,rgba(254,252,234,1) 58%,rgba(254,252,234,1) 58%,rgba(196,186,0,1) 100%);
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fce300', endColorstr='#c4ba00',GradientType=1 );
+            position:relative;
+            z-index:999; 
+        }
+        button:after {
+            content:" ";
+            border-radius:5em;
+            display:inline-block;
+            height:100%;
+            width:100%;
+            background-color:#222; 
+            top:0px;
+            left:0px;
+            position:absolute;
+            z-index:10;
+            border:1em solid #ff0; 
+        }
+      </style>
+   </head>
+   <body>
+      <button class="button">Bet</button>
+   </body>
+</html>

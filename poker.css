@@ -1,0 +1,265 @@
+.card {
+   display:inline-block;
+   width:15vw;
+   height:36vh;
+   border-radius:0.5vw;
+   transform-style: preserve-3d;
+   background-color:#fff;
+   border:1px solid rgba(0,0,0,.8);
+   text-align:center;
+   position:relative;
+   margin-left:.5em;
+   box-shadow: .125em .125em 4px rgba(0,0,0,.4);
+}
+.cardwrap {
+   transform-style: preserve-3d;
+   transition: transform 400ms;
+   width:16vw;
+   height:36vh;
+   display:inline-block;
+}
+#holds {
+    font-size:2.2vw;
+    height:1em;
+    margin:.5em 0;
+}
+.hold {
+    color:#ff0;
+    width:7em;
+    text-align:center;
+    display:inline-block;
+    font-weight:bold;
+}
+.cardwrap .card {
+  margin: 0;
+  display: inline-block;
+  position: absolute;
+  width: 15vw;
+  height: 36vh;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style:preserve-3d;
+}
+.cardwrap .cardback {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style:preserve-3d;
+  transform: rotateY(180deg);
+}
+.cardwrap.flipped  {
+   transform: rotateY(-180deg); 
+  transform-style:preserve-3d;
+}
+.cards {
+   position: relative;
+   perspective: 800px;
+}
+.card:before {
+   line-height: 7vh;
+   font-size: 4vw;
+   white-space: pre;
+   transform-style:preserve-3d;
+   backface-visibility:hidden;
+   -webkit-backface-visibility:hidden;
+   text-align: center;
+   display: inline-block;
+   padding: .125em .125em .25em .05em;
+   position:absolute;
+   left:0px;
+   top:0px;
+   font-weight:bold;
+}
+.card2D:before { color:#c00; content: "2\A\2666"; }
+.card3D:before { color:#c00; content: "3\A\2666"; }
+.card4D:before { color:#c00; content: "4\A\2666"; }
+.card5D:before { color:#c00; content: "5\A\2666"; }
+.card6D:before { color:#c00; content: "6\A\2666"; }
+.card7D:before { color:#c00; content: "7\A\2666"; }
+.card8D:before { color:#c00; content: "8\A\2666"; }
+.card9D:before { color:#c00; content: "9\A\2666"; }
+.card10D:before { color:#c00; content: "10\A\2666"; }
+.card11D:before { color:#c00; content: "J\A\2666"; }
+.card12D:before { color:#c00; content: "Q\A\2666"; }
+.card13D:before { color:#c00; content: "K\A\2666"; }
+.card1D:before { color:#c00; content: "A\A\2666"; }
+.card2H:before { color:#c00; content: "2\A\2665"; }
+.card3H:before { color:#c00; content: "3\A\2665"; }
+.card4H:before { color:#c00; content: "4\A\2665"; }
+.card5H:before { color:#c00; content: "5\A\2665"; }
+.card6H:before { color:#c00; content: "6\A\2665"; }
+.card7H:before { color:#c00; content: "7\A\2665"; }
+.card8H:before { color:#c00; content: "8\A\2665"; }
+.card9H:before { color:#c00; content: "9\A\2665"; }
+.card10H:before { color:#c00; content: "10\A\2665"; }
+.card11H:before { color:#c00; content: "J\A\2665"; }
+.card12H:before { color:#c00; content: "Q\A\2665"; }
+.card13H:before { color:#c00; content: "K\A\2665"; }
+.card1H:before {color:#c00; content: "A\A\2665"; }
+
+.card2S:before { color:#000; content: "2\A\2660"; }
+.card3S:before { color:#000; content: "3\A\2660"; }
+.card4S:before { color:#000; content: "4\A\2660"; }
+.card5S:before { color:#000; content: "5\A\2660"; }
+.card6S:before { color:#000; content: "6\A\2660"; }
+.card7S:before { color:#000; content: "7\A\2660"; }
+.card8S:before { color:#000; content: "8\A\2660"; }
+.card9S:before { color:#000; content: "9\A\2660"; }
+.card10S:before { color:#000; content: "10\A\2660"; }
+.card11S:before { color:#000; content: "J\A\2660"; }
+.card12S:before { color:#000; content: "Q\A\2660"; }
+.card13S:before { color:#000; content: "K\A\2660"; }
+.card1S:before { color:#000; content: "A\A\2660"; }
+.card2C:before { color:#000; content: "2\A\2665"; }
+.card3C:before { color:#000; content: "3\A\2663"; }
+.card4C:before { color:#000; content: "4\A\2663"; }
+.card5C:before { color:#000; content: "5\A\2663"; }
+.card6C:before { color:#000; content: "6\A\2663"; }
+.card7C:before { color:#000; content: "7\A\2663"; }
+.card8C:before { color:#000; content: "8\A\2663"; }
+.card9C:before { color:#000; content: "9\A\2663"; }
+.card10C:before { color:#000; content: "10\A\2663"; }
+.card11C:before { color:#000; content: "J\A\2663"; }
+.card12C:before { color:#000; content: "Q\A\2663"; }
+.card13C:before { color:#000; content: "K\A\2663"; }
+.card1C:before {color:#000; content: "A\A\2663"; }
+
+
+.card:after {
+   line-height: 7vh;
+   transform-style:preserve-3d;
+	backface-visibility:hidden;
+	-webkit-backface-visibility:hidden;
+   font-size: 4vw;
+   font-weight:bold;
+   white-space: pre;
+   text-align: center;
+   display: inline-block;
+   padding: .125em .125em .25em .05em;
+   transform: rotate(180deg);
+   position:absolute;
+   right:0px;
+   bottom:0px;
+}
+.card2D:after { color:#c00; content: "2\A\2666"; }
+.card3D:after { color:#c00; content: "3\A\2666"; }
+.card4D:after { color:#c00; content: "4\A\2666"; }
+.card5D:after { color:#c00; content: "5\A\2666"; }
+.card6D:after { color:#c00; content: "6\A\2666"; }
+.card7D:after { color:#c00; content: "7\A\2666"; }
+.card8D:after { color:#c00; content: "8\A\2666"; }
+.card9D:after { color:#c00; content: "9\A\2666"; }
+.card10D:after { color:#c00; content: "10\A\2666"; }
+.card11D:after { color:#c00; content: "J\A\2666"; }
+.card12D:after { color:#c00; content: "Q\A\2666"; }
+.card13D:after { color:#c00; content: "K\A\2666"; }
+.card1D:after { color:#c00; content: "A\A\2666"; }
+.card2H:after { color:#c00; content: "2\A\2665"; }
+.card3H:after { color:#c00; content: "3\A\2665"; }
+.card4H:after { color:#c00; content: "4\A\2665"; }
+.card5H:after { color:#c00; content: "5\A\2665"; }
+.card6H:after { color:#c00; content: "6\A\2665"; }
+.card7H:after { color:#c00; content: "7\A\2665"; }
+.card8H:after { color:#c00; content: "8\A\2665"; }
+.card9H:after { color:#c00; content: "9\A\2665"; }
+.card10H:after { color:#c00; content: "10\A\2665"; }
+.card11H:after { color:#c00; content: "J\A\2665"; }
+.card12H:after { color:#c00; content: "Q\A\2665"; }
+.card13H:after { color:#c00; content: "K\A\2665"; }
+.card1H:after {color:#c00; content: "A\A\2665"; }
+
+.card2S:after { color:#000; content: "2\A\2660"; }
+.card3S:after { color:#000; content: "3\A\2660"; }
+.card4S:after { color:#000; content: "4\A\2660"; }
+.card5S:after { color:#000; content: "5\A\2660"; }
+.card6S:after { color:#000; content: "6\A\2660"; }
+.card7S:after { color:#000; content: "7\A\2660"; }
+.card8S:after { color:#000; content: "8\A\2660"; }
+.card9S:after { color:#000; content: "9\A\2660"; }
+.card10S:after { color:#000; content: "10\A\2660"; }
+.card11S:after { color:#000; content: "J\A\2660"; }
+.card12S:after { color:#000; content: "Q\A\2660"; }
+.card13S:after { color:#000; content: "K\A\2660"; }
+.card1S:after { color:#000; content: "A\A\2660"; }
+.card2C:after { color:#000; content: "2\A\2663"; }
+.card3C:after { color:#000; content: "3\A\2663"; }
+.card4C:after { color:#000; content: "4\A\2663"; }
+.card5C:after { color:#000; content: "5\A\2663"; }
+.card6C:after { color:#000; content: "6\A\2663"; }
+.card7C:after { color:#000; content: "7\A\2663"; }
+.card8C:after { color:#000; content: "8\A\2663"; }
+.card9C:after { color:#000; content: "9\A\2663"; }
+.card10C:after { color:#000; content: "10\A\2663"; }
+.card11C:after { color:#000; content: "J\A\2663"; }
+.card12C:after { color:#000; content: "Q\A\2663"; }
+.card13C:after { color:#000; content: "K\A\2663"; }
+.card1C:after {color:#000; content: "A\A\2663"; }
+
+.card figure {
+  transform-style:preserve-3d;
+   pointer-events: none;
+   width:6.7vw;
+   height:19vh;
+	margin:4.6vw 4vw;
+   border:1px solid #000;
+   backface-visibility: hidden;
+   -webkit-backface-visibility: hidden;
+	font-size:3vw;
+}
+.card10C figure,.card10S figure,.card10D figure, .card10H figure { width:47%; left:10%; }
+.card11H figure { background-image: url(img/JH.png); background-size:100% 100%; }
+.card11D figure { background-image: url(img/JD.png); background-size:100% 100%; }
+.card11C figure { background-image: url(img/JC.png); background-size:100% 100%; }
+.card11S figure { background-image: url(img/JS.png); background-size:100% 100%; }
+.card12H figure { background-image: url(img/QH.png); background-size:100% 100%; }
+.card12D figure { background-image: url(img/QD.png); background-size:100% 100%; }
+.card12C figure { background-image: url(img/QC.png); background-size:100% 100%; }
+.card12S figure { background-image: url(img/QS.png); background-size:100% 100%; }
+.card13H figure { background-image: url(img/KH.png); background-size:100% 100%; }
+.card13D figure { background-image: url(img/KD.png); background-size:100% 100%; }
+.card13C figure { background-image: url(img/KC.png); background-size:100% 100%; }
+.card13S figure { background-image: url(img/KS.png); background-size:100% 100%; }
+
+
+.card2H figure:after,.card3H figure:after,.card4H figure:after,.card5H figure:after,.card6H figure:after,.card7H figure:after,.card8H figure:after,.card9H figure:after,.card10H figure:after,.card1H figure:after { display:inline-block; margin-top:6vh;margin-left:-1vw;content:" \A\2665"; transform:scale(2.5); color:#c00; } 
+.card2D figure:after,.card3D figure:after,.card4D figure:after,.card5D figure:after,.card6D figure:after,.card7D figure:after,.card8D figure:after,.card9D figure:after,.card10D figure:after,.card1D figure:after { display:inline-block; margin-top:6vh;margin-left:-1vw;content:" \A\2666"; transform:scale(2.5); color:#c00; } 
+.card2C figure:after,.card3C figure:after,.card4C figure:after,.card5C figure:after,.card6C figure:after,.card7C figure:after,.card8C figure:after,.card9C figure:after,.card10C figure:after,.card1C figure:after { display:inline-block; margin-top:6vh;margin-left:-1vw;content:" \A\2663"; transform:scale(2.5); color:#000; } 
+.card2S figure:after,.card3S figure:after,.card4S figure:after,.card5S figure:after,.card6S figure:after,.card7S figure:after,.card8S figure:after,.card9S figure:after,.card10S figure:after,.card1S figure:after { display:inline-block; margin-top:6vh;margin-left:-1vw;content:" \A\2660"; transform:scale(2.5); color:#000; } 
+.diamond { color: #cc0000; }
+.cardback { 
+    background: -webkit-radial-gradient(circle, rgb(255,255,255) 25%, rgba(255,255,255,0) 25%), -webkit-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), -webkit-radial-gradient(circle, rgb(35,29,24) 25%, rgba(255,255,255,0) 25%), -webkit-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), rgba(200,57,0,1);
+    background: -moz-radial-gradient(circle, rgb(255,255,255) 25%, rgba(255,255,255,0) 25%), -moz-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), -moz-radial-gradient(circle, rgb(35,29,24) 25%, rgba(255,255,255,0) 25%), -moz-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), rgba(200,57,0,1);
+    background: radial-gradient(circle, rgb(255,255,255) 25%, rgba(255,255,255,0) 25%), radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), radial-gradient(circle, rgb(35,29,24) 25%, rgba(255,255,255,0) 25%), radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), rgba(200,57,0,1);
+    background-position: 3em 3em, 3em 4em, auto auto, 0 1em;
+    background-size:0.5vw 0.5vw;
+    border: 1vw solid #fff;
+    border-radius:.5vw;
+    width:13vw;
+    height:34vh;
+    display:inline-block;
+    box-shadow: .125em .125em 4px rgba(0,0,0,.4);
+    transform-style:preserve-3d;
+	 backface-visibility:hidden;
+	 -webkit-backface-visibility:hidden;
+}
+.cardback figure { border: none; }
+button:active { transform: translateY(0.25em); position:relative; display:inline-block; }
+button { background: #f4e130; background: -moz-linear-gradient(top, #f4e130 0%, #fff460 50%, #e5da02 51%, #d1ca00 100%); background: -webkit-linear-gradient(top, #f4e130 0%,#fff460 50%,#e5da02 51%,#d1ca00 100%); background: linear-gradient(to bottom, #f4e130 0%,#fff460 50%,#e5da02 51%,#d1ca00 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4e130', endColorstr='#d1ca00',GradientType=0 ); }
+#dealButton { border-top-right-radius:2em; border-bottom-right-radius:2em; }
+#backButton { border-top-left-radius:2em; border-bottom-left-radius:2em; }
+h2:before {
+    display: inline-block;
+    height: 8.3vh;
+    width: 5.4vw;
+    background-color: #ee0;
+    position: absolute;
+    top: 0.1vh;
+    left: 0.02vw;
+    content: "$1";
+    border-radius: 4vw;
+    border: 0.4vw solid #ccc;
+    z-index: 1;
+    color: #000;
+    font-size: 3.1vw;
+    text-shadow: 2px 2px 0px rgba(255,255,255,.8);
+    padding-top: 1.4vh;
+}

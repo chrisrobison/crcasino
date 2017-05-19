@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title></title>
+   <style>
+      body { 
+         text-align:center;
+background: rgb(255,255,255);
+background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%);
+background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%);
+background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 );
+}
+      .reel { 
+         background:url('img/reel.png'), #fff;
+         display:inline-block;
+         width:200px;
+         height:600px; 
+         border:.5em solid #000;
+         background-position: 0px -3200px;
+         animation: spin 1000ms 5 linear;
+         margin:0;
+
+      }
+      #reel1 { animation-delay: 0ms; }
+      #reel2 { animation-delay: 150ms; }
+      #reel3 { animation-delay: 300ms; }
+      #reel4 { animation-delay: 450ms; }
+      #reel5 { animation-delay: 600ms; }
+      @keyframes spin {
+         0% { background-position: 0px -3200px; }
+         100% { background-position: 0px 0px; }
+      }
+      #slot {
+         margin-top:1em; 
+      }
+      #main { position:absolute; top:0px; left:0px; right:0px; bottom:0px; height:100%; width:100%; overflow:hidden; 
+         background: -moz-linear-gradient(top, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 49%, rgba(255,255,255,0.75) 100%);
+         background: -webkit-linear-gradient(top, rgba(255,255,255,0.75) 0%,rgba(255,255,255,0) 49%,rgba(255,255,255,0.75) 100%);
+         background: linear-gradient(to bottom, rgba(255,255,255,0.75) 0%,rgba(255,255,255,0) 49%,rgba(255,255,255,0.75) 100%);
+         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bfffffff', endColorstr='#bfffffff',GradientType=0 );
+
+      }
+   </style>
+</head>
+<body>
+   <div id='main'>
+      <div id='slot'>
+         <div id='reel1' class='reel'></div><div id='reel2' class='reel'></div><div id='reel3' class='reel'></div><div id='reel4' class='reel'></div><div id='reel5' class='reel'></div>
+      </div>
+   </div>
+<script>
+
+</script>
+</body>
+</html>

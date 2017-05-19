@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CR Honest Games</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css?family=Gravitas+One');
+		body { font-family:"Helvetica Neue",Helvetica,sans-serif; font-size:20px; background-color:#000; color:#eee; text-align:center; }
+		.game { display:inline-block; width:15em; height:15em; border: 0.5em solid #c00; padding:0.3em; margin:1em; background-color:#05a; border-radius:10em;}
+		.games { text-align:center; }
+		a { text-decoration:none; color:#ee0; }
+		a:visited { color:#aa0; }
+		a:active { color:#f00; }
+		a:hover { color:#0af; }
+		h1 { font-family:"Gravitas One",cursive; font-weight:100; }
+		.game a { font-weight:900; text-transform:uppercase; font-size:1.5em; color:#fff; text-shadow:.125em .125em 0px rgba(0,0,0,.8); }
+		.game img { border:.5em solid rgba(255,255,255,1); border-radius:.25em;  transform: scale(.9); transition:all 250ms  cubic-bezier(.25, .99, .71, 1.23); position:relative; left:-.5em; box-shadow:.25em .25em .25em rgba(0,0,0,.5); }
+		.game a:hover img { transform: scale(1.2); }
+		#main { display:inline-block; width:80%; }
+		.gamename { position:relative; top:-0.7em; transform: scale(1.5) translateY(0.7em); display: inline-block; padding: 0 .5em 0; font-family: "Gravitas One",cursive; font-weight:100; }
+		#loginOptions { display:inline-block; position:absolute; right:0vw; top:2vh; transition:all 300ms cubic-bezier(.25,.99,.71,1.23); }
+		#loginOptions button { display:block; font-size:1.5vw; width:100%; cursor:pointer; transition:transform 300ms linear; }
+		#providers { display:inline-block; width:100%; height:0vh; transition:all 300ms cubic-bezier(.25,.99,.71,1.23); overflow:hidden;}
+		#loginOptions button:hover { transform: scale(1.3); }
+	</style>
+</head>
+<body>
+<div id='main'>
+	<div id='loginOptions'>
+		<a id='loginLink' href='#' onclick='return toggleOptions()'>Login with...</a>
+		<div id='providers'>
+			<button onclick="login('facebook')">Facebook</button>
+			<!--button onclick="login('google')">Google</button>
+			<button onclick="login('twitter')">Twitter</button>
+			<button onclick="login('github')">GitHub</button-->
+		</div>
+		<a id='collectBonus' href='#' onclick='return collectBonus()'>Collect Bonus</a>
+	</div>
+
+	<h1>CR HONEST ONLINE GAMES</h1>
+	<hr>
+	<p>The online casino industry has succeeded in taking all the fun out of recreational gambling, whether it be for real money or virtual cash. After wasting countless hours playing fixed game after fixed game I decided to do something about it.  I built my own games.  No hacks.  No crooked games.  No back doors.  Just good 'ole gambling the way it used to be.  Losing because you suck and the odds are against you, not because of shady casino operations.  Feel free to try out the games currently available.  Keep in mind, however, that while playable, they are still in heavy development and bugs do exist.  If you have any questions or comments, feel free to email me at <a href="mailto:cdr@netoasis.net">cdr@netoasis.net</a></p>
+	<hr>
+	<div class='games'>
+		<div class='game'><a href="game.html" target="_blank"><img src="img/honest-bj.png"><br><span class='gamename'>Honest<br>Blackjack</span></a></div>
+		<div class='game'><a href="poker2.html" target="_blank"><img src="img/honest-poker.png"><br><span class='gamename'>Honest<br>Poker</span></a></div>
+		<div class='game'><a href="holdem.html" target="_blank"><img src="img/honest-holdem.png"><br><span class='gamename'>Honest<br>Hold'em</span></a></div>
+	</div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+	 apiKey: "AIzaSyDxGzBuvFA2qrOZZPBdTmIjsXAgWpcrmcs",
+	 authDomain: "crblackjack-9e220.firebaseapp.com",
+	 databaseURL: "https://crblackjack-9e220.firebaseio.com",
+	 projectId: "crblackjack-9e220",
+	 storageBucket: "crblackjack-9e220.appspot.com",
+	 messagingSenderId: "32143422101"
+  };
+  firebase.initializeApp(config);
+</script>
+<script>
+	function login(who) {
+		var provider;
+		switch(who) {
+			case "facebook":
+				provider = new firebase.auth.FacebookAuthProvider();
+				break;
+			case "google":
+				provider = new firebase.auth.GoogleAuthProvider();
+				break;
+			case "twitter":
+				provider = new firebase.auth.TwitterAuthProvider();
+				break;
+			case "github":
+				provider = new firebase.auth.GitHubAuthProvider();
+				break;
+		}
+		db = firebase.database();
+
+		firebase.auth().signInWithPopup(provider).then(function(result) {
+		  var token = result.credential.accessToken;
+		  var user = result.user;
+		  console.dir(user);
+		  writeUserData(user.uid, user.displayName, user.email, user.photoURL);
+		}).catch(function(error) {
+		  var errorCode = error.code;
+		  var errorMessage = error.message;
+		  var email = error.email;
+		  var credential = error.credential;
+		});	
+	}
+	function writeUserData(userId, name, email, imageUrl) {
+		firebase.database().ref('users/' + userId).set({
+			name: name,
+			email: email,
+			profile_picture : imageUrl
+		});
+		setCookie("uid", userId);
+	}
+	var loginHeight = 0;
+	function toggleOptions() {
+		if (loginHeight===0) {
+			$$("providers").style.height = "20vh";
+			setTimeout(function() { $$("providers").style.overflow = "visible"; }, 300);
+			loginHeight = 20;
+		} else {
+			$$("providers").style.height = "0vh";
+			$$("providers").style.overflow = "hidden";
+			loginHeight = 0;
+		}
+	}
+	function $$(str) { return document.getElementById(str); }
+	function init() {
+		$$("loginOptions").addEventListener("mouseleave", function(e) { 
+			$$("providers").style.overflow = "hidden";
+		$$("providers").style.height = "0px"; loginHeight = 0; });
+	}
+
+	function collectBonus() {
+		var endpoint = "https://us-central1-crblackjack-9e220.cloudfunctions.net/collectBonus?callback=gotBonus&uid="+firebase.auth().currentUser.uid;
+		var el = document.createElement('script');
+		el.src = endpoint;
+		document.body.appendChild(el);
+	}
+	init();
+</script>
+</body>
+</html>

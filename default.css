@@ -1,0 +1,815 @@
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+@import url('https://fonts.googleapis.com/css?family=Bowlby+One');
+@import url('https://fonts.googleapis.com/css?family=Poller+One');
+body { margin: 0; padding: 0; font-size: 14px; color: #fff; font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif; }
+h1, h2, h3, h4, h5, input, select, button, textarea { font-family: "Poller One", "Helvetica Neue", sans-serif; }
+a { text-decoration: none; color: #00c; }
+a:hover { text-decoration: underline; }
+a:visited { color: #006; }
+a:active { color: #e00; display: inline-block; top: 2px; }
+label { color: #fff; text-transform: uppercase; font-weight:bold; }
+select { width:2em; }
+#wrapper {
+    position:absolute;
+    top:0px;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    height:100%;
+    width:100%;
+    overflow:hidden;
+}
+#toolbar { 
+	background-color: #000;
+    color: #fff;
+    position: absolute;
+    width: 100%;
+    height: 0px;
+    top: 0px;
+    left: 0px;
+    display: none;
+
+}
+.card {
+   font-family:"Oswald",cursive;
+   display:inline-block;
+   width:7vw;
+   height:16vh;
+   border-radius:0.4vw;
+   background-color:#fff;
+   border:1px solid rgba(0,0,0,.8);
+   box-shadow: .125em .125em 4px rgba(0,0,0,.4);
+   transition: all 400ms ease-out;
+   transform: translate(0px, 0px) rotateZ(0deg);
+   position:relative;
+   margin-left:-5vw;
+   text-shadow:0px 0px 0px rgba(0,0,0,.5);
+}
+
+.hand {
+    color: #fff;
+    position: absolute;
+    height: 12%;
+    padding: 2em 5em 10em 6em;
+    border-radius: 5em;
+    width:17%;
+}
+.splitting { 
+    height:20em; 
+    width:12em;
+}
+#player5.splitting {
+    height:17em;
+    width:13em;
+    left:2%;
+    top:31%;
+}
+#player4.splitting {
+    height:13em;
+    width:13em;
+    left:21%;
+    top:39%;
+}
+#player3.splitting {
+    left:39%;
+    top:38%;
+    height:15em;
+    width:13em;
+}
+#player2.splitting {
+    height:14em;
+    width:13em;
+    top:33%;
+    left:60%;
+}
+#player1.splitting {
+    height:15em;
+    width:13em;
+    top:26%;
+    left:77%;
+}
+.splitting, .hands {
+    display:inline-block; 
+}
+.splitting .hands { width:4em; position:relative; top:7em; }
+.splitting .total { left:1em; top:12em; }
+.splitting .splithand .card,.splitting .hands .card { margin-top:-5em; }
+.splitting .total {  }
+.splitting .betchips { top:-3.5em; }
+.splitting span.bet { top:2em; }
+
+.splithand {
+    display:inline-block;
+    position:absolute;
+    top:12em;
+    width:4em;
+    height:17em;
+    right:2em;
+}
+#player5 .splithand { top:11em; }
+#player5 .splittotal { top:9em; }
+#player5.splitting .hands { top:3em; }
+#player5.splitting .total { top:9em; left:2em; }
+
+.splitting h1 { margin-top:-1em; }
+.hands {
+    position:relative;
+    left:2em;
+    width:17em;
+    top:7em;
+}
+#options { position:relative; top:.75em; padding-right:1em; }
+#options select, #options input { font-size:1em; }
+#main { 
+    user-select:none;
+    background-image: url("img/blackjack_table.jpg");
+    background-size: 100% 100%;
+    position: absolute;
+    top: 0em;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    padding-top: 2em;
+    display: inline-block;
+    perspective: 1000px;
+}
+.left { float: left; }
+.right { float: right; }
+.total {
+    position: absolute;
+    left: 1em;
+    top: 7.4em;
+    background-color: rgba(0, 0, 0, .5);
+    padding: 0px 12px;
+    border: 5px solid #CDDC39;
+    border-radius: 16px;
+    min-width: 2em;
+    height: 1.5em;
+    text-align: center;
+    color: #FFF;
+    font-size: 2em;
+    z-index: 99999;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, .4);
+    font-family: 'Bowlby One', cursive;
+    display:none;
+}
+.splittotal {
+    position: absolute;
+    left: 7em;
+    background-color: rgba(0, 0, 0, .5);
+    padding: 0px 12px;
+    border: 5px solid #CDDC39;
+    border-radius: 16px;
+    min-width: 2em;
+    height: 1.5em;
+    text-align: center;
+    color: #FFF;
+    top: 12em;
+    font-size: 2em;
+    z-index: 99999;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, .6);
+    font-family: 'Bowlby One', cursive;
+}
+.hand h1 {
+    position:absolute; left:0.6em; top:0.4em; z-index:99999;font-size:1em; padding:0px; margin:0px;
+}
+.results {
+    text-align:center;
+    font-family: 'Bowlby One', cursive;
+    pointer-events:none;
+    color: #ff0;
+    text-shadow: 2px 2px 1px rgba(0, 0, 0, 1);
+    position: absolute;
+    top: 5em;
+    left: 1em;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 2em;
+    padding: .25em 1em;
+    z-index: 9999;
+    transform: scale(0) rotate(360deg);
+    background-color: rgba(0, 0, 0, .5);
+    border-radius: 0.5em;
+    border: .25em solid #ff0;
+    transition: all 300ms ease-in;
+    opacity:0;
+    letter-spacing: 4px;
+    box-shadow: .25em .25em .25em rgba(0,0,0,.8);
+}
+.splitresults {
+    font-family: 'Bowlby One', cursive;
+    color: #ff0;
+    text-shadow: 2px 2px 1px rgba(0, 0, 0, 1);
+    position: absolute;
+    top: 7em;
+    left: 5em;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 2em;
+    padding: .25em 1em;
+    z-index: 9999;
+    transform: scale(0) rotate(-360deg);
+    background-color: rgba(0, 0, 0, .5);
+    border-radius: 0.5em;
+    border: .25em solid #ff0;
+    transition: all 500ms ease-in;
+    opacity:0;
+    letter-spacing: 4px;
+    box-shadow: .25em .25em .25em rgba(0,0,0,.8);
+}
+.blackjack {
+    animation: blackjack 2000ms linear;
+    animation-fill-mode: forwards;
+    border: 20px solid transparent;
+    border-image: url(img/marquee.gif) 20 20 20 20 round;
+    opacity:1;
+    left:-1em;
+}
+@keyframes throb {
+    0% { transform: scale(2); }
+    20% { transform: scale(1); }
+    40% { transform: scale(2); }
+    60% { transform: scale(1); }
+    80% { transform: scale(2); }
+    100% { transform: scale(1); }
+}
+@keyframes blackjack {
+    0% { transform: scale(0) rotate(-720deg); }
+    33% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1) rotate(0deg); }
+    65% { transform: scale(2) rotate(0deg); }
+    75% { transform: scale(1) rotate(0deg); }
+    85% { transform: scale(2) rotate(0deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+.splitting .busted { margin-left:0em; }
+.busted {
+    color: #F00;
+    text-shadow: -1px -1px 0px #ff0, 1px 1px 0px #ff0, -1px 0px 0px #ff0, 0px -1px 0px #ff0, 0px 1px 0px #ff0, 1px 0px 0px #ff0, -1px 1px 0px #ff0, 1px -1px 0px #ff0;
+    box-shadow: .25em .25em .25em rgba(0,0,0,.4);
+    -webkit-transform: rotate(-30deg);
+    transform: rotate(-360deg) scale(0);
+    opacity:0;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 0.5em;
+    position: absolute;
+    top: 4em;
+    display: inline-block;
+    left: 1em;
+    font-weight: bold;
+    font-size: 2.5em;
+    border: .25em solid #F00;
+    padding: .25em 1em;
+    z-index: 99999;
+    transition: all 500ms linear;
+}
+.undealt {}
+#leaderboard {
+    position: absolute;
+    left: 50%;
+    background-color: #000;
+    color: #fff;
+    min-height: 4em;
+}
+#leaderboard td,
+#leaderboard th {
+    padding: .125em;
+    text-align: center;
+}
+div#player5 {
+    left:1%;
+    bottom:21%;
+    height: 19%;
+    width:17%;
+    text-shadow: 2px 2px 1px black;
+    transform: rotateX(20deg) rotateZ(18deg);
+}
+div#player4 {
+    left: 19%;
+    bottom: 19%;
+    height: 12%;
+    width:17%;
+    text-shadow: 2px 2px 1px black;
+    transform: rotateX(20deg) rotateZ(8deg);
+}
+div#player3 {
+    left: 41%;
+    bottom: 16%;
+    height:12%;
+    width:17%;
+    text-shadow: 2px 2px 1px black;
+    transform: rotateX(20deg) rotateZ(0deg);
+}
+div#player2 {
+    position: absolute;
+    left: 60%;
+    bottom: 21%;
+    height: 12%;
+    width:17%;
+    text-shadow: 2px 2px 1px black;
+    transform: rotateX(20deg) rotateZ(-9deg);
+}
+div#player1 {
+    position: absolute;
+    left: 80%;
+    bottom: 30%;
+    height: 13%;
+    width:17%;
+    text-shadow: 2px 2px 1px black;
+    transform: rotateX(20deg) rotateZ(-17deg);
+}
+div#dealer {
+    position: absolute;
+    left: 26vw;
+    top: 9vh;
+    width:40vw;
+    transform: rotateX(20deg);
+}
+#dealer .hands {
+    left:-6vw; width:48vw;
+}
+#dealer-total { left:5em; top:1.5em; }
+div#dealer .card {
+    margin-left: 0;
+}
+div#buttons {
+    position: absolute;
+    z-index: 9999;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    font-size:2vw;
+    height: 12vh;
+    background-color: rgba(0, 0, 0, .5);
+    text-align: center;
+    white-space: nowrap;
+}
+.button:selected {
+    outline: none;
+}
+.button {
+    transition: transform 150ms cubic-bezier(.25, .99, .71, 1.23);
+    outline: none;
+    font-size: 2vw;
+    text-transform: uppercase;
+    font-weight: 900;
+    text-shadow: -1px -1px 0px rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: .5em;
+    display: inline-block;
+    position: relative;
+    padding: 0;
+    margin: .5em .25em 0 .25em;
+    transform: rotateX(20deg);
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, .8);
+    background: #2d9c2f;
+    border: 0;
+}
+.chip.selected {
+    transform:scale(1.3) rotateX(30deg);
+    filter:brightness(1.0) drop-shadow(0 0 2vw rgba(255,255,255,.8));;
+}
+#buttons .button {
+top:0px;
+}
+.button div {
+    font-family: "Poller One", "Arial Black", "Helvetica Neue",Helvetica,sans-serif;
+    display: inline-block;
+    position: relative;
+    top: -.25em;
+    height: 1.5em;
+    border: 4px solid #a6f34c;
+    border-radius: .5em;
+    padding: .25em 1em .25em 1em;
+    background: #7c8587;
+    background: -moz-linear-gradient(top, #7c8587 0%, #444948 49%, #0a0e0a 51%, #0a0809 100%);
+    background: -webkit-linear-gradient(top, #7c8587 0%, #444948 49%, #0a0e0a 51%, #0a0809 100%);
+    background: linear-gradient(to bottom, #7c8587 0%, #444948 49%, #0a0e0a 51%, #0a0809 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7c8587', endColorstr='#0a0809', GradientType=0);
+    transition: top 250ms linear;
+}
+#hitstay {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 20%;
+    transition: transform 300ms cubic-bezier(.25, .99, .71, 1.23);
+}
+#hitstay .button {
+}
+#dealButton {
+    position: absolute;
+    top: 0.5em;
+    left: 45%;
+}
+#buttons .hidden {
+    display: none;
+}
+.currentPlayer {
+    box-shadow: 0px 0px 5em rgba(0, 255, 0, .7);
+    background-color: rgba(0, 255, 0, 0.5);
+}
+div#dealer .card {
+    margin-left: 0;
+	 float:left;
+}
+.deal {
+    animation: deal 1000ms ease-out;
+}
+.undealt {
+    transform: translate(800px, -800px) rotateZ(720deg);
+    opacity:0;
+}
+#holecard {
+    position:relative;
+    transform-style: preserve-3d;
+    transition: 500ms;
+    width:7vw;
+    height:16vh;
+	 float:left;
+    display: inline-block;
+}
+h1 { text-transform: uppercase; }
+.hole, .cardback {
+    backface-visibility: hidden;
+    position:absolute;
+    top:0px;
+    left:0px;
+    font-size:0.9vw;
+    width:7vw;
+    height:16vh;
+}
+.hole {
+    z-index:2;
+    transform:rotateY(180deg);
+}
+.cardback { 
+    background-image: url(img/card-back.png);
+    background-size:100% 100%;
+    position: absolute;
+    display: none;
+    font-size:2vw;
+    width:7vw;
+    height:16vh;
+    display: inline-block;
+    border: 0px solid transparent;
+    border-radius: .4vw;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, .7);
+    z-index: 999;
+    transform: rotateY(0deg);
+}
+
+.card:before {
+   line-height: 1em;
+   font-size: 2vw;
+   white-space: pre;
+   text-align: center;
+   display: inline-block;
+   padding: .125em .125em .25em .05em;
+   font-weight:bold;
+}
+.card-2D:before { color:#c00; content: "2\A\2666"; }
+.card-3D:before { color:#c00; content: "3\A\2666"; }
+.card-4D:before { color:#c00; content: "4\A\2666"; }
+.card-5D:before { color:#c00; content: "5\A\2666"; }
+.card-6D:before { color:#c00; content: "6\A\2666"; }
+.card-7D:before { color:#c00; content: "7\A\2666"; }
+.card-8D:before { color:#c00; content: "8\A\2666"; }
+.card-9D:before { color:#c00; content: "9\A\2666"; }
+.card-10D:before { color:#c00; content: "10\A\2666"; }
+.card-11D:before { color:#c00; content: "J\A\2666"; }
+.card-12D:before { color:#c00; content: "Q\A\2666"; }
+.card-13D:before { color:#c00; content: "K\A\2666"; }
+.card-1D:before { color:#c00; content: "A\A\2666"; }
+.card-2H:before { color:#c00; content: "2\A\2665"; }
+.card-3H:before { color:#c00; content: "3\A\2665"; }
+.card-4H:before { color:#c00; content: "4\A\2665"; }
+.card-5H:before { color:#c00; content: "5\A\2665"; }
+.card-6H:before { color:#c00; content: "6\A\2665"; }
+.card-7H:before { color:#c00; content: "7\A\2665"; }
+.card-8H:before { color:#c00; content: "8\A\2665"; }
+.card-9H:before { color:#c00; content: "9\A\2665"; }
+.card-10H:before { color:#c00; content: "10\A\2665"; }
+.card-11H:before { color:#c00; content: "J\A\2665"; }
+.card-12H:before { color:#c00; content: "Q\A\2665"; }
+.card-13H:before { color:#c00; content: "K\A\2665"; }
+.card-1H:before {color:#c00; content: "A\A\2665"; }
+
+.card-2S:before { color:#000; content: "2\A\2660"; }
+.card-3S:before { color:#000; content: "3\A\2660"; }
+.card-4S:before { color:#000; content: "4\A\2660"; }
+.card-5S:before { color:#000; content: "5\A\2660"; }
+.card-6S:before { color:#000; content: "6\A\2660"; }
+.card-7S:before { color:#000; content: "7\A\2660"; }
+.card-8S:before { color:#000; content: "8\A\2660"; }
+.card-9S:before { color:#000; content: "9\A\2660"; }
+.card-10S:before { color:#000; content: "10\A\2660"; }
+.card-11S:before { color:#000; content: "J\A\2660"; }
+.card-12S:before { color:#000; content: "Q\A\2660"; }
+.card-13S:before { color:#000; content: "K\A\2660"; }
+.card-1S:before { color:#000; content: "A\A\2660"; }
+.card-2C:before { color:#000; content: "2\A\2663"; }
+.card-3C:before { color:#000; content: "3\A\2663"; }
+.card-4C:before { color:#000; content: "4\A\2663"; }
+.card-5C:before { color:#000; content: "5\A\2663"; }
+.card-6C:before { color:#000; content: "6\A\2663"; }
+.card-7C:before { color:#000; content: "7\A\2663"; }
+.card-8C:before { color:#000; content: "8\A\2663"; }
+.card-9C:before { color:#000; content: "9\A\2663"; }
+.card-10C:before { color:#000; content: "10\A\2663"; }
+.card-11C:before { color:#000; content: "J\A\2663"; }
+.card-12C:before { color:#000; content: "Q\A\2663"; }
+.card-13C:before { color:#000; content: "K\A\2663"; }
+.card-1C:before {color:#000; content: "A\A\2663"; }
+
+
+.card:after {
+   line-height: 1em;
+   font-size: 2vw;
+   font-weight:bold;
+   white-space: pre;
+   text-align: center;
+   display: inline-block;
+   padding: .125em .125em .25em .05em;
+   transform: rotate(180deg);
+   position:absolute;
+   right:0px;
+   bottom:0px;
+}
+.card-2D:after { color:#c00; content: "2\A\2666"; }
+.card-3D:after { color:#c00; content: "3\A\2666"; }
+.card-4D:after { color:#c00; content: "4\A\2666"; }
+.card-5D:after { color:#c00; content: "5\A\2666"; }
+.card-6D:after { color:#c00; content: "6\A\2666"; }
+.card-7D:after { color:#c00; content: "7\A\2666"; }
+.card-8D:after { color:#c00; content: "8\A\2666"; }
+.card-9D:after { color:#c00; content: "9\A\2666"; }
+.card-10D:after { color:#c00; content: "10\A\2666"; }
+.card-11D:after { color:#c00; content: "J\A\2666"; }
+.card-12D:after { color:#c00; content: "Q\A\2666"; }
+.card-13D:after { color:#c00; content: "K\A\2666"; }
+.card-1D:after { color:#c00; content: "A\A\2666"; }
+.card-2H:after { color:#c00; content: "2\A\2665"; }
+.card-3H:after { color:#c00; content: "3\A\2665"; }
+.card-4H:after { color:#c00; content: "4\A\2665"; }
+.card-5H:after { color:#c00; content: "5\A\2665"; }
+.card-6H:after { color:#c00; content: "6\A\2665"; }
+.card-7H:after { color:#c00; content: "7\A\2665"; }
+.card-8H:after { color:#c00; content: "8\A\2665"; }
+.card-9H:after { color:#c00; content: "9\A\2665"; }
+.card-10H:after { color:#c00; content: "10\A\2665"; }
+.card-11H:after { color:#c00; content: "J\A\2665"; }
+.card-12H:after { color:#c00; content: "Q\A\2665"; }
+.card-13H:after { color:#c00; content: "K\A\2665"; }
+.card-1H:after {color:#c00; content: "A\A\2665"; }
+
+.card-2S:after { color:#000; content: "2\A\2660"; }
+.card-3S:after { color:#000; content: "3\A\2660"; }
+.card-4S:after { color:#000; content: "4\A\2660"; }
+.card-5S:after { color:#000; content: "5\A\2660"; }
+.card-6S:after { color:#000; content: "6\A\2660"; }
+.card-7S:after { color:#000; content: "7\A\2660"; }
+.card-8S:after { color:#000; content: "8\A\2660"; }
+.card-9S:after { color:#000; content: "9\A\2660"; }
+.card-10S:after { color:#000; content: "10\A\2660"; }
+.card-11S:after { color:#000; content: "J\A\2660"; }
+.card-12S:after { color:#000; content: "Q\A\2660"; }
+.card-13S:after { color:#000; content: "K\A\2660"; }
+.card-1S:after { color:#000; content: "A\A\2660"; }
+.card-2C:after { color:#000; content: "2\A\2663"; }
+.card-3C:after { color:#000; content: "3\A\2663"; }
+.card-4C:after { color:#000; content: "4\A\2663"; }
+.card-5C:after { color:#000; content: "5\A\2663"; }
+.card-6C:after { color:#000; content: "6\A\2663"; }
+.card-7C:after { color:#000; content: "7\A\2663"; }
+.card-8C:after { color:#000; content: "8\A\2663"; }
+.card-9C:after { color:#000; content: "9\A\2663"; }
+.card-10C:after { color:#000; content: "10\A\2663"; }
+.card-11C:after { color:#000; content: "J\A\2663"; }
+.card-12C:after { color:#000; content: "Q\A\2663"; }
+.card-13C:after { color:#000; content: "K\A\2663"; }
+.card-1C:after {color:#000; content: "A\A\2663"; }
+
+.pic {
+   position:absolute;
+   left:1.85vw;
+   top:4vh;
+   width:3vw;
+   height:7.4vh;
+   border:2px groove rgba(180,180,180,.5);
+   border-radius:0.3vw;
+	text-align:center;
+}
+.card-10C .pic,.card-10S .pic,.card-10D .pic, .card-10H .pic { width:2.8vw; left:2vw; }
+.card-11H .pic { background-image: url(img/JH.png); background-size:100% 100%; }
+.card-11D .pic { background-image: url(img/JD.png); background-size:100% 100%; }
+.card-11C .pic { background-image: url(img/JC.png); background-size:100% 100%; }
+.card-11S .pic { background-image: url(img/JS.png); background-size:100% 100%; }
+.card-12H .pic { background-image: url(img/QH.png); background-size:100% 100%; }
+.card-12D .pic { background-image: url(img/QD.png); background-size:100% 100%; }
+.card-12C .pic { background-image: url(img/QC.png); background-size:100% 100%; }
+.card-12S .pic { background-image: url(img/QS.png); background-size:100% 100%; }
+.card-13H .pic { background-image: url(img/KH.png); background-size:100% 100%; }
+.card-13D .pic { background-image: url(img/KD.png); background-size:100% 100%; }
+.card-13C .pic { background-image: url(img/KC.png); background-size:100% 100%; }
+.card-13S .pic { background-image: url(img/KS.png); background-size:100% 100%; }
+
+
+
+.diamond { color: #cc0000; }
+.card-2H .pic:after,.card-3H .pic:after,.card-4H .pic:after,.card-5H .pic:after,.card-6H .pic:after,.card-7H .pic:after,.card-8H .pic:after,.card-9H .pic:after,.card-10H .pic:after,.card-1H .pic:after { display:inline-block; content:" \A\2665"; transform:scale(4); color:#c00; padding-top:1vh; } 
+.card-2D .pic:after,.card-3D .pic:after,.card-4D .pic:after,.card-5D .pic:after,.card-6D .pic:after,.card-7D .pic:after,.card-8D .pic:after,.card-9D .pic:after,.card-10D .pic:after,.card-1D .pic:after { display:inline-block; content:" \A\2666"; transform:scale(4); color:#c00; padding-top:1vh; } 
+.card-2C .pic:after,.card-3C .pic:after,.card-4C .pic:after,.card-5C .pic:after,.card-6C .pic:after,.card-7C .pic:after,.card-8C .pic:after,.card-9C .pic:after,.card-10C .pic:after,.card-1C .pic:after { display:inline-block; content:" \A\2663"; transform:scale(4); color:#000; padding-top:1vh; } 
+.card-2S .pic:after,.card-3S .pic:after,.card-4S .pic:after,.card-5S .pic:after,.card-6S .pic:after,.card-7S .pic:after,.card-8S .pic:after,.card-9S .pic:after,.card-10S .pic:after,.card-1S .pic:after { display:inline-block; content:" \A\2660"; transform:scale(4); color:#000; padding-top:1vh; } 
+
+.card-1S .pic, .card-1C .pic, .card-1H .pic, .card-1D .pic { left:1.9vw; }
+.card-1S .pic:after, .card-1C .pic:after, .card-1H .pic:after, .card-1D .pic:after { left:1vw; }
+.loser { border-color:#f00; transform: scale(1) rotate(15deg); opacity:1; }
+.pusher { border-color:#ff0; transform: scale(1) rotate(5deg); opacity:1; }
+div.winner {
+    animate: throb 2000ms ease-in;
+    border-color:#f0f; 
+    transform: scale(1)  opacity:1;
+    border: 10px solid transparent;
+    border-radius:2em;
+    border-image: url(img/marquee-small.gif) 10 10 10 10 round;
+    padding: .25em;
+}
+.hand .chip {
+    position:absolute;
+    right:auto;
+    bottom:auto;
+    filter:brightness(1.0);
+    top:1em;
+    left:0em;
+    transform: rotateX(40deg);
+}
+.chip span { pointer-events: none; }
+ .chip {
+    font-family:"Oswald",cursive;
+    position:absolute;
+    font-size:36px;
+    display:inline-block;
+    height:3vw; width:3.1vw;
+    border-radius:5vw;
+    border: 0.5vw dashed #666;
+    background-color:#006600;
+    transform: rotateX(45deg);
+    margin:0;
+    box-shadow:0.25em 0.25em 0.25em rgba(0,0,0,.5);
+    transition: all 300ms ease-in;
+    filter:brightness(0.6);
+ }
+ 
+ .chip:after {
+    height:5vh; width:4vw;
+    padding-top:3vh;
+    display:inline-block;
+    background-color:#00cc00;
+    font-size:2vw;
+    font-weight:900;
+    color:#000;
+    text-shadow:0px 0px 0px rgba(0,0,0,0);
+    border-radius:10vw;
+    position:absolute;
+    top:-1.6vh;
+    left:-0.4vw;
+    border: 0.4vw dashed #fff;
+    text-align:center;
+ }
+.chip span { display:inline-block; position:absolute; width:3.8vw; height:6vh; background-color:#fff; border-radius:5vw; z-index:9990; left:0.1vw; top:-0.5vh; text-align:center; padding-top:0.8vw;  color:#000; font-family:"Bowlby One", cursive; font-size:1.5vw; }
+#chip1.chip span { content: " "; color:#000; font-weight:bold; } 
+#chip1.chip:after { content:" "; background-color:#aa00aa; }
+#chip1.chip { bottom:-2vh; right:9vw; background-color:#660066; }
+#chip5.chip:after { content:" "; background-color:#00aa00; }
+#chip5.chip {  bottom:-2vh; right:3vw; background-color:#006600; }
+#chip25.chip:after { content:" 5"; background-color:#aa0000; }
+#chip25.chip { bottom:-2vh; right:-3vw; background-color:#660000; }
+#chip100.chip:after { content:" "; background-color:#333; }
+#chip100.chip { bottom:-2vh; right:-9vw; background-color:#000000; }
+#chips { position:absolute; bottom:6%; right:20em; display:inline-block; text-align:right; transition:transform 300ms cubic-bezier(.84,1.85,.65,.87); transform: translateY(0em); z-index:99999; }
+#houserules {
+    top:3vh; left:1vw; position:absolute; z-index:99999; font-size:2vw; height:13vh; width:19vw; background-image:url(img/houserules.png); background-size:100% 100%; text-align:center; 
+}
+.rules { font-size: 1.3vw; color:#333; font-family:"Helvetica Neue", Helvetica, sans-serif; text-align:left; position:relative; left:3vw;letter-spacing:-1px;font-weight:500; top:4vh; padding-right:2vw; }
+.bet {
+    position: absolute;
+    display: inline-block;
+    top: 5.2em;
+    font-size: 1.2em;
+    left: -1em;
+    width:2em;
+    z-index: 9999;
+    background-color: rgba(0,0,0,1);
+    padding: .25em 0.8em;
+    border-top-left-radius: 1em;
+    border-bottom-left-radius: 1em;
+    overflow: visible;
+    filter:drop-shadow(0px 2px 0px #fff) drop-shadow(-2px -2px 0px #fff) drop-shadow(2px 0px 0px #fff) drop-shadow(0px 5px 2px rgba(0,0,0,.5));
+    height: 1.5em;
+    border-right: 0;
+}
+
+.bet:before { content: "$"; }
+.bet { display:none; }
+#dealer .info, #dealer .bet { display:none; }
+#buttons button.button:active { transform:translateY(0.25em); }
+button:active { transform:translateY(0.25em); display:inline-block; }
+ 
+.info { 
+    font-family: "Helvetica Neue",Helvetica,sans-serif;
+    text-shadow: 2px 2px 0px #000;
+    font-weight: 300;
+    text-align: right;
+    font-size: 1.5em;
+    position: absolute;
+    padding-right:1em; 
+    width: 9em;
+    padding-top: .5em;
+    height: 2em;
+    top: 12em;
+    left: 1.8em;
+    box-shadow: 0em 0.25em 0.25em rgba(0,0,0,.5);
+    border-radius: 0.6em;
+    color: #fff;
+    border: 1px solid;
+    background-color: rgba(0,0,0,.5);
+    opacity:0.5;
+}
+.bet:after {
+    border-top: 1em solid transparent;
+    border-bottom: 1em solid transparent;
+    display: inline-block;
+    height: 0;
+    width: 0;
+    content: " ";
+    border-left: 1em solid rgba(0,0,0,1);
+    top: 0px;
+    left: 3.5em;
+    position: absolute;
+}
+.info:before { content:"$"; }
+#player3, #player4, #player2 { height: 10em; }
+#player5 .info { bottom: -2%; top:auto; left:15%; }
+#player4 .info { bottom: -17%; top:auto; }
+#player3 .info { bottom: -17%; top:auto; }
+#player2 .info { bottom: -21%; top:auto; left:13%; }
+#player1 .info { bottom: -18%; top:auto; left:-1%; }
+#dealer .total { display:inline-block; }
+#railing { position:absolute; bottom:0px; height:25%; left:0px; right:0px; background-image:url('img/bj-railing.png'); background-size:100% 100%; pointer-events:none; }
+#shoe {background-image:url('img/shoe.png'); background-size:100% 100%; width: 275px; height:219px; position:absolute; top:5%; right:5%; transform:scale(1.3); }
+#cardholder {  
+    position:absolute;
+    height:219px; 
+    width:275px; 
+    top:0px; 
+    left:0px; 
+    z-index:101;
+    display:inline-block; 
+}
+/* shrink shoe by decrementing the width and height of shoecards to a minimum of w:134px h:92px top:100px left:27px and a max of w:168px h:159px top:40px left:40px*/
+#shoecards { display: inline-block; width: 162px; height: 159px; background-position: bottom left; transform: rotateZ(17deg) rotateY(0deg); background-image: url(img/carddeck.png); position: absolute; top: 40px; left: 30px; z-index: 102; overflow: hidden; transition: all 1s linear; }
+#shoecards.min { width:134px; height:92px; top:100px; left:27px; }
+#shoelid { background-image:url('img/shoelid.png'); background-size:100% 100%; width:275px; height:219px; position:absolute; top:0px; left:0px; z-index:103; }
+#shoeside { background-image:url('img/shoeside.png'); background-size:100% 100%; width:275px; height:219px; position:absolute; top:0px; left:0px; z-index:104; }
+.betchips { position:absolute; display:inline-block; width:3em; height:4em; top:1em; left:1em; transition: top 2s cubic-bezier(.25, .99, .71, 1.23), left 2s cubic-bezier(.25, .99, .71, 1.23), transform 2s cubic-bezier(.25, .99, .71, 1.23), opacity 250ms, top 1s; filter:drop-shadow(0px 2px 2px rgba(0,0,0,.5)); z-index:9999; }
+.hideButton { transform: translateY(150%); }
+.showButton { transform: translateY(0%); }
+
+.WIN .bet { filter:drop-shadow(0px 2px 0px #0f0) drop-shadow(-2px -2px 0px #0f0) drop-shadow(2px 0px 0px #0f0) drop-shadow(0px 5px 2px rgba(0,0,0,.5)); }
+.LOSE .bet { filter:drop-shadow(0px 2px 0px #f00) drop-shadow(-2px -2px 0px #f00) drop-shadow(2px 0px 0px #f00) drop-shadow(0px 5px 2px rgba(0,0,0,.5)); }
+.BUST .bet { filter:drop-shadow(0px 2px 0px #a00) drop-shadow(-2px -2px 0px #a00) drop-shadow(2px 0px 0px #a00) drop-shadow(0px 5px 2px rgba(0,0,0,.5)); }
+.PUSH .bet { filter:drop-shadow(0px 2px 0px #0cf) drop-shadow(-2px -2px 0px #0cf) drop-shadow(2px 0px 0px #0cf) drop-shadow(0px 5px 2px rgba(0,0,0,.5)); }
+
+.take { opacity: 0; }
+#player5 .take { transform: translateY(-50em) translateX(20em); }
+#player4 .take { transform: translateY(-50em) translateX(10em); }
+#player3 .take { transform: translateY(-50em) translateX(0em); }
+#player2 .take { transform: translateY(-50em) translateX(-10em); }
+#player1 .take { transform: translateY(-50em) translateX(-20em); }
+
+.rebet { transform: translateY(10em); }
+.splitchips {left:13.5em; top:.5em; z-index:9; }
+.splitbet { left:9.5em; display: inline-block; }
+.spitting .betchips { top:0em; }
+.splitting .total { top:10.5em; left:1em; }
+#player5.splitting .betchips { top:-4em; }
+#player5.splitting .hands { top:3em; }
+#player4.splitting .hands { top:4em; }
+#player3.splitting .hands { top:4em; }
+#player2.splitting .hands { top:3em; }
+#player1.splitting .hands { top:4em; }
+#player5.splitting .total { top:9em; left:2em; }
+#player3.splitting .total { top:12em; left:2em; }
+#player2.splitting .total { top:11em; left:2em; }
+#player1.splitting .total { top:11em; left:1.5em; }
+#player4.splitting .splittotal { top:10.5em; }
+#player2.splitting .splittotal { top:11em; left:6em; }
+#player1.splitting .splittotal { top:11em; left: 6.5em; }
+.click { display:inline-block; position:absolute; height:40%; top:34%; left:16%; color:rgba(255,255,255,.8); text-transform:uppercase; font-family:"Helvetica Neue",Helvetica,sans-serif; letter-spacing:4px; width:20%; text-align:center; line-height:1.5; font-weight:bold; font-size:1.3em; transform:rotateX(45deg); text-shadow:none; pointer-events:none; border:4px solid rgba(255,255,255,.8); border-radius:1em; padding:2.4em 1.6em; }
+#player5 .click { left:23%; top:31%; height:35%; transform:rotateY(-15deg) rotateX(45deg) }
+#player4 .click { left:19%; top:35%; transform:rotateZ(3deg) rotateY(-7deg) rotateX(45deg); }
+#player3 .click {}
+#player2 .click { left:10%; top:36%; height:42%; transform:rotateY(10deg) rotateX(45deg); }
+#player1 .click { left:6%; top:29%; height:45%; transform:rotateX(45deg) rotateZ(-6deg); }
+#dealer .click { display:none; }

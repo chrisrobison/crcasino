@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title></title>
+   <link rel='stylesheet' type='text/css' href='card.css'/>
+</head>
+<body>
+   <div id='main'>
+      <div class='card card-11H'><div class='pic'></div></div>
+      <div class='card card-12S'><div class='pic'></div></div>
+      <div class='card card-13C'><div class='pic'></div></div>
+      <div class='card card-10H'><div class='pic'></div></div>
+      <div class='card card-1C'><div class='pic'></div></div>
+   </div>
+   <script>
+      (function() {
+         window.cdr = {
+            init: function() {
+               var deck = cdr.makeDeck();
+
+               for (var i in deck) {
+                  if (deck.hasOwnProperty(i)) {
+                     $$('main').appendChild(deck[i]);
+                  }
+               }
+               $$("main").addEventListener("mousedown", function(e) {
+                  var tgt = e.target;
+                  cdr.dragging = tgt;
+                  tgt.style.transform = "translateX(0px) translateY(0px)";
+                  cdr.dragX = e.clientX;
+                  cdr.dragY = e.clientY;
+                  tgt.style.zIndex = 9999;
+
+               });
+               document.addEventListener("mousemove", function(e) {
+                  if (cdr.dragging) {
+                     var css = "translateX(" + (e.clientX - cdr.dragX) + "px) translateY(" + (e.clientY - cdr.dragY) + "px)";
+                     console.log(css);
+                     cdr.dragging.style.transform = css;
+                  }
+               });
+
+               $$("main").addEventListener("mouseup", function(e) {
+                  cdr.dragging = undefined;
+               });
+            },
+            makeDeck: function() {
+               var suits = ['H', 'D', 'S', 'C'];
+               var cards = [];
+               for (var s=0; s<4; s++) {
+                  for (var c=1; c<14; c++) {
+                     cards.push(cdr.makeCard(c + suits[s]));
+                  }
+               }
+               return cards;
+            },
+            makeCard: function(card) {
+               var newcard = el('div', '', 'card card-' + card);
+               newcard.appendChild(el('div', '', 'pic'));
+               return newcard;
+            },
+            shuffle: function(deck) {
+
+            }
+         }
+
+      })(); 
+      function el(tag, id, classname, content) {
+         var el = document.createElement(tag);
+         if (id) el.id = id;
+         if (classname) el.className = classname;
+         if (content) el.innerHTML = content;
+         return el;
+      }
+      function $(str) { return document.querySelector(str); }
+      function $$(str) { return document.getElementById(str); }
+      function $$$(str) { return document.querySelectorAll(str); }
+      cdr.init();
+   </script>
+</body>
+</html>
