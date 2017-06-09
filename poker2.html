@@ -602,7 +602,7 @@
 				$$("gameName").innerHTML = pt.name;
 				for (var i=0; i<hands.length; i++) {
 					var name = hands[i];
-					var displayName = name.replace(/([a-zA-Z])([A-Z])/g, "$1 $2");
+					var displayName = name.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/([A-Z])([A-Z])/, "$1 $2");
 					sortable.push([name, pt.hands[name]]);
 
 					var pay = [];
