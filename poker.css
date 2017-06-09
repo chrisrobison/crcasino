@@ -190,7 +190,6 @@
 	top: -7vh;
 	right: -4vw;
 	content: "";
-	border: 1px solid #000;
 	z-index: 99999;
 	background-image: url(img/wild-red.png);
 	background-size: 100% 100%;

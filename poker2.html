@@ -3,6 +3,8 @@
 <head>
    <meta charset="utf-8">
    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=yes'>
+	<link rel='icon' href='favicon.png'>
+	<link rel='shortcut icon' href='favicon.png'>
    <title>Video Poker</title>
    <style>
       body { background-color:#0032b4; color:#fff; font-family:"Helvetica Neue",Helvetica,sans-serif; font-size:1vw; }
@@ -267,7 +269,15 @@
 				  var balance = snapshot.val();
 				  cdr.game.balance = balance;
 				  cdr.game.credit = Math.floor(balance / cdr.game.creditValue);
-				  $$("credit").innerHTML = cdr.game.credit;
+				  var showCredit = cdr.game.credit;
+				  if (showCredit > 1000000000) {
+						showCredit = Math.floor(showCredit / 1000000) / 100 + "B";
+				  } else if (showCredit > 1000000) {
+						showCredit = Math.floor(showCredit / 1000) / 100 + "M";
+				  } else if (showCredit > 1000) {
+						showCredit = Math.floor(showCredit / 100) / 10 + "K";
+				  }
+				  $$("credit").innerHTML = showCredit;
 
 				  if ((cdr.game.credit < 1) || cdr.game.active) {
 					  $$("betOne").setAttribute("disabled",true);
