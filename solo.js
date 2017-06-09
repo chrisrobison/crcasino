@@ -1,6 +1,5 @@
 var bj = {
     config: {
-		  cloudURL: "https://us-central1-crblackjack-9e220.cloudfunctions.net/",
         maxBet: 500,
         minBet: 1,
         insurancePays:2,
@@ -45,8 +44,8 @@ var bj = {
         var p = 0;
 
         bj.table = document.getElementById("main");
-        bj.table.innerHTML = "<div id='highlight'></div>";
-		  
+        bj.table.innerHTML = "";
+
         bj.decks = decks;
         bj.newShoe(decks);
         bj.players = {};
@@ -130,7 +129,7 @@ var bj = {
             div = document.createElement("div");
             div.id = name;
             div.className = "hand";
-            div.innerHTML = "<span class='betchips' id='"+name+"-chips'></span><span class='bet' id='" + name + "-bet'>0</span><span class='total' id='" + name + "-total'></span><span class='click'></span><div class='info'><img class='profilePic'><h1>" + showname + "</h1><span class='bank'>"+bj.players[name].bank+"</span></div>";
+            div.innerHTML = "<span class='betchips' id='"+name+"-chips'></span><span class='bet' id='" + name + "-bet'>0</span><span class='total' id='" + name + "-total'></span><span class='click'>Click to <br>place bet</span><div class='info'><h1>" + showname + "</h1><span class='bank'>"+bj.players[name].bank+"</span></div>";
             
             var d2 = document.createElement('div');
             
@@ -146,7 +145,7 @@ var bj = {
             div = bj.players[name].ui;
         }
 
-        return bj.players[name];
+        return true;
     },
     clearTable: function() {
         var oldcards = document.getElementsByClassName("card"),
@@ -247,15 +246,12 @@ var bj = {
            cardback.classList.add('cardback');
            holecard.appendChild(cardback);
         }
-		  var uicard = $$(pl.name + "-card" + cardnum);
-		  if (!uicard) {
-				uicard = document.createElement("div");
-			   uicard.className = "card undealt card-" + card.replace(/\W/, '');
-			   var pic = document.createElement('div');
-			   pic.className = 'pic';
-			   uicard.appendChild(pic);
-			   if (!hole) $$(pl.name + '-' + type).appendChild(uicard);
-		  }
+        var uicard = document.createElement("div");
+        uicard.className = "card undealt card-" + card.replace(/\W/, '');
+        var pic = document.createElement('div');
+        pic.className = 'pic';
+        uicard.appendChild(pic);
+
         if (cardnum===0) { uicard.style.marginTop = "0px"; }
         if (type === 'splithand') {
             uicard.id = pl.name + "-split" + cardnum; 
@@ -280,12 +276,21 @@ var bj = {
              $$(pl.name + '-' + 'hands').appendChild(holecard);
              setTimeout(function() { uicard.classList.remove('undealt'); holecard.classList.remove('undealt'); }, (bj.delay * idx) + 250);
         } else {
-             setTimeout(function() { uicard.classList.remove('undealt'); }, (bj.delay * idx) + 50);
+             $$(pl.name + '-' + type).appendChild(uicard);
+             setTimeout(function() { uicard.classList.remove('undealt'); }, (bj.delay * idx) + 250);
         }
 
         return uicard;
     },
-	 resetTable: function() {
+    deal: function() {
+        var i, p, pl, card, uicard;
+        bj.counted = false;
+        bj.stopped = false;
+
+        if (bj.shoe.length < ((bj.playerCount + 1) * 5)) {
+            bj.newShoe(bj.decks);
+        }
+
         bj.clearTable();
         $$("chips").style.transform = "translateY(20em)";
 
@@ -311,23 +316,13 @@ var bj = {
             $$("player"+p).classList.remove('LOSE');
             $$("player"+p).classList.remove('WIN');
             $$("player"+p).classList.remove('BUST');
+            
+            
         }
         bj.players.dealer.cards = [];
         bj.players.dealer.isBusted = false;
         bj.players.dealer.total = 0;
-	 },
-    deal: function() {
-        var i, p, pl, card, uicard;
-        bj.counted = false;
-        bj.stopped = false;
-
-        if (bj.shoe.length < ((bj.playerCount + 1) * 5)) {
-            bj.newShoe(bj.decks);
-        }
-
-        bj.resetTable();
-		  
-		  var cnt = 0;
+        var cnt = 0;
 
         for (i = 0; i < 2; i++) {
             for (p = 1; p < bj.playerCount + 1; p++) {
@@ -465,7 +460,6 @@ var bj = {
       if (c2 === 1) c2 = 11;
       console.log("Postparse:  Card 1: "+c1+" Card 2: "+c2);
       console.log("Total: " + (c1 + c2));
-		if (c1 + c2 === 21) { console.log(player.name + " has BLACKJACK!"); }
       return (c1+c2===21);
     },
     blackjack: function(player) {
@@ -828,35 +822,6 @@ var bj = {
         setTimeout(function() { winchips.style.top = "100%"; winchips.style.left = left; }, 500);
         //setTimeout(function() { $$('main').removeChild(winchips); }, 4000);
     },
-	 bet: function(player, amt) {
-		 var denoms = [100, 25, 5, 1];
-       var runningTotal = amt;
-		 var chips = [$$('chip100').cloneNode(true), $$('chip25').cloneNode(true), $$('chip5').cloneNode(true), $$('chip1').cloneNode(true)];
-		 var stack = [];
-		 var match = player.match(/player(\d)/);
-		 var pn = parseInt(match[1]) - 3;
-
-		 for (var i=0; i < denoms.length; i++) {
-			 var denom = denoms[i];
-			 
-			 var chunks = Math.floor(runningTotal / denom);
-			 if (chunks > 0) {
-				 runningTotal -= chunks * denom;
-				 for (var j=0; j < chunks; j++) {
-					 var cloneChip = chips[i].cloneNode(true);
-					 cloneChip.classList.remove('selected');
-					 cloneChip.style.marginTop = -stack.length * 0.75 + "vh";
-					 cloneChip.style.marginLeft = stack.length * (pn * -0.12) + "vw";
-					 $$(player + "-chips").appendChild(cloneChip);
-					 stack.push(cloneChip);
-				 }
-			 }
-		 }
-		 bj.players[player].chips = stack;
-		 $$(player + "-bet").innerHTML = amt;
-		 $$(player + "-bet").style.display = "inline-block";
-		 $("#" + player + " .info").style.opacity = 1;
-	 },
     rebet: function(player) {
         var pc = $$(player + "-chips");
         setTimeout(function() {
@@ -991,7 +956,7 @@ var bj = {
         }
         
         var totel = document.getElementById(player + "-total");
-        totel.style.display = "inline-block";
+        
         setTimeout(function() { 
             totel.innerHTML = bj.players[player].total;
             
@@ -1057,427 +1022,10 @@ var bj = {
 			// The firebase.auth.AuthCredential type that was used.
 			var credential = error.credential;
 	  });
-	 }, 
-	 joinTable: function(uid) {
-		 var scr = el("script");
-		 scr.src = bj.config.cloudURL + "joinTable?callback=bj.gotSeat&table=1&uid=" + firebase.auth().currentUser.uid;
-		 document.body.appendChild(scr);
-	 },
-	 displayCard: function(obj, sequence) {
-		 var pl = bj.players[obj.player];
-		 if (sequence!==0 && !sequence) {
-			sequence = pl.cards.length;
-		 }
-		 if (!pl.cards.includes(obj.card)) {
-			 pl.cards.push(obj.card);
-			 bj.showCard(obj.card, bj.players[obj.player], 0, pl.cards.length);
-			 bj.tallyCards(obj.player);
-		 }
-	 },
-	 gotSeat: function(obj) {
-		 console.log("gotSeat: " + JSON.stringify(obj));
-		 console.dir(obj);
-		 bj.me.seat = parseInt(obj.seat);
-		 firebase.database().ref("tables/"+obj.table+"/actions/" + firebase.auth().currentUser.uid).on("value", function(snap) {
-			 snap.forEach(function(childSnapshot) {
-			     var childKey = childSnapshot.key;
-				  var actions = childSnapshot.val();
-				  console.log("[gotSeat] received action: "+JSON.stringify(actions));
-				  console.dir(actions);
-				  if (actions && actions.action && actions.payload) {
-				     bj[actions.action](actions.payload);
-				     firebase.database().ref("tables/"+obj.table+"/actions/" + firebase.auth().currentUser.uid + "/" + childKey).remove()
-				  }
-			 });
-		 });
-		 firebase.database().ref("tables/"+obj.table+"/currentSeat").on("value", function(snap) {
-			 var currentSeat = snap.val();
-			 bj.currentSeat = currentSeat;
-			 if (currentSeat) {
-				bj.nextSeat(currentSeat);
-				 if (bj.me.seat === currentSeat) {
-					 bj.showButton("hitstay");
-					 bj.showButton("doubleButton");
-					 bj.hideButton("splitButton");
-				 }
-			}
-		 });
-		 bj.tableID = obj.table;
-		 bj.db = obj;
-		 if (bj.db.game.currentSeat==0) {
-			bj.showButton("dealButton");
-		 } else {
-			bj.hideButton("dealButton");
-		 }
-		 bj.me.playerNum = obj.seat;
-		 bj.me.player = "player" + obj.seat;
-		 bj.makePlayer("Dealer");
-		 
-		 for (var i in obj.game.players) {
-			if (obj.game.players.hasOwnProperty(i)) {
-				 bj.playerJoined(obj.game.players[i]);
-				 var cards = obj.game.players[i].cards[0];
-				 if (cards.hand) {
-					var keys = Object.keys(cards.hand);
-					for (var j=0; j < keys.length; j++) {
-						var card = (cards.hand && cards.hand[j]) ? cards.hand[j] : "";
-						 if (card) {
-							bj.displayCard({"player":"player"+obj.game.players[i].seat, "card":card, "sequence":j });	
-						}
-					 }
-				 } 
-			 }
-		 }
-		 //bj.displayCard({"player":"dealer", "card": obj.game.dealer.cards.hand[0]},0);
-	    // showCard: function(card, pl, idx, cardnum, hole=0, type='hands') {
-		 console.log("currentSeat: "+obj.game.currentSeat);
-		 if (obj.game.currentSeat===0) {
-			var dc = obj.game.dealer.cards.hand;
-			for (var i=0; i< dc.length; i++) {
-				bj.players['dealer'].cards.push(dc[i]);
-				bj.showCard(dc[i], bj.players.dealer, 0, i, 0);
-				bj.tallyCards("dealer", 0, 0);
-			}
-			bj.tallyCards("dealer", 0, 0);
-		 } else {
-			 bj.players['dealer'].cards.push(obj.game.dealer.cards.hand[0]);
-			 bj.players['dealer'].cards.push(obj.game.dealer.cards.hand[1]);
-			 bj.showCard(obj.game.dealer.cards.hand[0], bj.players.dealer, 0, 0, 0);
-			 bj.showCard(obj.game.dealer.cards.hand[1], bj.players.dealer, 0, 1, 1);
-			 bj.tallyCards("dealer", 0, 1);
-		 }
-	 },
-	 playerJoined: function(obj) {
-		if (obj) {
-			var key = "player" + obj.seat;
-			bj.players[key].info = obj;
-			bj.players[key].name = "player" + obj.seat;
-			bj.players[key].player = "player" + obj.seat;
-			bj.players[key].bet = obj.bet;
-			bj.players[key].profilePic = obj.profile_picture;
-			bj.players[key].cards = [];
-
-			$$(key).classList.add('active');
-			$("#" + key + " .info h1").innerHTML = obj.info.name;
-			$("#" + key + " .info .bank").innerHTML = "";
-			$("#" + key + " .click").innerHTML = "";
-			$("#" + key + " .profilePic").src = obj.info.profile_picture;
-			
-			if (obj.bet) {
-				bj.bet(key, obj.bet);
-			}
-		}
-	 },
-	 placeBet: function(amt) {
-		 var scr = el("script");
-		 scr.src = bj.config.cloudURL + "bet?callback=bj.betMade&bet=" + amt + "&table=" + bj.tableID + "&uid=" + firebase.auth().currentUser.uid;
-		 document.body.appendChild(scr);
-	 },
-	 betMade: function(obj) {
-		console.log("betMade: "+JSON.stringify(obj));
-		console.dir(obj);
-			
-	 },
-	 dealCards: function() {
-		 var scr = el("script");
-		 scr.src = bj.config.cloudURL + "deal?callback=bj.startPlaying&table=" + bj.tableID + "&uid=" + firebase.auth().currentUser.uid;
-		 document.body.appendChild(scr);
-		 bj.hideButton("dealButton");
-	 },
-	 doHit: function() {
-		clearTimeout(bj.playerCountdownTimeout);
-		$$("playerCountdown").classList.remove("show");
-	
-		if (bj.currentSeat === bj.me.seat) {
-		   $$("playerTimer").innerHTML = "0:10 seconds";
-		   bj.playerTimer = 10;
-			var scr = el("script");
-			scr.src = bj.config.cloudURL + "hit?callback=bj.gotHit&table=" + bj.tableID + "&uid=" + firebase.auth().currentUser.uid;
-			document.body.appendChild(scr);
-			bj.hideButton("splitButton");
-			bj.hideButton("doubleButton");
-		}
-	 },
-	 gotHit: function(obj) {
-		console.log("gotHit: " + JSON.stringify(obj));
-		console.dir(obj);
-		 var pl = bj.players[obj.player];
-		 clearTimeout(bj.playerCountdownTimeout);
-	    bj.playerCountdownTimeout = 0;
-		 $$("playerCountdown").classList.remove("show");
-
-		 $$("playerTimer").innerHTML = "0:10 seconds";
-		 bj.playerTimer = 10;
-		 setTimeout(function() { $$("playerCountdown").classList.add("show");}, 100);
-		 if (!bj.playerCountdownTimeout) {
-			bj.playerCountdownTimeout = setTimeout(bj.updatePlayerCountdown, 1000);
-		 }
-		 
-		 if (!pl.cards.includes(obj.card)) {
-			 pl.cards.push(obj.card);
-			 bj.showCard(obj.card, pl, 0, pl.cards.length);
-			 bj.tallyCards(obj.player, 0);
-		 }
-	 },
-	 startPlaying: function(obj) {
-		console.log("startPlaying: "+JSON.stringify(obj));
-		console.dir(obj);
-		
-		var players = [], keys = [], seats = [], ids;
-		bj.currentSeat = obj.currentSeat;
-
-		ids = Object.keys(obj.players);
-		for (var i in obj.players) {
-			if (obj.players.hasOwnProperty(i)) {
-				var pl = obj.players[i];
-				pl.uid = i;
-				players.push(pl);
-				seats[pl.seat] = i;
-			}
-		}
-		var sorted = players.sort(function(a, b) { return (a.seat > b.seat) ? 1 : ((b.seat > a.seat) ? -1 : 0);});
-
-		var cnt = 0;
-		for (var c=0; c < 2; c++) {
-			for (var s=1; s < 6; s++) {
-				var p = seats[s];
-				if (p) {
-					cnt++;
-					var pl = obj.players[p];
-					pl.name = "player" + pl.seat;
-					var card = pl.cards[0].hand[c];
-					bj.showCard(card, pl, cnt, c, 0);
-					bj.players[pl.name].cards[c] = card;
-					$$(pl.name+'-total').classList.remove('hide');
-					bj.tallyCards("player" + pl.seat, 0);
-				}
-			}
-			cnt++;
-			if (c!==1) {
-				bj.players['dealer'].cards[0] = obj.dealer.hand[c];
-				bj.showCard(obj.dealer.hand[c], bj.players["dealer"], cnt, c, 0);
-				bj.tallyCards('dealer', cnt, 1);
-			} else {
-				bj.players['dealer'].cards[1] = obj.dealer.hand[c];
-				bj.showCard(card, bj.players["dealer"], cnt, c, 1);
-			}
-			cnt++;
-	     // showCard: function(card, pl, idx, cardnum, hole=0, type='hands') {
-		}
-		bj.hideButton('splitButton');
-		bj.showButton('hitstay');
-		bj.nextSeat(bj.currentSeat);
-	 },
-	 doDealer: function(obj) {
-			clearTimeout(bj.playerCountdownTimeout);
-			bj.playerCountdownTimeout = 0;
-			$$("playerCountdown").classList.remove("show");
-
-			var hole = $$('holecard')
-			if (hole) { 
-				hole.style.transform = "rotateY(180deg)";
-			}
-			//bj.players["dealer"].cards = obj.hand;
-			var cnt = 1;
-			console.log("doDealer: " + JSON.stringify(obj));
-			var keys = Object.keys(obj.hand);
-			for (var i=2; i < keys.length; i++) {
-				console.log("doDealer: showing card: " + obj.hand[i]);
-				bj.players['dealer'].cards.push(obj.hand[i]);
-				bj.showCard(obj.hand[i], bj.players['dealer'], 0, i, 0);
-				cnt++;
-			}
-			bj.tallyCards('dealer', 0);
-			
-			for (var i in obj.results) {
-				var result = obj.results[i].hands[0].result;
-				var pl = "player" + bj.db.game.seats[i];
-
-				if (result==="WIN") {
-					bj.showResult(pl, "WIN", "winner");
-					bj.winChips(pl);
-				   $$(pl+'-total').style.borderColor = "#0f0";
-               $$(pl+'-total').style.color = "#0f0";
-               $$(pl).classList.add('WIN');
-				} else if (result==="PUSH") {
-					bj.showResult(pl, "PUSH", "pusher");
-				   $$(pl+'-total').style.borderColor = "#aaa";
-               $$(pl+'-total').style.color = "#aaa";
-               $$(pl).classList.add('PUSH');
-				} else if (result==="BUST") {
-				   $$(pl+'-total').style.borderColor = "#a00";
-               $$(pl+'-total').style.color = "#a00";
-               $$(pl).classList.add('BUST');
-				} else {
-					bj.showResult(pl, "LOSE", "loser");
-				   $$(pl+'-total').style.borderColor = "#aaa";
-               $$(pl+'-total').style.color = "#aaa";
-               $$(pl).classList.add('LOSE');
-               $$(pl+'-chips').classList.add('take');
-               bj.rebet(pl);
-				}
-			}
-			setTimeout(bj.resetGame, 5000);
-	 },
-	 removeCard: function(el) {
-		setTimeout(function() { 
-			if (el && el.parentNode) el.parentNode.removeChild(el); 
-		}, 1500);
-	 },
-	 resetGame: function() {
-		 var cards = $$$(".card");
-		 for (var i in cards) {
-			  if (cards.hasOwnProperty(i)) {
-					cards[i].style.transform = "";
-					cards[i].style.transition = "all 1000ms linear";
-					cards[i].classList.add('discarded');
-					bj.removeCard(cards[i]);
-			  }
-		 }
-		 var hole = $$("holecard");
-		 if (hole) {
-			hole.parentNode.removeChild($$("holecard"));
-		 }
-
-		 var results = $$$(".results");
-		 for (var i in results) {
-			 if (results.hasOwnProperty(i)) {
-				 results[i].style.transform = "";
-				 results[i].style.opacity = 0;
-			 }
-		 }
-		 
-		 var busted = $$$(".busted");
-		 for (var i in busted) {
-			 if (busted.hasOwnProperty(i)) {
-				 busted[i].style.transform = "";
-				 busted[i].style.opacity = 0;
-			 }
-		 }
-		 
-		 var totals = $$$(".total");
-		 for (var i in totals) {
-			 if (totals.hasOwnProperty(i)) {
-				 totals[i].classList.add('hide');
-			 }
-		 }
-
-		 var LOSES = $$$(".LOSE");
-		 for (var i in LOSES) {
-			 if (LOSES.hasOwnProperty(i)) {
-				 LOSES[i].classList.remove('LOSE');
-			 }
-		 }
-
-		 var WINS = $$$(".WIN");
-		 for (var i in WINS) {
-			 if (WINS.hasOwnProperty(i)) {
-				 WINS[i].classList.remove('WIN');
-			 }
-		 }
-
-
-		 $$("dealer-total").classList.remove('hide');
-		 $$("highlight").style.display = "none";
-		 bj.nextGameCountdown();
-
-		 for (var i in bj.players) {
-			if (bj.players.hasOwnProperty(i)) {
-				bj.players[i].cards = [];
-				$$(i+"-total").innerHTML = 0;
-			}
-		 }
-		 bj.players['dealer'].cards = [];
-	 },
-	 nextGameCountdown: function() {
-		bj.countdown = 10;
-		$$("nextGameCountdown").classList.add('show');
-		setTimeout(bj.updateCountdown, 1000);
-		setTimeout(bj.dealCards, 10000);
-	 },
-	 updatePlayerCountdown: function() {
-		bj.playerTimer--;
-		var fmt = bj.playerTimer;
-		if (fmt < 10) {
-			fmt = "0" + fmt;
-		}
-		$$("playerTimer").innerHTML = "0:" + fmt + " seconds";
-		
-		if (bj.playerTimer > 0) {
-			setTimeout(bj.updatePlayerCountdown, 1000);
-		} else {
-			$$("playerCountdown").classList.remove('show');
-			bj.doStay();
-		}
-	 },
-	 updateCountdown: function() {
-		bj.countdown--;
-		var fmt = bj.countdown;
-		if (fmt < 10) {
-			fmt = "0" + fmt;
-		}
-		$$("nextGameTimer").innerHTML = "0:" + fmt + " seconds";
-		
-		if (bj.countdown > 0) {
-			setTimeout(bj.updateCountdown, 1000);
-		} else {
-			$$("nextGameCountdown").classList.remove('show');
-		}
-	 },
-	 nextSeat: function(seat=bj.currentSeat) {
-		 if (seat) {
-			if (Number.isInteger(seat)) {
-				bj.currentSeat = seat;
-			   var pname = bj.db.game.players[bj.db.game.seats[seat]].info.name;
-			   var plural = (pname.match(/s$/)) ? "'" : "'s";
-			   $$("playerCountdownName").innerHTML = bj.me.displayName + plural;
-				if (seat == bj.me.seat) {
-				   $$("playerCountdownTagLine").innerHTML = "Make your move...";
-				} else {
-					$$("playerCountdownTagLine").innerHTML = pname + " is making their move...";
-				}
-			 } else {
-			   $$("playerCountdownName").innerHTML = "Dealer's";
-				$$("playerCountdownTagLine").innerHTML = "Dealer is playing..."; 
-				bj.currentSeat = "dealer";
-			 }
-			 
-		 } 
-		 var id = (seat=="dealer") ? "dealer" : "player" + seat;
-		 $$("highlight").style.display = "inline-block";
-		 $$("highlight").className = id;
-		 bj.currentPlayerNum = bj.currentSeat;
-		 bj.currentPlayer = id;
-		 
-		 if (bj.me.seat === bj.currentSeat) {
-			 bj.showButton("hitstay");
-			 bj.showButton("doubleButton");
-			 bj.hideButton("splitButton");
-			 var pname = bj.me.displayName;
-			 var plural = (pname.match(/s$/)) ? "'" : "'s";
-			 $$("playerCountdownName").innerHTML = bj.me.displayName + plural;
-		 }
-		 bj.playerTimer = 10;
-		 $$("playerTimer").innerHTML = "0:" + bj.playerTimer + " seconds";
-		 $$("playerCountdown").classList.add("show");
-	    if (!bj.playerCountdownTimeout) {
-			bj.playerCountdownTimeout = setTimeout(bj.updatePlayerCountdown, 1000);
-		 }
-	 },
-	 doStay: function() {
-		clearTimeout(bj.playerCountdownTimeout);
-		bj.playerCountdownTimeout = 0;
-		$$("playerCountdown").classList.remove("show");
-
-		if (bj.currentSeat === bj.me.seat) {
-		 var scr = el('script');
-		 scr.src = bj.config.cloudURL + "stay?callback=bj.nextSeat&table=" + bj.tableID + "&uid=" + bj.me.uid;
-		 document.body.appendChild(scr);
-		 bj.hideButton("hitstay");
-		}
 	 }
 };
-function el(tag, id='', classname='', content='') {
+
+function el(tag, id, classname, content) {
     var el = document.createElement(tag);
     if (id) el.id = id;
     if (classname) el.className = classname;
@@ -1488,6 +1036,4 @@ function $$$(str) { return document.querySelectorAll(str); }
 function $$(str) { return document.getElementById(str); }
 function $(sel) { return document.querySelector(sel); }
 
-
-document.addEventListener("DOMContentLoaded", function(event) { bj.init(1, 5); } );
-
+ document.addEventListener("DOMContentLoaded", function(event) { bj.init(1, 5); } );

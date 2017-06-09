@@ -4,17 +4,22 @@
 	<style>
 		body { background-color:#000; }
 
-		#head { display:inline-block; border-radius:10em; background-color:#ee0; box-shadow:1vw 1vw 1vw rgba(255,255,255,.5); height:10vw; width:10vw; }
+		#head { display:inline-block; border-radius:10em; background-color:#ee0; 
+		
+			background: linear-gradient(to bottom, #fde239 0%, #fdb627 100%);
+		box-shadow:1vw 1vw 1vw rgba(255,255,255,.5); height:10vw; width:10vw; }
 		#forehead { display:inline-block; width:8vw; height:2vh; position:relative; }
 		#eyes { display:inline-block; width:8vw; height:4vh; }
-		.eye { position:relative; display:inline-block; 
+		.eye { position:absolute; display:inline-block; 
 			background: rgb(168,148,0);
 			background: -moz-linear-gradient(top,  rgba(168,148,0,1) 0%, rgba(255,246,0,1) 100%);
 			background: -webkit-linear-gradient(top,  rgba(168,148,0,1) 0%,rgba(255,246,0,1) 100%);
 			background: linear-gradient(to bottom,  rgba(168,148,0,1) 0%,rgba(255,246,0,1) 100%);
 			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a89400', endColorstr='#fff600',GradientType=0 );
-			height:4vw; width:4vw; left:2vw; border-radius:5vw; transform: scaleX(0.8); z-index:100; }
-		.eye:after { display:inline-block; height:1vw; width:1vw; border-radius:1vw; background-color:#000; position:absolute; left:40%; top:50%; content:" "; z-index:5; }
+			height:3.4vw; width:3.7vw; left:2vw; top:3vh; border-radius:5vw; transform: scaleX(0.8); z-index:100; }
+		.eye:after { display:inline-block; height:0.6vw; width:0.6vw; border-radius:1vw; background-color:#000; position:absolute; left:40%; top:30%; content:" "; z-index:50; }
+		.eye.left { left:2vw; }
+		.eye.right { left:5.4vw; }
 		/* .eye:before { display:inline-block; position:absolute; top:-0.4vw; left:-0.4vw; width:2.5vw; height:2.5vw; 
 		background: rgb(168,148,0);
 		background: -moz-linear-gradient(top,  rgba(168,148,0,1) 0%, rgba(255,246,0,1) 100%);
@@ -33,13 +38,13 @@
 		.socket { 
 			display:inline-block; 
 			position:absolute; 
-			top:0px; 
-			left:0px; 
+			top:0.4vh; 
+			left:0.3vw; 
 			background-color:#fff; 
-			width:3vw; 
-			height:3vw; 
+			width:2.8vw; 
+			height:2.8vw; 
 			border-radius:5vw; 
-			z-index:1;
+			box-shadow:-.125vw -.25vw .25vw rgba(0,0,0,.5);
 		}
 	</style>
 </head>

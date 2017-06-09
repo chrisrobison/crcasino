@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+	<style>
+		body { background-color:#0ac; }
+		.plus {
+			display:inline-block;
+			position:absolute;
+			width:33.3px;
+			height:100px;
+			background-color:#000;
+			transition:all 2s linear;
+			animation:spin 4s infinite;
+			z-index:1;
+		}
+		.plus:after {
+			display:inline-block;
+			position:absolute;
+			content:" ";
+			left:-33.3px;
+			width:100px;
+			top:33.3px;
+			height:33.3px;
+			background-color:#000;
+			z-index:1;
+		}	
+		.white {
+			display:inline-block;
+			position:absolute;
+			width:33.3px;
+			height:100px;
+			background-color:#fff;
+			transition:all 2s linear;
+			animation:spin 4s infinite;
+		}
+		.white:after {
+			display:inline-block;
+			position:absolute;
+			content:" ";
+			left:-33.3px;
+			width:100px;
+			top:33.3px;
+			height:33.3px;
+			background-color:#fff;
+		}	
+		@keyframes spin {
+			0% { transform:rotate(0deg); z-index:9999; }
+			30% { transform:rotate(90deg); z-index:9999; }
+			100% { transform: rotate(90deg); z-index:9999; }
+		}
+	</style>
+</head>
+<body>
+<script>
+	function makePlus(color, id) {
+		var plus = el("div", id, "plus");
+		return plus;
+	}
+	
+	function init() {
+		var cnt = 0;
+		for (var r=0; r<5; r++) {
+			for (var c=0; c<5; c++) {
+				cnt++;
+				var e = el("div", "plus"+c+''+r, "plus");
+				e.style.top = (r * 100) + (c * 66.3) + "px";
+				e.style.left = (c * 133) + (r * 33.3) + "px";
+				e.style.animationDelay = (c * 500) + (r * 250) + "ms";
+				document.body.appendChild(e);
+				
+				var w = el("div", "white"+c+''+r, "white");
+				w.style.top = (r * 100) + (c * 66.3) + 33.3 + "px";
+				w.style.left = (c * 133) + (r * 33.3) + 66.6 + "px";
+				w.style.animationDelay = (c * 2000) + (r * 1000) + "ms";
+				document.body.appendChild(w);
+
+			}
+		}
+	}
+	function $$(str) { return document.getElementById(str); }
+	function el(tag, id, classname, content) {
+		var el = document.createElement(tag);
+		if (id) el.id = id;
+		if (classname) el.className = classname;
+		if (content) el.innerHTML = content;
+		return el;
+	}
+	init();
+</script>
+</body>
+</html>

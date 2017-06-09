@@ -32,9 +32,9 @@
     </div>
     <div id='river' class='hidden'>
       <div id='card0' class='cardwrap undealt'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card1' class='cardwrap undealt'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card2' class='cardwrap undealt'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card3' class='cardwrap undealt'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+      <div id='card1' class='cardwrap undealt'><div class='card card13H suitH face'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+      <div id='card2' class='cardwrap undealt'><div class='card card12H suitH face'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+      <div id='card3' class='cardwrap undealt'><div class='card card11H suitH face'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
       <div id='card4' class='cardwrap undealt'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
     </div>
     <div id='player' class='hidden'>
@@ -507,9 +507,16 @@
 		  nextCard: function(obj) {
 			  var card = obj.card;
 			  //card = cdr.cards.deck.shift();
+			  console.log("nextCard:"+JSON.stringify(obj) + " ["+cdr.state.nextCard+"]");
 			  console.dir(obj);
 			  cdr.cards.river.push(card);
-			  $("#card" + cdr.state.nextCard + " .card").className = "card card" + card + " suit" + card.replace(/\d+/,'') + " " + ((parseInt(card) > 10) ? 'face' : '');
+			  console.log("Card: "+card);
+			  var suit = card.replace(/\d+/,'');
+			  var face = (parseInt(card) > 10) ? "face" : "";
+			  console.log("Suit: "+suit+" Face: "+face);
+			  var newclass = "card card" + card + " suit" + suit + " " + face;
+			  console.log("newclass: "+newclass);
+			  $("#card" + obj.cardID + " .card").className = "card card" + card + " suit" + suit + " " + face;
 			  
 			  cdr.dealCard("card" + obj.cardID);
 			  cdr.state.nextCard++;

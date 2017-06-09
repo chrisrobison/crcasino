@@ -18,7 +18,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
          height:600px; 
          border:.5em solid #000;
          background-position: 0px -3200px;
-         animation: spin 1000ms 5 linear;
+         animation: spin 3000ms 1 cubic-bezier(1,1.58,.75,.77);
          margin:0;
 
       }
@@ -32,7 +32,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
          100% { background-position: 0px 0px; }
       }
       #slot {
-         margin-top:1em; 
+         margin-top:1em;
+			border:.5vw solid #000;
+			background: rgb(245,246,246);
+			background: -moz-linear-gradient(top, rgba(245,246,246,1) 0%, rgba(214,214,214,1) 11%, rgba(219,220,226,1) 33%, rgba(255,255,255,1) 48%, rgba(255,255,255,1) 48%, rgba(216,216,216,1) 81%, rgba(221,223,227,1) 90%, rgba(245,246,246,1) 100%);
+			background: -webkit-linear-gradient(top, rgba(245,246,246,1) 0%,rgba(214,214,214,1) 11%,rgba(219,220,226,1) 33%,rgba(255,255,255,1) 48%,rgba(255,255,255,1) 48%,rgba(216,216,216,1) 81%,rgba(221,223,227,1) 90%,rgba(245,246,246,1) 100%);
+			background: linear-gradient(to bottom, rgba(245,246,246,1) 0%,rgba(214,214,214,1) 11%,rgba(219,220,226,1) 33%,rgba(255,255,255,1) 48%,rgba(255,255,255,1) 48%,rgba(216,216,216,1) 81%,rgba(221,223,227,1) 90%,rgba(245,246,246,1) 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f6f6', endColorstr='#f5f6f6',GradientType=0 );
       }
       #main { position:absolute; top:0px; left:0px; right:0px; bottom:0px; height:100%; width:100%; overflow:hidden; 
          background: -moz-linear-gradient(top, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 49%, rgba(255,255,255,0.75) 100%);
@@ -41,6 +47,64 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bfffffff', endColorstr='#bfffffff',GradientType=0 );
 
       }
+		button { outline:none; }
+		#spin { 
+			display:inline-block;
+			position:absolute;
+			width:12vw;
+			height:21.5vh;
+			padding-top:5vh;
+			border-radius:10vw;
+			border:1vw solid #900;
+			background-color:#f00;
+			color:#fff;
+			font-size:3vw;
+			font-weight:bold;
+			font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+			box-shadow:-0.2vw -0.6vh 0vw #ffcccc;
+		}
+		#spin:before {
+			display:inline-block;
+			position:absolute;;
+			width:10vw;
+			height:18vh;
+			border-radius:10vw;
+			background-color:#600; 
+			top:0vw;
+			left:0vw;
+			content:" ";
+		}
+		#spin:after {
+			content:"SPIN";
+			display:inline-block;
+			position:absolute;
+			padding-top:4vh;
+			width:8.5vw;
+			height:11vh;
+			border-radius:10vw;
+			background-color:#f00;
+			border:.25vw solid rgba(255,255,255,.5);
+			text-shadow:-1px -1px 0px #000;
+			top:0vw;
+			left:.5vw;
+		}
+		#spin:active:after {
+			top:.5vw;
+		}
+		#spin:active {
+			border-color:#f00;
+		}
+		#machineOverlay {
+			display:none;
+			position:absolute;
+			left:0px;
+			right:0px;
+			top:0px;
+			bottom:0px;
+			width:100%;
+			height:100%;
+
+		}
    </style>
 </head>
 <body>
@@ -48,6 +112,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
       <div id='slot'>
          <div id='reel1' class='reel'></div><div id='reel2' class='reel'></div><div id='reel3' class='reel'></div><div id='reel4' class='reel'></div><div id='reel5' class='reel'></div>
       </div>
+		<div id='machineOverlay'><img src='img/slot.png'></div>
+		<button id='spin'></button>
    </div>
 <script>
 

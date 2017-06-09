@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans|Bevan|Titan+One');
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans');
 .card {
    font-family:"Noto Sans",cursive;
 	display:inline-block;
@@ -13,11 +13,23 @@
    margin-left:.5em;
    box-shadow: 0.3vw 0.6vh 0.5vw rgba(0,0,0,.4);
 }
+#cards {
+	position:absolute;
+	bottom:20vh;
+	left:15vw;
+}
+#hands .cardwrap {
+   transform-style: preserve-3d;
+   transition: transform 200ms;
+   width:8vw;
+   height:20vh;
+   display:inline-block;
+}
 .cardwrap {
    transform-style: preserve-3d;
    transition: transform 200ms;
-   width:16vw;
-   height:36vh;
+   width:13vw;
+   height:32vh;
    display:inline-block;
 }
 #holds {
@@ -25,6 +37,10 @@
     height:1em;
     margin:.5em 0;
 	 width:102vw;
+	position:absolute;
+	bottom:20vh;
+	left:10vw;
+	display:none;
 }
 .hold {
     color:#ff0;
@@ -49,8 +65,8 @@
   margin: 0;
   display: inline-block;
   position: absolute;
-  width: 15vw;
-  height: 36vh;
+  width: 100%;
+  height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform-style:preserve-3d;
@@ -65,13 +81,34 @@
    transform: rotateY(-180deg); 
   transform-style:preserve-3d;
 }
+
+#hands .cardwrap .card {
+  margin: 0;
+  display: inline-block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style:preserve-3d;
+}
+#hands .cardwrap .cardback {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style:preserve-3d;
+  transform: rotateY(180deg);
+}
+#hands .cardwrap.flipped  {
+   transform: rotateY(-180deg); 
+  transform-style:preserve-3d;
+}
 .cards {
    position: relative;
    perspective: 800px;
 }
-.card:before {
-   line-height: 8vh;
-   font-size: 4vw;
+#hands .card:before {
+   line-height: 4vh;
+   font-size: 2vw;
    white-space: pre;
    transform-style:preserve-3d;
    backface-visibility:hidden;
@@ -79,6 +116,21 @@
    text-align: center;
    display: inline-block;
    padding: .125em .125em .25em .05em;
+   position:absolute;
+   left:0px;
+   top:0px;
+   font-weight:bold;
+}
+.card:before {
+   line-height: 120%;
+   font-size: 300%;
+   white-space: pre;
+   transform-style:preserve-3d;
+   backface-visibility:hidden;
+   -webkit-backface-visibility:hidden;
+   text-align: center;
+   display: inline-block;
+   padding: 3% 1%;
    position:absolute;
    left:0px;
    top:0px;
@@ -139,17 +191,33 @@
 .card1C:before {color:#000; content: "A\A\2663"; }
 
 
-.card:after {
-   line-height: 8vh;
+#hands .card:after {
+   line-height: 4vh;
    transform-style:preserve-3d;
 	backface-visibility:hidden;
 	-webkit-backface-visibility:hidden;
-   font-size: 4vw;
+   font-size: 2vw;
    font-weight:bold;
    white-space: pre;
    text-align: center;
    display: inline-block;
    padding: .125em .125em .25em .05em;
+   transform: rotate(180deg);
+   position:absolute;
+   right:0px;
+   bottom:0px;
+}
+.card:after {
+   line-height: 120%;
+   transform-style:preserve-3d;
+	backface-visibility:hidden;
+	-webkit-backface-visibility:hidden;
+   font-size: 300%;
+   font-weight:bold;
+   white-space: pre;
+   text-align: center;
+   display: inline-block;
+   padding: 3% 1%;
    transform: rotate(180deg);
    position:absolute;
    right:0px;
@@ -182,22 +250,6 @@
 .card13H:after { color:#c00; content: "K\A\2665"; }
 .card1H:after {color:#c00; content: "A\A\2665"; }
 
-.wilds .card2S figure.pic::before, .wilds .card2C figure.pic::before, .wilds .card2D figure.pic::before, .wilds .card2H figure.pic::before {
-	position: absolute;
-	height: 14vh;
-	width: 8vw;
-	display: inline-block;
-	top: -7vh;
-	right: -4vw;
-	content: "";
-	border: 1px solid #000;
-	z-index: 99999;
-	background-image: url(img/wild-red.png);
-	background-size: 100% 100%;
-}
-.wilds .card2S figure.pic::before, .wilds .card2C figure.pic::before {
-	background-image:url("img/wild-black.png");
-}
 .card2S:after { color:#000; content: "2\A\2660"; }
 .card3S:after { color:#000; content: "3\A\2660"; }
 .card4S:after { color:#000; content: "4\A\2660"; }
@@ -225,43 +277,78 @@
 .card13C:after { color:#000; content: "K\A\2663"; }
 .card1C:after {color:#000; content: "A\A\2663"; }
 
+#hands .card figure {
+  transform-style:preserve-3d;
+   pointer-events: none;
+   width:4vw;
+   height:11.5vh;
+	margin:2.6vw 2vw;
+   border:1px solid transparent;
+   backface-visibility: hidden;
+   -webkit-backface-visibility: hidden;
+	font-size:1vw;
+}
+#cards .cardwrap { margin-left:.5vw; }
 .card figure {
   transform-style:preserve-3d;
    pointer-events: none;
-   width:6.7vw;
-   height:19vh;
-	margin:4.6vw 4vw;
+   width:50%;
+   height:57%;
+	margin:31% 25%;
    border:1px solid transparent;
    backface-visibility: hidden;
    -webkit-backface-visibility: hidden;
 	font-size:3vw;
 }
 .card10C figure,.card10S figure,.card10D figure, .card10H figure { width:47%; left:10%; }
-.card11H figure { background-image: url(img/JH.png); background-size:100% 100%; border:1px solid #999; }
-.card11D figure { background-image: url(img/JD.png); background-size:100% 100%; border:1px solid #999; }
-.card11C figure { background-image: url(img/JC.png); background-size:100% 100%; border:1px solid #999; }
-.card11S figure { background-image: url(img/JS.png); background-size:100% 100%; border:1px solid #999; }
-.card12H figure { background-image: url(img/QH.png); background-size:100% 100%; border:1px solid #999; }
-.card12D figure { background-image: url(img/QD.png); background-size:100% 100%; border:1px solid #999; }
-.card12C figure { background-image: url(img/QC.png); background-size:100% 100%; border:1px solid #999; }
-.card12S figure { background-image: url(img/QS.png); background-size:100% 100%; border:1px solid #999; }
-.card13H figure { background-image: url(img/KH.png); background-size:100% 100%; border:1px solid #999; }
-.card13D figure { background-image: url(img/KD.png); background-size:100% 100%; border:1px solid #999; }
-.card13C figure { background-image: url(img/KC.png); background-size:100% 100%; border:1px solid #999; }
-.card13S figure { background-image: url(img/KS.png); background-size:100% 100%; border:1px solid #999; }
+.card11H figure { background-image: url(img/JH.png); background-size:100% 100%; border:1px solid #aaa; }
+.card11D figure { background-image: url(img/JD.png); background-size:100% 100%; border:1px solid #aaa; }
+.card11C figure { background-image: url(img/JC.png); background-size:100% 100%; border:1px solid #aaa; }
+.card11S figure { background-image: url(img/JS.png); background-size:100% 100%; border:1px solid #aaa; }
+.card12H figure { background-image: url(img/QH.png); background-size:100% 100%; border:1px solid #aaa; }
+.card12D figure { background-image: url(img/QD.png); background-size:100% 100%; border:1px solid #aaa; }
+.card12C figure { background-image: url(img/QC.png); background-size:100% 100%; border:1px solid #aaa; }
+.card12S figure { background-image: url(img/QS.png); background-size:100% 100%; border:1px solid #aaa; }
+.card13H figure { background-image: url(img/KH.png); background-size:100% 100%; border:1px solid #aaa; }
+.card13D figure { background-image: url(img/KD.png); background-size:100% 100%; border:1px solid #aaa; }
+.card13C figure { background-image: url(img/KC.png); background-size:100% 100%; border:1px solid #aaa; }
+.card13S figure { background-image: url(img/KS.png); background-size:100% 100%; border:1px solid #aaa; }
 
+#hand1 { display:inline-block; width:50%; position:absolute; left:2vw; top:3vh; height:24vh; }
+#hand2 { display:inline-block; width:50%; position:absolute; right:2vw; top:3vh; height:24vh; }
+#hand3 { display:inline-block; width:50%; position:absolute; left:2vw; top:25vh; height:24vh; }
+#hand4 { display:inline-block; width:50%; position:absolute; right:2vw; top:25vh; height:24vh; }
 
-.card2H figure:after,.card3H figure:after,.card4H figure:after,.card5H figure:after,.card6H figure:after,.card7H figure:after,.card8H figure:after,.card9H figure:after,.card10H figure:after,.card1H figure:after { display:inline-block; margin-top:6vh;margin-left:-1vw;content:" \A\2665"; transform:scale(2.5); color:#c00; } 
-.card2D figure:after,.card3D figure:after,.card4D figure:after,.card5D figure:after,.card6D figure:after,.card7D figure:after,.card8D figure:after,.card9D figure:after,.card10D figure:after,.card1D figure:after { display:inline-block; margin-top:6vh;margin-left:-1vw;content:" \A\2666"; transform:scale(2.5); color:#c00; } 
-.card2C figure:after,.card3C figure:after,.card4C figure:after,.card5C figure:after,.card6C figure:after,.card7C figure:after,.card8C figure:after,.card9C figure:after,.card10C figure:after,.card1C figure:after { display:inline-block; margin-top:6vh;margin-left:-1vw;content:" \A\2663"; transform:scale(2.5); color:#000; } 
-.card2S figure:after,.card3S figure:after,.card4S figure:after,.card5S figure:after,.card6S figure:after,.card7S figure:after,.card8S figure:after,.card9S figure:after,.card10S figure:after,.card1S figure:after { display:inline-block; margin-top:6vh;margin-left:-1vw;content:" \A\2660"; transform:scale(2.5); color:#000; } 
+.card2H figure:after,.card3H figure:after,.card4H figure:after,.card5H figure:after,.card6H figure:after,.card7H figure:after,.card8H figure:after,.card9H figure:after,.card10H figure:after,.card1H figure:after { display:inline-block; margin-top:2.8vh;margin-left:-1vw;content:" \A\2665"; color:#c00; font-size:5vw; } 
+#hands .card2H figure:after,#hands .card3H figure:after,#hands .card4H figure:after,#hands .card5H figure:after,#hands .card6H figure:after,#hands .card7H figure:after,#hands .card8H figure:after,#hands .card9H figure:after,#hands .card10H figure:after,#hands .card1H figure:after { display:inline-block; margin-top:2vh;margin-left:-0.2vw;content:" \A\2665"; color:#c00; font-size:3vw; } 
+
+.card2D figure:after,.card3D figure:after,.card4D figure:after,.card5D figure:after,.card6D figure:after,.card7D figure:after,.card8D figure:after,.card9D figure:after,.card10D figure:after,.card1D figure:after { display:inline-block; margin-top:2.8vh;margin-left:-1vw;content:" \A\2666"; color:#c00; font-size:5vw; } 
+#hands .card2D figure:after,#hands .card3D figure:after,#hands .card4D figure:after,#hands .card5D figure:after,#hands .card6D figure:after,#hands .card7D figure:after,#hands .card8D figure:after,#hands .card9D figure:after,#hands .card10D figure:after,#hands .card1D figure:after { display:inline-block; margin-top:2vh;margin-left:-0.2vw;content:" \A\2666"; color:#c00; font-size:3vw; } 
+
+.card2C figure:after,.card3C figure:after,.card4C figure:after,.card5C figure:after,.card6C figure:after,.card7C figure:after,.card8C figure:after,.card9C figure:after,.card10C figure:after,.card1C figure:after { display:inline-block; margin-top:2.8vh;margin-left:-1vw;content:" \A\2663"; color:#000; font-size:5vw; } 
+#hands .card2C figure:after,#hands .card3C figure:after,#hands .card4C figure:after,#hands .card5C figure:after,#hands .card6C figure:after,#hands .card7C figure:after,#hands .card8C figure:after,#hands .card9C figure:after,#hands .card10C figure:after,#hands .card1C figure:after { display:inline-block; margin-top:2vh;margin-left:-0.2vw;content:" \A\2663"; color:#000; font-size:3vw; } 
+
+.card2S figure:after,.card3S figure:after,.card4S figure:after,.card5S figure:after,.card6S figure:after,.card7S figure:after,.card8S figure:after,.card9S figure:after,.card10S figure:after,.card1S figure:after { display:inline-block; margin-top:2.8vh;margin-left:-1vw;content:" \A\2660"; color:#000; font-size:5vw; } 
+#hands .card2S figure:after,#hands .card3S figure:after,#hands .card4S figure:after,#hands .card5S figure:after,#hands .card6S figure:after,#hands .card7S figure:after,#hands .card8S figure:after,#hands .card9S figure:after,#hands .card10S figure:after,#hands .card1S figure:after { display:inline-block; margin-top:2vh;margin-left:-0.2vw;content:" \A\2660"; color:#000; font-size:3vw; } 
+
 .diamond { color: #cc0000; }
-.cardback { 
-    background: -webkit-radial-gradient(circle, rgb(255,255,255) 25%, rgba(255,255,255,0) 25%), -webkit-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), -webkit-radial-gradient(circle, rgb(35,29,24) 25%, rgba(255,255,255,0) 25%), -webkit-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), rgba(200,57,0,1);
-    background: -moz-radial-gradient(circle, rgb(255,255,255) 25%, rgba(255,255,255,0) 25%), -moz-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), -moz-radial-gradient(circle, rgb(35,29,24) 25%, rgba(255,255,255,0) 25%), -moz-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), rgba(200,57,0,1);
-    background: radial-gradient(circle, rgb(255,255,255) 25%, rgba(255,255,255,0) 25%), radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), radial-gradient(circle, rgb(35,29,24) 25%, rgba(255,255,255,0) 25%), radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), rgba(200,57,0,1);
-    background-position: 3em 3em, 3em 4em, auto auto, 0 1em;
-    background-size:0.5vw 0.5vw;
+#hands .cardback { 
+    border: 1px solid #000;
+    border-radius:.5vw;
+    width:100%;
+    height:100%;
+    display:inline-block;
+    box-shadow: 0.3vw 0.6vh 0.5vw rgba(0,0,0,.4);
+    transform-style:preserve-3d;
+	 backface-visibility:hidden;
+	 -webkit-backface-visibility:hidden;
+    background: rgb(254,255,255);
+    background: -moz-linear-gradient(-45deg, rgba(254,255,255,1) 0%, rgba(255,252,226,1) 64%, rgba(242,238,201,1) 100%);
+    background: -webkit-linear-gradient(-45deg, rgba(254,255,255,1) 0%,rgba(255,252,226,1) 64%,rgba(242,238,201,1) 100%);
+    background: linear-gradient(135deg, rgba(254,255,255,1) 0%,rgba(255,252,226,1) 64%,rgba(242,238,201,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#f2eec9',GradientType=0 );
+}
+#cards .cardback { 
     border: 1vw solid #fff;
     border-radius:.5vw;
     width:13vw;
@@ -272,7 +359,36 @@
 	 backface-visibility:hidden;
 	 -webkit-backface-visibility:hidden;
 }
-.cardback figure { border: none; }
+#cards .cardback figure { 
+	border: none; 
+	height:100%;
+	width:100%;
+	margin:0;
+	padding:0;
+	content:"";
+    background: -webkit-radial-gradient(circle, rgb(255,255,255) 25%, rgba(255,255,255,0) 25%), -webkit-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), -webkit-radial-gradient(circle, rgb(35,29,24) 25%, rgba(255,255,255,0) 25%), -webkit-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), rgba(200,57,0,1);
+    background: -moz-radial-gradient(circle, rgb(255,255,255) 25%, rgba(255,255,255,0) 25%), -moz-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), -moz-radial-gradient(circle, rgb(35,29,24) 25%, rgba(255,255,255,0) 25%), -moz-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), rgba(200,57,0,1);
+    background: radial-gradient(circle, rgb(255,255,255) 25%, rgba(255,255,255,0) 25%), radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), radial-gradient(circle, rgb(35,29,24) 25%, rgba(255,255,255,0) 25%), radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), rgba(200,57,0,1);
+    background-position: 3em 3em, 3em 4em, auto auto, 0 1em;
+    background-size:0.5vw 0.5vw;
+}
+#hands .cardback figure { 
+	border: none;
+	position:relative;
+	top:-3%;
+	left:-5%;
+	height:89%;
+	width:86%;
+	margin:12%;
+	padding:0;
+	border-radius:0.5vw;
+	content:"";
+    background: -webkit-radial-gradient(circle, rgb(255,255,255) 25%, rgba(255,255,255,0) 25%), -webkit-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), -webkit-radial-gradient(circle, rgb(35,29,24) 25%, rgba(255,255,255,0) 25%), -webkit-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), rgba(200,57,0,1);
+    background: -moz-radial-gradient(circle, rgb(255,255,255) 25%, rgba(255,255,255,0) 25%), -moz-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), -moz-radial-gradient(circle, rgb(35,29,24) 25%, rgba(255,255,255,0) 25%), -moz-radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), rgba(200,57,0,1);
+    background: radial-gradient(circle, rgb(255,255,255) 25%, rgba(255,255,255,0) 25%), radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), radial-gradient(circle, rgb(35,29,24) 25%, rgba(255,255,255,0) 25%), radial-gradient(circle, rgb(63,57,50) 25%, rgba(255,255,255,0) 25%), rgba(200,57,0,1);
+    background-position: 3em 3em, 3em 4em, auto auto, 0 1em;
+    background-size:0.35vw 0.35vw;
+}
 button:active { transform: translateY(0.25em); position:relative; display:inline-block; }
 button { background: #f4e130; background: -moz-linear-gradient(top, #f4e130 0%, #fff460 50%, #e5da02 51%, #d1ca00 100%); background: -webkit-linear-gradient(top, #f4e130 0%,#fff460 50%,#e5da02 51%,#d1ca00 100%); background: linear-gradient(to bottom, #f4e130 0%,#fff460 50%,#e5da02 51%,#d1ca00 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4e130', endColorstr='#d1ca00',GradientType=0 ); }
 #dealButton { border-top-right-radius:2em; border-bottom-right-radius:2em; }

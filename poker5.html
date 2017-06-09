@@ -8,27 +8,16 @@
       body { background-color:#0032b4; color:#fff; font-family:"Helvetica Neue",Helvetica,sans-serif; font-size:1vw; }
       #main { perspective:1000px; position:absolute; top:0px; right:0px; bottom:0px; left:0px; text-align:center; }
       #paytable { 
-         width:70vw;
+			display:none;
+         width:90%;
          color:#ffffff;
          border: 4px outset #0df;
-         margin:.5em auto 0px 20vw;
+         margin:.5em auto 0px;
          background-color:#142850;
          border-collapse:collapse;
          line-height:1em;
          font-weight: 700; font-size:130%;text-transform: uppercase;  
       }
-		#gameName {
-			display: inline-block;
-			width: 20vw;
-			position: absolute;
-			left: 0vw;
-			top: 3vh;
-			font-size: 4vw;
-			text-transform: uppercase;
-			text-align: center;
-			text-shadow: 2px 2px 0px rgba(0,0,0,.8);
-			font-family:"Titan One", cursive;
-		}
       #paybet { background-color:#0af; color:#ff0;border-bottom: 2px solid #fff;  }
       #paytable td#paybet1, #paytable td#paybet2,#paytable td#paybet3,#paytable td#paybet4,#paytable td#paybet5 { background-color:#0af; color:#ff0; text-align:center; border-bottom: 2px solid #fff; }
       table#paytable .paybet { background-color:#c00; color:#ff0; }
@@ -42,9 +31,9 @@
       .left { text-align:left; }
       h2 { width:3.3vw; height:6.1vh; margin:0; padding:1.3vw 1.6vw 1.1vw 0.7vw; color:#fff; z-index:9999; border-radius:5vw; display:inline-block; border:0.6vw dashed #fff; font-size:3vw; top:-1vh; position:relative; letter-spacing:-4px; text-shadow:-1px -2px 0px #000; }
       .status { display:inline-block; }
-      #bet { width:30%; color:#eee; position:absolute; left:2vw; height:8vh; font-size:4vw; top:5vh; text-align:left; }
+      #bet { width:30%; color:#eee; position:absolute; left:2vw; height:8vh; font-size:3vw; top:5vh; text-align:left; }
       #bet:before { content: "BET: "; }
-      #credit { width:40vw; color:#eef; position:absolute; right:2vw; height:8vh; font-size:4vw; top:5vh; text-align:right; }
+      #credit { width:30vw; color:#eef; position:absolute; right:2vw; height:8vh; font-size:3vw; top:5vh; text-align:right; }
       #credit:before { content: "CREDITS: "; }
       #win { width:33%; color:#eee; position:absolute; left:33%; height:9vh; top:5vh; font-size:4vw;  }
 		@keyframes bounce {
@@ -90,7 +79,7 @@
       th { border-bottom:3px solid #0df; border-right:3px solid #0df;  }
    </style>
    <link rel='manifest' href='manifest.json'>
-   <link rel='stylesheet' type='text/css' href='poker.css'>
+   <link rel='stylesheet' type='text/css' href='poker5.css'>
    <script src="pokersolver.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
 	<script>
@@ -109,10 +98,6 @@
 </head>
 <body>
 <div id='main'>
-	<div id='gameName'>
-		Video<br>
-		Poker
-	</div>
    <table id='paytable'>
       <colgroup>
          <col>
@@ -130,13 +115,43 @@
       <div id='card3-hold' class='hold'>HOLD</div>
       <div id='card4-hold' class='hold'>HOLD</div>
    </div>
-   <div id='cards'>
-      <div id='card0' class='cardwrap'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card1' class='cardwrap'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card2' class='cardwrap'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card3' class='cardwrap'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card4' class='cardwrap'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+	<div id='hands'>
+		<div id='hand1'>
+			<div id='hand1card0' class='cardwrap flipped'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand1card1' class='cardwrap flipped'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand1card2' class='cardwrap flipped'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand1card3' class='cardwrap flipped'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand1card4' class='cardwrap flipped'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+		</div>
+		<div id='hand2'>
+			<div id='hand2card0' class='cardwrap flipped'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand2card1' class='cardwrap flipped'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand2card2' class='cardwrap flipped'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand2card3' class='cardwrap flipped'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand2card4' class='cardwrap flipped'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+		</div>
+		<div id='hand3'>
+			<div id='hand3card0' class='cardwrap flipped'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand3card1' class='cardwrap flipped'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand3card2' class='cardwrap flipped'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand3card3' class='cardwrap flipped'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand3card4' class='cardwrap flipped'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+		</div>
+		<div id='hand4'>
+			<div id='hand4card0' class='cardwrap flipped'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand4card1' class='cardwrap flipped'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand4card2' class='cardwrap flipped'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand4card3' class='cardwrap flipped'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand4card4' class='cardwrap flipped'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+		</div>
    </div>
+   <div id='cards'>
+		<div id='card0' class='cardwrap'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+		<div id='card1' class='cardwrap'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+		<div id='card2' class='cardwrap'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+		<div id='card3' class='cardwrap'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+		<div id='card4' class='cardwrap'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+	</div>
    <div id='status' class='status'>
       <div id='bet'>0</div>
       <div id='win'></div>
@@ -162,7 +177,6 @@
 (function() {
    window.cdr = {
       game: {
-			type: "poker",
 			chipColors: ["#dd0", "#0c0", "#c00", "#c0c", "#000", "#0be", "#fa0", "#999", "#0a6", "#69a", "#333", "#000"],
 			creditValues: [ 1, 2, 5, 10, 25, 100, 250, 500, 1000, 2000, 5000, 10000 ],
 			creditValueIdx:0,
@@ -220,12 +234,6 @@
          cdr.deal();
       },
       init: function() {
-			if (document.location.hash) {
-				cdr.game.type = document.location.hash.replace(/^#/, '');
-				if (cdr.game.type==="dueces") {
-					$$("main").classList.add('wilds');
-				}
-			}
          cdr.genPaytable();
          var cards = cdr.newDeck();
          
@@ -247,7 +255,7 @@
 			$$("denom").addEventListener("click", function(e) {
 				cdr.game.creditValueIdx++;
 				if (cdr.game.creditValueIdx > cdr.game.creditValues.length - 1) cdr.game.creditValueIdx = 0;
-				if (cdr.game.balance / cdr.game.creditValues[cdr.game.creditValueIdx] < 1) cdr.game.creditValueIdx = 0;
+				if (cdr.game.balance / cdr.game.creditValues[cdr.game.creditValueIdx] < 0) cdr.game.creditValueIdx = 0;
 
 				cdr.game.creditValue = cdr.game.creditValues[cdr.game.creditValueIdx];
 				cdr.updateChip();
@@ -340,7 +348,7 @@
             }
          }
          var scr = document.createElement('script');
-			scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/exchangeCards?game="+cdr.game.type+"&callback=cdr.newCards&uid=" + firebase.auth().currentUser.uid + "&discard=" + needcards.join(',');
+			scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/exchangeCards?game=poker&callback=cdr.newCards&uid=" + firebase.auth().currentUser.uid + "&discard=" + needcards.join(',');
 			document.body.appendChild(scr);
 		},
 		newCards: function(cards) {
@@ -357,7 +365,7 @@
 		},
 		checkWin: function() {
          var scr = document.createElement('script');
-			scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/checkHand?game="+cdr.game.type+"&callback=cdr.gotWin&uid=" + firebase.auth().currentUser.uid;
+			scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/checkHand?callback=cdr.gotWin&game=poker&uid=" + firebase.auth().currentUser.uid;
 			document.body.appendChild(scr); 
 		},
 		gotWin: function(hand, won) {
@@ -433,7 +441,7 @@
          cdr.newDeck();
          
 			var func = document.createElement('script');
-			func.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/newGame?game="+cdr.game.type+"&callback=cdr.gotGame&uid=" + firebase.auth().currentUser.uid + "&bet=" + cdr.game.bet *  cdr.game.creditValue;
+			func.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/newGame?game=poker&callback=cdr.gotGame&uid=" + firebase.auth().currentUser.uid + "&bet=" + cdr.game.bet *  cdr.game.creditValue;
 			document.body.appendChild(func);
 		},
 		gotGame: function(cards) {
@@ -584,52 +592,28 @@
         return array;
       },
       genPaytable: function() {
-			firebase.database().ref("payouts/"+cdr.game.type).once("value", function(snap) {
-				var pt = snap.val();
-				var hands = Object.keys(pt.hands);
-				var newpaytable = {};
-				var sortable = [];
-				$$("gameName").innerHTML = pt.name;
-				for (var i=0; i<hands.length; i++) {
-					var name = hands[i];
-					var displayName = name.replace(/([a-zA-Z])([A-Z])/g, "$1 $2");
-					sortable.push([name, pt.hands[name]]);
+         var paytable = $('#paytable');
+         var keys = Object.keys(cdr.paytable);
+         var header = el('tr');
+         header.appendChild(el('td', 'paybet', '', '&#9660; Hand <span style="float:right;">Bet &#9654;</span>'));
+         for (var i=1; i < 6; i++) {
+            header.appendChild(el('td', 'paybet' + i, '', i));
+         }
+         paytable.appendChild(header);
 
-					var pay = [];
-					for (var j=1; j<6; j++) {
-						pay.push(parseInt(pt.hands[name]) * j);
-					}
-					newpaytable[name] = { "hand": displayName, win: pay };
-				}
-				cdr.paytable = newpaytable;
-				sortable.sort(function(a, b) {
-					return b[1] - a[1];
-				});
-				cdr.paytable[sortable[0][0]].win[4] = parseInt(pt.jackpot);
-				console.dir(newpaytable);
-				console.log("New pay table: " + JSON.stringify(newpaytable));
-				var paytable = $('#paytable');
-				var keys = Object.keys(cdr.paytable);
-				var header = el('tr');
-				header.appendChild(el('td', 'paybet', '', '&#9660; Hand <span style="float:right;">Bet &#9654;</span>'));
-				for (var i=1; i < 6; i++) {
-					header.appendChild(el('td', 'paybet' + i, '', i));
-				}
-				paytable.appendChild(header);
+         for (var i=0; i<keys.length; i++) {
+            var tr = el('tr');
+            tr.id = keys[i];
+            var pt = cdr.paytable[keys[i]];
 
-				for (var i=0; i<sortable.length; i++) {
-					var tr = el('tr');
-					tr.id = sortable[i][0];
-					var mypt = cdr.paytable[sortable[i][0]];
-					
-					tr.appendChild(el('td', tr.id+"Title", '', mypt.hand));
-					for (var j=0; j<mypt.win.length; j++) {
-						var td = el('td', tr.id + j, 'right', mypt.win[j]);
-						tr.appendChild(td); 
-					}
-					paytable.appendChild(tr);
-				}
-			});
+            tr.appendChild(el('td', pt.hand.replace(/\W/g, ''), '', pt.hand));
+            for (var j=0; j<pt.win.length; j++) {
+               var td = el('td', pt.hand.replace(/\W/g, '') + '_' + (j + 1), 'right', pt.win[j]);
+               td.id = keys[i] + j;
+               tr.appendChild(td); 
+            }
+            paytable.appendChild(tr);
+         }
       },
       newDeck: function() {
          cdr.deck = [];

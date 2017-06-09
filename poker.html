@@ -383,10 +383,7 @@
          for (var i=0; i<cards.length - 1; i++) {
             if (!lastCard) {
                lastCard = parseInt(cards[i]);
-					console.log("Last card is now "+lastCard);
             } else if ((lastCard + 1) !== parseInt(cards[i])) {
-					console.log("Checking sequence...");
-					
 					if (isStraight!==false && (lastCard===1) && (cards[i]===10)) {
 						console.log("Could be straight");
                   isStraight = true;

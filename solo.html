@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	 <meta http-equiv="Content-Language" content="en">
-	 <meta charset="utf-8">
+    <meta charset="utf-8">
     <meta name='viewport' content='width=device-width, initial-scale=0.25, user-scalable=yes'>
     <title>Blackjack</title>
     <link rel='manifest' href='manifest.json'>
-    <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <link rel='stylesheet' type='text/css' href='default.css'/>
-    <script src='bj.js'></script>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' type='text/css' href='solo.css'/>
+    <script src='solo.js'></script>
 </head>
 
 <body>
@@ -46,11 +45,11 @@
       </div>
     </div>
     <div id='main'>
+
     </div>
     <div id='shoe'><div id='cardholder'></div><div id='shoecards'></div><div id='shoelid'></div><div id='shoeside'></div></div>
     <div id='railing'></div>
     <div id='chips'>
-		<div class='autobetWrap'><input type='checkbox' id='autobet' checked='true' value='1'><label for='autobet'><span></span>Auto Rebet</label></div>
       <div class='chip selected' id='chip1'><span>1</span></div>
       <div class='chip' id='chip5'><span>5</span></div>
       <div class='chip' id='chip25'><span>25</span></div>
@@ -58,20 +57,6 @@
     </div>
     <table id='leaderboard' border='0' cellpadding='0' cellspacing='0'>
     </table>
-	 <div id='playerCountdown'>
-		 <h1><span id='playerCountdownName'></span> Turn</h1>
-		 <hr>
-		 <h1 id='playerCountdownTagLine'>Make your move...</h1>
-		 <h1 id='playerTimer'>0:10 seconds</h1>
-		 <div id='playerBarWrap'><div id='playerBar'></div></div>
-	 </div>
-	 <div id='nextGameCountdown'>
-		 <h1>Place Bets</h1>
-		 <hr>
-		 <h1>Next game in:</h1>
-		 <h1 id='nextGameTimer'>0:15 seconds</h1>
-		 <div id='nextGameBarWrap'><div id='nextGameBar'></div></div>
-	 </div>
     <div id='buttons'>
 		<div id='playerInfo'>
 			<img id='playerPic' src='https://cloudfront.ualberta.ca/-/media/science/departments/computing-science1/about/anonymous.png?w=1200' height='100' width='100'>
@@ -103,32 +88,21 @@
      firebase.initializeApp(config);
    </script>
    <script>
-function el(tag, id='', classname='', content='') {
-    var el = document.createElement(tag);
-    if (id) el.id = id;
-    if (classname) el.className = classname;
-    if (content) el.innerHTML = content;
-    return el;
-}
-function $$$(str) { return document.querySelectorAll(str); }
-function $$(str) { return document.getElementById(str); }
-function $(sel) { return document.querySelector(sel); }
-
       $$("dealButton").addEventListener("click", function(e) {
          e.preventDefault();
-         bj.dealCards();
+         bj.deal();
          return false;
       });
       
       $$("hitButton").addEventListener("click", function(e) {
          e.preventDefault();
-         bj.doHit();
+         bj.hit();
          return false;
       });
       
       $$("stayButton").addEventListener("click", function(e) {
          e.preventDefault();
-         bj.doStay();
+         bj.nextPlayer();
          return false;
       });
       
@@ -143,16 +117,6 @@ function $(sel) { return document.querySelector(sel); }
          bj.split();
          return false;
       });
-
-		$$("autobet").addEventListener("click", function(e) {
-			var chkbox = $$("autobet");
-			if (chkbox.checked) {
-				chkbox.removeAttribute("checked");
-			} else {
-				chkbox.setAttribute("checked", "true");
-			}
-		});
-
       $$("main").addEventListener("click", function(e) {
          e.preventDefault();
          var tgt = e.target, match;
@@ -179,13 +143,10 @@ function $(sel) { return document.querySelector(sel); }
                $$(player + "-bet").innerHTML = bj.players[player].bet;
                $$(player + "-bet").style.display = "none";
                $("#"+player+" .info").style.opacity = 0.5;
-//               $("#"+player + " .click").innerHTML = "CLICK TO<br>PLACE BET";
-					bj.placeBet(0);
+               $("#"+player + " .click").innerHTML = "CLICK TO<br>PLACE BET";
 					bj.hideButton("dealButton");
                return false;
             }
-				bj.placeBet(bj.players[player].bet);
-
             // bj.players[player].bank -= bet;
             //$("#" + player + " .bank").innerHTML = bj.players[player].bank; 
 				bj.showButton("dealButton");
@@ -197,8 +158,8 @@ function $(sel) { return document.querySelector(sel); }
             bj.players[player].chips.push(bet);
             var pn = parseInt(match[1]) - 3;
 
-            el.style.marginTop = -(bj.players[player].chips.length - 1) * 0.75 + "vh";
-            el.style.marginLeft = (bj.players[player].chips.length - 1) * (pn * -0.12) + "vw";
+            el.style.marginTop = -bj.players[player].chips.length * 0.2 + "em";
+            el.style.marginLeft = bj.players[player].chips.length * (pn * 0.08) + "em";
             el.classList.remove('selected');
          }
          return false;
@@ -206,14 +167,12 @@ function $(sel) { return document.querySelector(sel); }
       
       $$("chips").addEventListener("click", function(e) {
          console.log(e);
-			if (e.target.id.match(/chip/i)) {
-				$(".chip.selected").classList.remove('selected');
-				e.target.classList.add('selected');
-				var value = e.target.querySelector('span').innerHTML;
-				console.log("chip value is "+value);
-				if (bj.currentPlayer) bj.players[bj.currentPlayer].activeChip = value;
-				bj.selectedChip = value;
-			} 
+         $(".chip.selected").classList.remove('selected');
+         e.target.classList.add('selected');
+         var value = e.target.querySelector('span').innerHTML;
+         console.log("chip value is "+value);
+         if (bj.currentPlayer) bj.players[bj.currentPlayer].activeChip = value;
+         bj.selectedChip = value;
       });
 		
 		function writeUserData(userId, name, email, imageUrl, fbtoken) {
@@ -244,23 +203,15 @@ firebase.auth().onAuthStateChanged(function(user) {
 		uid: user.uid, 
 		providerData: user.providerData 
 	 };
-	 
-	 var pic = (user.photoURL) ? user.photoURL : "/img/anonymous.gif";
-	 $$("playerPic").src = pic;
+
+	 $$("playerPic").src = user.photoURL;
 	 $$("playerName").innerHTML = user.displayName;
 	 $$("loginButton").classList.add('hideButton');
     firebase.database().ref("bank/"+uid+"/balance").on("value", function(snapshot) {
 		  var balance = snapshot.val();
-		  bj.credit = balance;
-		  var display = balance;
-		  if (display > 1000000) {
-			  display = Math.floor(display / 10000) / 100;
-			  display += "M";
-		  }
-		  $$("credit").innerHTML = display;
+		  bj.me.credit = balance;
+		  $$("credit").innerHTML = balance;
   	 });
-	 bj.clearTable();
-	 bj.joinTable();
   } else {
 	 $$("loginButton").classList.remove("hideButton");
   }
