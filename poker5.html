@@ -109,11 +109,11 @@
       </colgroup>
    </table>
    <div id='holds'>
-      <div id='card0-hold' class='hold'>HOLD</div>
-      <div id='card1-hold' class='hold'>HOLD</div>
-      <div id='card2-hold' class='hold'>HOLD</div>
-      <div id='card3-hold' class='hold'>HOLD</div>
-      <div id='card4-hold' class='hold'>HOLD</div>
+      <div id='card0-hold' class='hold'></div>
+      <div id='card1-hold' class='hold'></div>
+      <div id='card2-hold' class='hold'></div>
+      <div id='card3-hold' class='hold'></div>
+      <div id='card4-hold' class='hold'></div>
    </div>
 	<div id='hands'>
 		<div id='hand1'>
@@ -177,11 +177,13 @@
 (function() {
    window.cdr = {
       game: {
+			endpoint: "https://us-central1-crblackjack-9e220.cloudfunctions.net/",
 			chipColors: ["#dd0", "#0c0", "#c00", "#c0c", "#000", "#0be", "#fa0", "#999", "#0a6", "#69a", "#333", "#000"],
 			creditValues: [ 1, 2, 5, 10, 25, 100, 250, 500, 1000, 2000, 5000, 10000 ],
 			creditValueIdx:0,
 			creditValue:1,
          cards: [],
+			hands: 5,
          discards: {},
          holds: {},
          bet: 0,
@@ -237,10 +239,14 @@
          cdr.genPaytable();
          var cards = cdr.newDeck();
          
-         for (var i=0; i<5; i++) {
-            cdr.addListener(i);
-         }
-		   
+		   $$("cards").addEventListener("mousedown", function(e) {
+				var tgt = e.target;
+				if (tgt.classList.contains('card')) {
+					cdr.toggleCard(tgt.parentNode.id, 0);
+				} else if (tgt.classList.contains('cardwrap')) {
+					cdr.toggleCard(tgt.id, 0);
+				}
+			});
 			var savedJS = localStorage.getItem("settings");
 			if (savedJS) {
 				cdr.settings = JSON.parse(savedJS);
@@ -278,25 +284,25 @@
 				  $$("credit").innerHTML = cdr.game.credit;
 
 				  if ((cdr.game.credit < 1) || cdr.game.active) {
-					  $$("betOne").setAttribute("disabled",true);
-					  $$("betOne").classList.add('disabled');
-					  
-					  $$("betMax").setAttribute("disabled",true);
-					  $$("betMax").classList.add('disabled');
+					  cdr.disable("betOne");
+					  cdr.disable("betMax");
 				  } else if (cdr.game.credit < 5) {
-					  $$("betOne").removeAttribute("disabled");
-					  $$("betOne").classList.remove('disabled');
-					  
-					  $$("betMax").setAttribute("disabled",true);
-					  $$("betMax").classList.add('disabled');
+					  cdr.enable("betOne");
+					  cdr.disable("betMax");
 				  } else {
-					  $$("betOne").removeAttribute("disabled");
-					  $$("betOne").classList.remove('disabled');
-
-					  $$("betMax").removeAttribute("disabled");
-					  $$("betMax").classList.remove('disabled');
+					  cdr.enable("betOne");
+					  cdr.enable("betMax");
 				  }
 			 });
+		},
+		disable: function(item) {
+			  $$(item).setAttribute("disabled",true);
+			  $$(item).classList.add('disabled');
+		},
+		enable: function(item) {
+			  $$(item).removeAttribute("disabled");
+			  $$(item).classList.remove('disabled');
+
 		},
       toggleCard: function(card, delay) {
          // setTimeout(function() { $$(card).classList.toggle('flipped'); }, delay * 100);
@@ -304,6 +310,11 @@
          if (current==="hidden") {
             $$(card + '-hold').style.visibility = "";
             cdr.game.holds[card] = true;
+
+				for (var i=1; i < 5; i++) {
+					$("#hand"+i+card+" .card").className = $("#"+card+" .card").className;
+					$$("hand"+i+card).classList.remove('flipped');
+				}
          } else {
             $$(card + '-hold').style.visibility = "hidden";
             delete cdr.game.holds[card];
@@ -348,10 +359,11 @@
             }
          }
          var scr = document.createElement('script');
-			scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/exchangeCards?game=poker&callback=cdr.newCards&uid=" + firebase.auth().currentUser.uid + "&discard=" + needcards.join(',');
+			scr.src = cdr.game.endpoint + "exchangeCards?game=poker5&callback=cdr.newCards&hands=" + cdr.game.hands + "&uid=" + firebase.auth().currentUser.uid + "&discard=" + needcards.join(',');
 			document.body.appendChild(scr);
 		},
 		newCards: function(cards) {
+			console.log("cards: "+JSON.stringify(cards));
 		   var cnt = 0;
          for (var i in cards) {
             if (cards.hasOwnProperty(i)) {
@@ -365,7 +377,7 @@
 		},
 		checkWin: function() {
          var scr = document.createElement('script');
-			scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/checkHand?callback=cdr.gotWin&game=poker&uid=" + firebase.auth().currentUser.uid;
+			scr.src = cdr.game.endpoint + "checkHand?callback=cdr.gotWin&game=poker5&uid=" + firebase.auth().currentUser.uid;
 			document.body.appendChild(scr); 
 		},
 		gotWin: function(hand, won) {
@@ -441,7 +453,7 @@
          cdr.newDeck();
          
 			var func = document.createElement('script');
-			func.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/newGame?game=poker&callback=cdr.gotGame&uid=" + firebase.auth().currentUser.uid + "&bet=" + cdr.game.bet *  cdr.game.creditValue;
+			func.src = cdr.game.endpoint + "newGame?game=poker5&hands="+cdr.game.hands+"&callback=cdr.gotGame&uid=" + firebase.auth().currentUser.uid + "&bet=" + cdr.game.bet *  cdr.game.creditValue;
 			document.body.appendChild(func);
 		},
 		gotGame: function(cards) {

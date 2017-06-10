@@ -17,6 +17,7 @@
 	position:absolute;
 	bottom:20vh;
 	left:15vw;
+	z-index:999;
 }
 #hands .cardwrap {
    transform-style: preserve-3d;
@@ -34,32 +35,35 @@
 }
 #holds {
     font-size:2.2vw;
-    height:1em;
-    margin:.5em 0;
-	 width:102vw;
+    height:26vh;
+    margin:0 0;
+	 width:100vw;
 	position:absolute;
-	bottom:20vh;
-	left:10vw;
-	display:none;
+	bottom:31vh;
+	left:16.5vw;
+	text-align:left;
 }
 .hold {
     color:#ff0;
-    width:14.85vw;
+    width:12.9vw;
     text-align:center;
     display:inline-block;
     font-weight:bold;
 	 padding: 0 0.4vw;
 	 position:relative;
+	 height:28vh;
 }
 .hold:after {
-	height:44vh;
+	height:40vh;
 	border-radius:1vw;
+	border:0.1vw solid #990;
 	background-color:#ff0;
-	width:15.85vw;
+	width:14vw;
 	position:absolute;
 	top:0;
 	left:-1vw;
 	content: "\1f512";
+	z-index:2;
 }
 .cardwrap .card {
   margin: 0;
@@ -288,7 +292,7 @@
    -webkit-backface-visibility: hidden;
 	font-size:1vw;
 }
-#cards .cardwrap { margin-left:.5vw; }
+#cards .cardwrap { margin-left:1vw; }
 .card figure {
   transform-style:preserve-3d;
    pointer-events: none;
@@ -351,8 +355,8 @@
 #cards .cardback { 
     border: 1vw solid #fff;
     border-radius:.5vw;
-    width:13vw;
-    height:34vh;
+    width:11vw;
+    height:29vh;
     display:inline-block;
     box-shadow: .125em .125em 4px rgba(0,0,0,.4);
     transform-style:preserve-3d;
