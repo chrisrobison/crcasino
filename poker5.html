@@ -35,7 +35,7 @@
       #bet:before { content: "BET: "; }
       #credit { width:30vw; color:#eef; position:absolute; right:2vw; height:8vh; font-size:3vw; top:5vh; text-align:right; }
       #credit:before { content: "CREDITS: "; }
-      #win { width:33%; color:#eee; position:absolute; left:33%; height:9vh; top:5vh; font-size:4vw;  }
+      #win { width:33%; color:#eee; position:absolute; left:33%; height:9vh; top:5vh; font-size:4vw;z-index:9999;  }
 		@keyframes bounce {
 			0% { transform: rotate(0deg) scale(1); }
 			10% { transform: rotate(-15deg) scale(1.5); }
@@ -48,6 +48,18 @@
 			80% { transform: scale(1); }
 			90% { transform: scale(1.5); }
 			100% { transform: scale(1); }
+		}
+		.handresult {
+			font-size:2em;
+			background-color:rgba(255,255,0,1);
+			color:#fff;
+			font-weight:bold;
+			text-shadow:2px 2px 2px #000;
+			z-index:99999;
+			width:100%;
+			position:absolute;
+			bottom:0vh;
+			left:0;
 		}
       #won {
          position: absolute;
@@ -67,7 +79,7 @@
       table#paytable tr.winner { background-color:#00d8ff; color:#000;}
       td.winner { background-color:#fff; transform:scale(1); text-align:center; animation: throb 2s; }
       #results { margin-top:-2em; display:none;}
-      .status { height: 10vh; position: absolute; font-weight: bold; bottom:19vh; text-shadow: 2px 2px 1px rgba(0,0,0,.5); left: 0px; width:100%; }
+      .status { height: 10vh; position: absolute; font-weight: bold; bottom:16vh; text-shadow: 2px 2px 1px rgba(0,0,0,.5); left: 0px; width:100%; z-index:99; }
       @keyframes throb {
          0% { transform: scale(2); }
         20% { transform: scale(1); }
@@ -122,6 +134,7 @@
 			<div id='hand1card2' class='cardwrap flipped'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
 			<div id='hand1card3' class='cardwrap flipped'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
 			<div id='hand1card4' class='cardwrap flipped'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand1result' class='handresult'></div>
 		</div>
 		<div id='hand2'>
 			<div id='hand2card0' class='cardwrap flipped'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
@@ -129,6 +142,7 @@
 			<div id='hand2card2' class='cardwrap flipped'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
 			<div id='hand2card3' class='cardwrap flipped'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
 			<div id='hand2card4' class='cardwrap flipped'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand2result' class='handresult'></div>
 		</div>
 		<div id='hand3'>
 			<div id='hand3card0' class='cardwrap flipped'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
@@ -136,6 +150,7 @@
 			<div id='hand3card2' class='cardwrap flipped'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
 			<div id='hand3card3' class='cardwrap flipped'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
 			<div id='hand3card4' class='cardwrap flipped'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand3result' class='handresult'></div>
 		</div>
 		<div id='hand4'>
 			<div id='hand4card0' class='cardwrap flipped'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
@@ -143,6 +158,7 @@
 			<div id='hand4card2' class='cardwrap flipped'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
 			<div id='hand4card3' class='cardwrap flipped'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
 			<div id='hand4card4' class='cardwrap flipped'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='hand4result' class='handresult'></div>
 		</div>
    </div>
    <div id='cards'>
@@ -151,6 +167,7 @@
 		<div id='card2' class='cardwrap'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
 		<div id='card3' class='cardwrap'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
 		<div id='card4' class='cardwrap'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+		<div id='result' class='handresult'></div>
 	</div>
    <div id='status' class='status'>
       <div id='bet'>0</div>
@@ -238,7 +255,7 @@
       init: function() {
          cdr.genPaytable();
          var cards = cdr.newDeck();
-         
+         $$("gameover").style.transform = "scale(1)";
 		   $$("cards").addEventListener("mousedown", function(e) {
 				var tgt = e.target;
 				if (tgt.classList.contains('card')) {
@@ -325,7 +342,7 @@
          setTimeout(function() { $$(card).classList.add('flipped'); setTimeout(function() { $("#"+card+" .card").style.visibility='hidden';}, 200); }, delay * 100);
       },
       showCard: function(card, delay, wait=500) {
-         setTimeout(function() { $("#"+card+" .card").style.visibility='visible'; $$(card).classList.remove('flipped'); }, (delay * 300) + wait);
+         setTimeout(function() { $("#"+card+" .card").style.visibility='visible'; $$(card).classList.remove('flipped'); }, (delay * 150) + wait);
       },
       setCard: function(i, draw, delay) {
             setTimeout(function() { $("#card" + i + " .card").className = 'card card' + draw; }, (delay * 200));
@@ -364,14 +381,34 @@
 		},
 		newCards: function(cards) {
 			console.log("cards: "+JSON.stringify(cards));
+			console.dir(cards);
 		   var cnt = 0;
-         for (var i in cards) {
-            if (cards.hasOwnProperty(i)) {
-               //cdr.hideCard('card' + i, cnt);
-               cdr.newCard('card' + i, cards[i], cnt);
-               cdr.showCard('card' + i, cnt, 300);
-               cnt++;
-            }
+			cdr.game.results = cards;
+			
+			var c = cards.hands[0];
+
+			for (var j=0; j < c.length; j++) {
+				if ($$("card"+j).classList.contains('flipped')) {
+					$("#card"+j+" .card").className = "card card" + c[j];
+					cdr.showCard("card"+j, cnt, 0);
+					cnt++;
+				}
+			}
+			if (cards.results[0]) {
+		   }
+         for (var i=1; i < cards.hands.length; i++) {
+            var c = cards.hands[i];
+
+				for (var j=0; j < c.length; j++) {
+					if ($$("hand"+i+"card"+j).classList.contains('flipped')) {
+						$("#hand"+i+"card"+j+" .card").className = "card card" + c[j];
+						cdr.showCard("hand"+i+"card"+j, cnt, 0);
+						cnt++;
+					}
+				}
+				if (cards.results[i]) {
+					$$("hand"+i+"result").innerHTML = cards.results[i].replace(/([a-z0-9])([A-Z0-9])/g, '$1 $2').replace(/([A-Z])([A-Z])/g, '$1 $2');
+				}
          }
          setTimeout(function() { cdr.checkWin(); }, 750);
 		},
@@ -390,7 +427,7 @@
                cdr.clearWinners(); 
                $$(hand).classList.add('winner');
                $$(hand + (cdr.game.bet - 1)).classList.add('winner');
-					cdr.gameoverTimeout = setTimeout(function() { $$("gameover").innerHTML = "GAME OVER"; $$("gameover").style.transform = "scale(1)"; }, 5000);
+					cdr.gameoverTimeout = setTimeout(function() { $$("gameover").innerHTML = "GAME OVER"; $$("gameover").style.transform = "scale(1)"; }, 10000);
             }
          } else { 
 				$$("gameover").innerHTML = "GAME OVER";

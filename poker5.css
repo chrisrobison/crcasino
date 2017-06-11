@@ -15,15 +15,15 @@
 }
 #cards {
 	position:absolute;
-	bottom:20vh;
+	bottom:22vh;
 	left:15vw;
 	z-index:999;
 }
 #hands .cardwrap {
    transform-style: preserve-3d;
    transition: transform 200ms;
-   width:8vw;
-   height:20vh;
+   width:7vw;
+   height:18vh;
    display:inline-block;
 }
 .cardwrap {
@@ -39,26 +39,27 @@
     margin:0 0;
 	 width:100vw;
 	position:absolute;
-	bottom:31vh;
+	bottom:33vh;
 	left:16.5vw;
 	text-align:left;
 }
 .hold {
     color:#ff0;
-    width:12.9vw;
+    width:13vw;
     text-align:center;
     display:inline-block;
     font-weight:bold;
-	 padding: 0 0.4vw;
+	 padding: 0 0.3vw;
 	 position:relative;
-	 height:28vh;
+	 height:37vh;
+	 margin-left:0.1vw;
 }
 .hold:after {
-	height:40vh;
+	height:38vh;
 	border-radius:1vw;
 	border:0.1vw solid #990;
 	background-color:#ff0;
-	width:14vw;
+	width:13.9vw;
 	position:absolute;
 	top:0;
 	left:-1vw;
@@ -284,9 +285,9 @@
 #hands .card figure {
   transform-style:preserve-3d;
    pointer-events: none;
-   width:4vw;
-   height:11.5vh;
-	margin:2.6vw 2vw;
+   width:55%;
+   height:55%;
+	margin:2.2vw 1.6vw;
    border:1px solid transparent;
    backface-visibility: hidden;
    -webkit-backface-visibility: hidden;
@@ -318,10 +319,10 @@
 .card13C figure { background-image: url(img/KC.png); background-size:100% 100%; border:1px solid #aaa; }
 .card13S figure { background-image: url(img/KS.png); background-size:100% 100%; border:1px solid #aaa; }
 
-#hand1 { display:inline-block; width:50%; position:absolute; left:2vw; top:3vh; height:24vh; }
-#hand2 { display:inline-block; width:50%; position:absolute; right:2vw; top:3vh; height:24vh; }
-#hand3 { display:inline-block; width:50%; position:absolute; left:2vw; top:25vh; height:24vh; }
-#hand4 { display:inline-block; width:50%; position:absolute; right:2vw; top:25vh; height:24vh; }
+#hand1 { display:inline-block; width:37vw; position:relative; height:19vh; }
+#hand2 { display:inline-block; width:37vw; position:relative; height:19vh; }
+#hand3 { display:inline-block; width:37vw; position:relative; height:19vh; }
+#hand4 { display:inline-block; width:37vw; position:relative; height:19vh; }
 
 .card2H figure:after,.card3H figure:after,.card4H figure:after,.card5H figure:after,.card6H figure:after,.card7H figure:after,.card8H figure:after,.card9H figure:after,.card10H figure:after,.card1H figure:after { display:inline-block; margin-top:2.8vh;margin-left:-1vw;content:" \A\2665"; color:#c00; font-size:5vw; } 
 #hands .card2H figure:after,#hands .card3H figure:after,#hands .card4H figure:after,#hands .card5H figure:after,#hands .card6H figure:after,#hands .card7H figure:after,#hands .card8H figure:after,#hands .card9H figure:after,#hands .card10H figure:after,#hands .card1H figure:after { display:inline-block; margin-top:2vh;margin-left:-0.2vw;content:" \A\2665"; color:#c00; font-size:3vw; } 
@@ -429,6 +430,7 @@ button { outline: none; }
 	border-radius: 8vw;
 	transform:scale(0);
 	transition: all 250ms cubic-bezier(.25, .99, .71, 1.23);
+	z-index:9999;
 }
 .chip1 { font-size:2.3vw; padding-left:1.0vw; width:3.1vw; }
 .chip2 { font-size:2.3vw;padding-left:1.0vw; width:3.1vw;  }
