@@ -181,7 +181,7 @@
 .card12S:before { color:#000; content: "Q\A\2660"; }
 .card13S:before { color:#000; content: "K\A\2660"; }
 .card1S:before { color:#000; content: "A\A\2660"; }
-.card2C:before { color:#000; content: "2\A\2665"; }
+.card2C:before { color:#000; content: "2\A\2663"; }
 .card3C:before { color:#000; content: "3\A\2663"; }
 .card4C:before { color:#000; content: "4\A\2663"; }
 .card5C:before { color:#000; content: "5\A\2663"; }
@@ -283,7 +283,8 @@
 .card1C:after {color:#000; content: "A\A\2663"; }
 
 #hands .card figure {
-  transform-style:preserve-3d;
+	background-repeat:no-repeat;
+	transform-style:preserve-3d;
    pointer-events: none;
    width:55%;
    height:55%;

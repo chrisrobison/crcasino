@@ -51,8 +51,11 @@
 		}
 		.handresult {
 			font-size:2em;
-			background-color:rgba(255,255,0,1);
+			background-color:rgba(174,84,231,1);
 			color:#fff;
+			border:.25vw solid rgba(107,36,154,1);
+			border-bottom-left-radius:1vw;
+			border-bottom-right-radius:1vw;
 			font-weight:bold;
 			text-shadow:2px 2px 2px #000;
 			z-index:99999;
@@ -457,6 +460,14 @@
             els[i].classList.remove('winner');
          }
       },
+		resetCards: function() {
+			for (var h=1; h < 5; h++) {
+				for (var c=0; c < 5; c++) {
+					$$("hand"+h+"card"+c).classList.add('flipped');
+					$$("hand"+h+"result").display = "none";
+				}
+			}
+		},
       deal: function() {
          if (cdr.game.bet == 0) {
             $$("gameover").innerHTML = "ADD CREDITS TO PLAY";
@@ -473,6 +484,8 @@
 			cdr.game.active = true;
          cdr.clearHolds();
 			cdr.clearWinners();
+			cdr.resetCards();
+
          $$("win").innerHTML = "";
          $$("won").innerHTML = "";
          $$("won").style.display = "none";
