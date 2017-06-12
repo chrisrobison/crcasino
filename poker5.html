@@ -35,7 +35,7 @@
       #bet:before { content: "BET: "; }
       #credit { width:30vw; color:#eef; position:absolute; right:2vw; height:8vh; font-size:3vw; top:5vh; text-align:right; }
       #credit:before { content: "CREDITS: "; }
-      #win { width:33%; color:#eee; position:absolute; left:33%; height:9vh; top:5vh; font-size:4vw;z-index:9999;  }
+      #win { width:33%; color:#eee; position:absolute; left:33%; height:9vh; top:5vh; font-size:3vw;z-index:9999;  }
 		@keyframes bounce {
 			0% { transform: rotate(0deg) scale(1); }
 			10% { transform: rotate(-15deg) scale(1.5); }
@@ -63,22 +63,50 @@
 			position:absolute;
 			bottom:0vh;
 			left:0;
+			display:none;
+			overflow:hidden;
+			transition:all 500ms cubic-bezier(.25, .99, .71, 1.23);
+			height:5vh;
+		}
+		#cards .handresult {
+			font-size:3vw;
+			bottom:-1.5vh;
+			height:7vh;
 		}
       #won {
-         position: absolute;
-         display: inline-block;
-         top: 49%;
-         left: 31%;
-         font-size: 6em;
-         color: #ff0;
-         text-shadow: 2px 2px 0px #000;
-         font-weight: bold;
-         background-color: rgba(0,0,0,.5);
-         padding: 0 1em;
-         border-radius: 1em;
-			transform:scale(0);
+			position: absolute;
+			display: inline-block;
+			width:50vw;
+			top: 32%;
+			left: 20%;
+			font-size: 5em;
+			color: #f9e945;
+			text-shadow: 2px 2px 0px #000;
+			font-weight: bold;
+			background-color: rgba(0,0,0,.5);
+			padding: 2vh 4vw 2vh;
+			border-radius: 1em;
+			border: 1vw solid rgb(249, 233, 69);
+			transform: scale(1);
+			z-index: 99999;
+			box-shadow: 0 0.5vw 0.5vw rgba(0,0,0,.4);
 			animation: bounce 2s 2;
+			display:none;
+			animation: win 3000ms 4;
       }
+		@keyframes win {
+			0% { text-shadow:0 0 0 #fff; transform:scale(1); }
+			10% { transform:scale(1.25); }
+			20% { transform:scale(1.0); }
+			30% { transform:scale(1.25); }
+			40% { transform:scale(1.0); }
+			50% { text-shadow:0 0 6vw #fff; }
+			60% { text-shadow:0 0 0vw #fff; }
+			70% { text-shadow:0 0 6vw #fff; }
+			80% { text-shadow:0 0 0vw #fff; }
+			90% { text-shadow:0 0 6vw #fff; transform:scale(1.25); }
+			100% { text-shadow:0 0 0vw #fff; transform:scale(1.0); }
+		}
       table#paytable tr.winner { background-color:#00d8ff; color:#000;}
       td.winner { background-color:#fff; transform:scale(1); text-align:center; animation: throb 2s; }
       #results { margin-top:-2em; display:none;}
@@ -262,9 +290,9 @@
 		   $$("cards").addEventListener("mousedown", function(e) {
 				var tgt = e.target;
 				if (tgt.classList.contains('card')) {
-					cdr.toggleCard(tgt.parentNode.id, 0);
+					cdr.toggleCard(tgt.parentNode.id, 0, 0);
 				} else if (tgt.classList.contains('cardwrap')) {
-					cdr.toggleCard(tgt.id, 0);
+					cdr.toggleCard(tgt.id, 0, 0);
 				}
 			});
 			var savedJS = localStorage.getItem("settings");
@@ -333,10 +361,15 @@
 
 				for (var i=1; i < 5; i++) {
 					$("#hand"+i+card+" .card").className = $("#"+card+" .card").className;
-					$$("hand"+i+card).classList.remove('flipped');
+					// $$("hand"+i+card).classList.remove('flipped');
+					cdr.showCard("hand"+i+card, 0, 0);
 				}
          } else {
             $$(card + '-hold').style.visibility = "hidden";
+				for (var i=1; i < 5; i++) {
+					// $$("hand"+i+card).classList.add('flipped');
+					cdr.hideCard("hand"+i+card, 0, 0);
+				}
             delete cdr.game.holds[card];
          }
          // if (cdr.game.discards[card]) { delete cdr.game.discards[card]; } else { cdr.game.discards[card] = true; }
@@ -345,7 +378,7 @@
          setTimeout(function() { $$(card).classList.add('flipped'); setTimeout(function() { $("#"+card+" .card").style.visibility='hidden';}, 200); }, delay * 100);
       },
       showCard: function(card, delay, wait=500) {
-         setTimeout(function() { $("#"+card+" .card").style.visibility='visible'; $$(card).classList.remove('flipped'); }, (delay * 150) + wait);
+         setTimeout(function() { $("#"+card+" .card").style.visibility='visible'; $$(card).classList.remove('flipped'); }, (delay * 100) + wait);
       },
       setCard: function(i, draw, delay) {
             setTimeout(function() { $("#card" + i + " .card").className = 'card card' + draw; }, (delay * 200));
@@ -385,19 +418,23 @@
 		newCards: function(cards) {
 			console.log("cards: "+JSON.stringify(cards));
 			console.dir(cards);
-		   var cnt = 0;
 			cdr.game.results = cards;
-			
+		   
+			var cnt = 0;
+			var wintot = 0;
 			var c = cards.hands[0];
 
 			for (var j=0; j < c.length; j++) {
 				if ($$("card"+j).classList.contains('flipped')) {
 					$("#card"+j+" .card").className = "card card" + c[j];
+					$("#card"+j+" .card").style.visibility = "visible";
 					cdr.showCard("card"+j, cnt, 0);
 					cnt++;
 				}
 			}
 			if (cards.results[0]) {
+				cdr.showResult(0, cards);
+				wintot += cards.wins[0];
 		   }
          for (var i=1; i < cards.hands.length; i++) {
             var c = cards.hands[i];
@@ -410,10 +447,30 @@
 					}
 				}
 				if (cards.results[i]) {
-					$$("hand"+i+"result").innerHTML = cards.results[i].replace(/([a-z0-9])([A-Z0-9])/g, '$1 $2').replace(/([A-Z])([A-Z])/g, '$1 $2');
+					cdr.showResult(i, cards);
+					wintot += cards.wins[i];
 				}
          }
-         setTimeout(function() { cdr.checkWin(); }, 750);
+			if (wintot > 0) {
+				setTimeout(function() { 
+					$$("won").innerHTML = "WIN "+Math.floor(wintot / cdr.game.creditValue)+" CREDITS";
+					$$("won").style.display = "inline-block";
+					$$("win").innerHTML = "WIN: "+Math.floor(wintot / cdr.game.creditValue);
+				}, 750);
+			} else {
+				cdr.gameoverTimeout = setTimeout(function() { $$("gameover").innerHTML = "GAME OVER"; $$("gameover").style.transform = "scale(1)"; }, 1000);
+			}
+			cdr.resetButtons();
+			cdr.game.active = false;
+		},
+		showResult: function(i, cards) {
+			var el = (i > 0) ? $$("hand"+i+"result") : $$("result");
+			setTimeout(function() {
+				el.innerHTML = cards.results[i].replace(/([a-z0-9])([A-Z0-9])/g, '$1 $2').replace(/([A-Z])([A-Z])/g, '$1 $2');
+				el.style.display = "inline-block";
+				el.style.height = "";
+			}, 250 * i);
+			
 		},
 		checkWin: function() {
          var scr = document.createElement('script');
@@ -459,14 +516,27 @@
          for (var i=0; i<els.length; i++) {
             els[i].classList.remove('winner');
          }
+			
+			$$("result").style.display = "none";
+			for (var i=1; i<5; i++) {
+				$$("hand"+i+"result").style.display = "none";
+			}
       },
 		resetCards: function() {
 			for (var h=1; h < 5; h++) {
 				for (var c=0; c < 5; c++) {
 					$$("hand"+h+"card"+c).classList.add('flipped');
-					$$("hand"+h+"result").display = "none";
 				}
+				$$("hand"+h+"result").style.height = "0";
 			}
+			setTimeout(function() { 
+				var els = $$$(".handresult"); 
+				for (var i in els) { 
+					if (els.hasOwnProperty(i)) {
+						els[i].style.display = "none";
+					}
+				}
+			}, 150);
 		},
       deal: function() {
          if (cdr.game.bet == 0) {
@@ -478,6 +548,7 @@
 				cdr.gameoverTimeout = 0;
 			}
 			$$("gameover").style.transform = "scale(0)";
+			$$("won").style.display = "none";
          //cdr.game.credit -= cdr.game.bet;
 			//$$("credit").innerHTML = cdr.game.credit;
 			

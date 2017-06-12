@@ -21,6 +21,8 @@
       }
 		#gameName {
 			display: inline-block;
+			color:#f00;
+			-webkit-text-stroke: 3px #ff0;
 			width: 20vw;
 			position: absolute;
 			left: 0vw;
@@ -62,6 +64,26 @@
 			90% { transform: scale(1.5); }
 			100% { transform: scale(1); }
 		}
+		#result { 
+			transition: all 1000ms cubic-bezier(.25, .99, .71, 1.23);
+			position:relative;
+			width:81vw;
+			background-color: rgba(174,84,231,1);
+			color: #fff;
+			border: .25vw solid rgba(107,36,154,1);
+			border-bottom-left-radius: 1vw;
+			border-bottom-right-radius: 1vw;
+			font-weight: bold;
+			top:-7vh;
+			height:8.5vh;
+			transform:scaleY(0);
+			box-shadow: 0 -0.25vh 0.25vw rgba(0,0,0,.4);
+			text-shadow: 2px 2px 2px #000;
+			z-index: 99999;
+			margin:0 auto;
+			font-size:4vw;
+		}
+		#cards { position:relative; }
       #won {
          position: absolute;
          display: inline-block;
@@ -75,12 +97,12 @@
          padding: 0 1em;
          border-radius: 1em;
 			transform:scale(0);
-			animation: bounce 2s 2;
+			animation: bounce 3s 2;
       }
       table#paytable tr.winner { background-color:#00d8ff; color:#000;}
       td.winner { background-color:#fff; transform:scale(1); text-align:center; animation: throb 2s; }
       #results { margin-top:-2em; display:none;}
-      .status { height: 10vh; position: absolute; font-weight: bold; bottom:19vh; text-shadow: 2px 2px 1px rgba(0,0,0,.5); left: 0px; width:100%; }
+      .status { height: 10vh; position: absolute; font-weight: bold; bottom:18vh; text-shadow: 2px 2px 1px rgba(0,0,0,.5); left: 0px; width:100%; }
       @keyframes throb {
          0% { transform: scale(2); }
         20% { transform: scale(1); }
@@ -138,6 +160,7 @@
       <div id='card2' class='cardwrap'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
       <div id='card3' class='cardwrap'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
       <div id='card4' class='cardwrap'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+		<div id='result' class='result'></div>
    </div>
    <div id='status' class='status'>
       <div id='bet'>0</div>
@@ -354,16 +377,38 @@
 			document.body.appendChild(scr);
 		},
 		newCards: function(cards) {
+			console.log("cards: "+JSON.stringify(cards));
+			console.dir(cards);
 		   var cnt = 0;
-         for (var i in cards) {
-            if (cards.hasOwnProperty(i)) {
-               //cdr.hideCard('card' + i, cnt);
-               cdr.newCard('card' + i, cards[i], cnt);
-               cdr.showCard('card' + i, cnt, 300);
-               cnt++;
-            }
-         }
-         setTimeout(function() { cdr.checkWin(); }, 750);
+			cdr.game.results = cards;
+			
+			var c = cards.hands[0];
+
+			for (var j=0; j < c.length; j++) {
+				if ($$("card"+j).classList.contains('flipped')) {
+					$("#card"+j+" .card").className = "card card" + c[j];
+					cdr.showCard("card"+j, cnt, 0);
+					cnt++;
+				}
+			}
+			if (cards.results[0]) {
+				$$("result").style.transform = "scaleY(1)";
+				$$("win").innerHTML = 'WON ' + Math.floor(cards.wins[0] / cdr.game.creditValue);;
+				$$("result").innerHTML = cards.results[0].replace(/([a-z0-9])([A-Z0-9])/g, '$1 $2').replace(/([A-Z])([A-Z])/g, '$1 $2');
+				$$("won").style.display = "inline-block";
+				$$("won").innerHTML = "WON " + Math.floor(cards.wins[0] / cdr.game.creditValue).toString().replace(/(\d)(?=(\d{3})+$)/, "$1,");
+				cdr.gameoverTimeout = setTimeout(function() { $$("gameover").innerHTML = "GAME OVER"; $$("gameover").style.transform = "scale(1)"; }, 10000);
+            cdr.clearWinners(); 
+            $$(cards.results[0]).classList.add('winner');
+            $$(cards.results[0] + (cdr.game.bet - 1)).classList.add('winner');
+	         } else { 
+				cdr.gameoverTimeout = setTimeout(function() {
+					$$("gameover").innerHTML = "GAME OVER";
+					$$("gameover").style.transform = "scale(1)";
+				}, 2000);
+		   }
+			cdr.resetButtons();
+			cdr.game.active = false;
 		},
 		checkWin: function() {
          var scr = document.createElement('script');
@@ -380,7 +425,7 @@
                cdr.clearWinners(); 
                $$(hand).classList.add('winner');
                $$(hand + (cdr.game.bet - 1)).classList.add('winner');
-					cdr.gameoverTimeout = setTimeout(function() { $$("gameover").innerHTML = "GAME OVER"; $$("gameover").style.transform = "scale(1)"; }, 5000);
+					cdr.gameoverTimeout = setTimeout(function() { $$("gameover").innerHTML = "GAME OVER"; $$("gameover").style.transform = "scale(1)"; }, 10000);
             }
          } else { 
 				$$("gameover").innerHTML = "GAME OVER";
@@ -419,6 +464,7 @@
 				clearTimeout(cdr.gameoverTimeout);
 				cdr.gameoverTimeout = 0;
 			}
+			$$("result").style.transform = "scaleY(0)";
 			$$("gameover").style.transform = "scale(0)";
          //cdr.game.credit -= cdr.game.bet;
 			//$$("credit").innerHTML = cdr.game.credit;
@@ -602,7 +648,7 @@
 				$$("gameName").innerHTML = pt.name;
 				for (var i=0; i<hands.length; i++) {
 					var name = hands[i];
-					var displayName = name.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/([A-Z])([A-Z])/, "$1 $2");
+					var displayName = name.replace(/([a-z0-9])([A-Z0-9])/g, "$1 $2").replace(/([A-Z0-9])([A-Z0-9])/g, "$1 $2");
 					sortable.push([name, pt.hands[name]]);
 
 					var pay = [];

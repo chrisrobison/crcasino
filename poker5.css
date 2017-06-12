@@ -419,7 +419,7 @@ button { outline: none; }
 #gameover { 
 	position: absolute;
 	display: inline-block;
-	top: 46%;
+	top: 30%;
 	width:60vw;
 	left: 17%;
 	font-size: 6em;
