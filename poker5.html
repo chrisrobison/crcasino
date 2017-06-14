@@ -159,38 +159,6 @@
       <div id='card4-hold' class='hold'></div>
    </div>
 	<div id='hands'>
-		<div id='hand1'>
-			<div id='hand1card0' class='cardwrap flipped'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand1card1' class='cardwrap flipped'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand1card2' class='cardwrap flipped'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand1card3' class='cardwrap flipped'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand1card4' class='cardwrap flipped'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand1result' class='handresult'></div>
-		</div>
-		<div id='hand2'>
-			<div id='hand2card0' class='cardwrap flipped'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand2card1' class='cardwrap flipped'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand2card2' class='cardwrap flipped'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand2card3' class='cardwrap flipped'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand2card4' class='cardwrap flipped'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand2result' class='handresult'></div>
-		</div>
-		<div id='hand3'>
-			<div id='hand3card0' class='cardwrap flipped'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand3card1' class='cardwrap flipped'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand3card2' class='cardwrap flipped'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand3card3' class='cardwrap flipped'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand3card4' class='cardwrap flipped'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand3result' class='handresult'></div>
-		</div>
-		<div id='hand4'>
-			<div id='hand4card0' class='cardwrap flipped'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand4card1' class='cardwrap flipped'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand4card2' class='cardwrap flipped'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand4card3' class='cardwrap flipped'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand4card4' class='cardwrap flipped'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-			<div id='hand4result' class='handresult'></div>
-		</div>
    </div>
    <div id='cards'>
 		<div id='card0' class='cardwrap'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
@@ -231,7 +199,7 @@
 			creditValueIdx:0,
 			creditValue:1,
          cards: [],
-			hands: 5,
+			hands: 10,
          discards: {},
          holds: {},
          bet: 0,
@@ -285,7 +253,9 @@
       },
       init: function() {
          cdr.genPaytable();
-         var cards = cdr.newDeck();
+			cdr.makeHands();
+         //var cards = cdr.newDeck();
+			$$("main").classList.add("hands"+cdr.game.hands);
          $$("gameover").style.transform = "scale(1)";
 		   $$("cards").addEventListener("mousedown", function(e) {
 				var tgt = e.target;
@@ -790,8 +760,29 @@
 				profile_picture : imageUrl
 			});
 			setCookie("uid", userId);
+		},
+		makeHands: function() {
+			var hands = $$("hands");
+			for (var i=1; i<cdr.game.hands; i++) {
+				hands.appendChild(cdr.makeHand(i));
+			}
+		},
+		makeHand: function(id) {
+			var suits = ['S', 'C', 'D', 'H'];
+			var hand = el('div', 'hand'+id, 'hand');
+			for (var i=0; i<5; i++) {
+				var cnum = Math.floor(Math.random()*12) + 1;
+				var suit = suits[Math.floor(Math.random()*4)];
+				var card = el('div', '', 'card card' + cnum + suit, '<figure class="pic">&nbsp;</figure>');
+				var cardback = el('div', '', 'cardback', '<figure class="pic">&nbsp;</figure>');
+				var cardwrap = el('div', 'hand'+id+'card'+i, 'cardwrap flipped');
+				cardwrap.appendChild(card);
+				cardwrap.appendChild(cardback);
+				hand.appendChild(cardwrap);
+			}
+			hand.appendChild(el('div', 'hand'+id+'result', 'handresult'));
+			return hand;
 		}
-         
    };
    cdr.init();
 })();

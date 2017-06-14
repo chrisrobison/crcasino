@@ -26,6 +26,22 @@
    height:18vh;
    display:inline-block;
 }
+.hands10 #hands .cardwrap {
+	width:5vw; 
+	height:13vh;
+}
+.hands25 #hands .cardwrap {
+	width:2.5vw;
+	height:6.5vh;
+}
+.hands50 #hands .cardwrap {
+	width: 1.75vw;
+	height:3.25vh;
+}
+.hands100 #hands .cardwrap {
+	width:1vw;
+	height:2vh;
+}
 .cardwrap {
    transform-style: preserve-3d;
    transition: transform 200ms;
@@ -195,6 +211,10 @@
 .card13C:before { color:#000; content: "K\A\2663"; }
 .card1C:before {color:#000; content: "A\A\2663"; }
 
+#hands {
+	width:85%;
+	display:inline-block;
+}
 
 #hands .card:after {
    line-height: 4vh;
@@ -281,7 +301,7 @@
 .card12C:after { color:#000; content: "Q\A\2663"; }
 .card13C:after { color:#000; content: "K\A\2663"; }
 .card1C:after {color:#000; content: "A\A\2663"; }
-
+.hands10 #hands  .card1S:after,.hands10 #hands  .card2S:after,.hands10 #hands  .card3S:after,.hands10 #hands  .card4S:after,.hands10 #hands  .card5S:after,.hands10 #hands  .card6S:after,.hands10 #hands  .card7S:after,.hands10 #hands  .card8S:after,.hands10 #hands  .card9S:after,.hands10 #hands  .card10S:after,.hands10 #hands  .card11S:after,.hands10 #hands  .card12S:after,.hands10 #hands  .card13S:after,.hands10 #hands  .card1C:after,.hands10 #hands  .card2C:after,.hands10 #hands  .card3C:after,.hands10 #hands  .card4C:after,.hands10 #hands  .card5C:after,.hands10 #hands  .card6C:after,.hands10 #hands  .card7C:after,.hands10 #hands  .card8C:after,.hands10 #hands  .card9C:after,.hands10 #hands  .card10C:after,.hands10 #hands  .card11C:after,.hands10 #hands  .card12C:after,.hands10 #hands  .card13C:after,.hands10 #hands  .card1H:after,.hands10 #hands  .card2H:after,.hands10 #hands  .card3H:after,.hands10 #hands  .card4H:after,.hands10 #hands  .card5H:after,.hands10 #hands  .card6H:after,.hands10 #hands  .card7H:after,.hands10 #hands  .card8H:after,.hands10 #hands  .card9H:after,.hands10 #hands  .card10H:after,.hands10 #hands  .card11H:after,.hands10 #hands  .card12H:after,.hands10 #hands  .card13H:after,.hands10 #hands  .card1D:after,.hands10 #hands  .card2D:after,.hands10 #hands  .card3D:after,.hands10 #hands  .card4D:after,.hands10 #hands  .card5D:after,.hands10 #hands  .card6D:after,.hands10 #hands  .card7D:after,.hands10 #hands  .card8D:after,.hands10 #hands  .card9D:after,.hands10 #hands  .card10D:after,.hands10 #hands  .card11D:after,.hands10 #hands  .card12D:after,.hands10 #hands  .card13D:after { display:none; }
 #hands .card figure {
 	background-repeat:no-repeat;
 	transform-style:preserve-3d;
@@ -320,10 +340,7 @@
 .card13C figure { background-image: url(img/KC.png); background-size:100% 100%; border:1px solid #aaa; }
 .card13S figure { background-image: url(img/KS.png); background-size:100% 100%; border:1px solid #aaa; }
 
-#hand1 { display:inline-block; width:37vw; position:relative; height:19vh; }
-#hand2 { display:inline-block; width:37vw; position:relative; height:19vh; }
-#hand3 { display:inline-block; width:37vw; position:relative; height:19vh; }
-#hand4 { display:inline-block; width:37vw; position:relative; height:19vh; }
+.hand { display:inline-block; margin-left:1vw; position:relative; margin-top:1vh; }
 
 .card2H figure:after,.card3H figure:after,.card4H figure:after,.card5H figure:after,.card6H figure:after,.card7H figure:after,.card8H figure:after,.card9H figure:after,.card10H figure:after,.card1H figure:after { display:inline-block; margin-top:2.8vh;margin-left:-1vw;content:" \A\2665"; color:#c00; font-size:5vw; } 
 #hands .card2H figure:after,#hands .card3H figure:after,#hands .card4H figure:after,#hands .card5H figure:after,#hands .card6H figure:after,#hands .card7H figure:after,#hands .card8H figure:after,#hands .card9H figure:after,#hands .card10H figure:after,#hands .card1H figure:after { display:inline-block; margin-top:2vh;margin-left:-0.2vw;content:" \A\2665"; color:#c00; font-size:3vw; } 

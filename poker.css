@@ -191,11 +191,11 @@
 	right: -4vw;
 	content: "";
 	z-index: 99999;
-	background-image: url(img/wild-red.png);
+	background-image: url(img/wild-red.gif);
 	background-size: 100% 100%;
 }
 .wilds .card2S figure.pic::before, .wilds .card2C figure.pic::before {
-	background-image:url("img/wild-black.png");
+	background-image:url("img/wild-black.gif");
 }
 .card2S:after { color:#000; content: "2\A\2660"; }
 .card3S:after { color:#000; content: "3\A\2660"; }

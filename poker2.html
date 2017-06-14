@@ -336,10 +336,10 @@
          // if (cdr.game.discards[card]) { delete cdr.game.discards[card]; } else { cdr.game.discards[card] = true; }
       },
       hideCard: function(card, delay) {
-         setTimeout(function() { $$(card).classList.add('flipped'); setTimeout(function() { $("#"+card+" .card").style.visibility='hidden';}, 200); }, delay * 100);
+         setTimeout(function() { $$(card).classList.add('flipped'); setTimeout(function() { $("#"+card+" .card").style.visibility='hidden';}, 200); }, delay * 50);
       },
       showCard: function(card, delay, wait=500) {
-         setTimeout(function() { $("#"+card+" .card").style.visibility='visible'; $$(card).classList.remove('flipped'); }, (delay * 300) + wait);
+         setTimeout(function() { $("#"+card+" .card").style.visibility='visible'; $$(card).classList.remove('flipped'); }, (delay * 50) + wait);
       },
       setCard: function(i, draw, delay) {
             setTimeout(function() { $("#card" + i + " .card").className = 'card card' + draw; }, (delay * 200));
@@ -377,6 +377,9 @@
 			document.body.appendChild(scr);
 		},
 		newCards: function(cards) {
+			setTimeout(function() { cdr.realNewCards(cards); }, 500);	
+		},
+		realNewCards: function(cards) {
 			console.log("cards: "+JSON.stringify(cards));
 			console.dir(cards);
 		   var cnt = 0;
