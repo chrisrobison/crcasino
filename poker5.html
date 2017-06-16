@@ -61,12 +61,13 @@
 			z-index:99999;
 			width:100%;
 			position:absolute;
-			bottom:0vh;
+			bottom:-0.2vh;
 			left:0;
 			display:none;
 			overflow:hidden;
 			transition:all 500ms cubic-bezier(.25, .99, .71, 1.23);
 			height:5vh;
+			text-transform:uppercase;
 		}
 		#cards .handresult {
 			font-size:3vw;
@@ -120,6 +121,34 @@
         100% { transform: scale(1); }
       }
       th { border-bottom:3px solid #0df; border-right:3px solid #0df;  }
+		#payleft, #payright {
+			position:absolute;
+			bottom:15vh;
+			width:16vw;
+			height:42vh;
+		}
+		#payleft { left:0px; }
+		#payright { right:0px; }
+.payline {
+    background-color: #f00;
+    margin: 0.2vh .5vw;
+    font-size: 1.4vw;
+    text-transform: uppercase;
+    text-align: center;
+    text-shadow: 1.5px 1.5px 0px #000;
+    border-radius: 2vw;
+    border: 0.2vw outset;
+    font-weight: bold;
+    padding-bottom: 0.3vh;
+}
+.pay {
+    background-color: #000;
+    display: block;
+    width: 10vw;
+    margin: 0 auto 0vh;
+    height: 3vh;
+    border: 2px inset #ff0;
+}
    </style>
    <link rel='manifest' href='manifest.json'>
    <link rel='stylesheet' type='text/css' href='poker5.css'>
@@ -160,6 +189,7 @@
    </div>
 	<div id='hands'>
    </div>
+	<div id='payleft'></div>
    <div id='cards'>
 		<div id='card0' class='cardwrap'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
 		<div id='card1' class='cardwrap'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
@@ -168,6 +198,7 @@
 		<div id='card4' class='cardwrap'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
 		<div id='result' class='handresult'></div>
 	</div>
+	<div id='payright'></div>
    <div id='status' class='status'>
       <div id='bet'>0</div>
       <div id='win'></div>
@@ -194,12 +225,13 @@
    window.cdr = {
       game: {
 			endpoint: "https://us-central1-crblackjack-9e220.cloudfunctions.net/",
+			hands: 10,
+			type: "poker",
 			chipColors: ["#dd0", "#0c0", "#c00", "#c0c", "#000", "#0be", "#fa0", "#999", "#0a6", "#69a", "#333", "#000"],
 			creditValues: [ 1, 2, 5, 10, 25, 100, 250, 500, 1000, 2000, 5000, 10000 ],
 			creditValueIdx:0,
 			creditValue:1,
          cards: [],
-			hands: 10,
          discards: {},
          holds: {},
          bet: 0,
@@ -238,6 +270,7 @@
             $$("bet"+cdr.game.bet+"pay").classList.add('paybet');
          }
          $$("bet").innerHTML = cdr.game.bet;
+			cdr.genPaytable();
       },
       betmax: function() {
          cdr.game.bet = 5;
@@ -249,6 +282,7 @@
             $$("bet"+cdr.game.bet+"pay").classList.add('paybet');
          }
          $$("bet").innerHTML = cdr.game.bet;
+			cdr.genPaytable();
          cdr.deal();
       },
       init: function() {
@@ -329,14 +363,14 @@
             $$(card + '-hold').style.visibility = "";
             cdr.game.holds[card] = true;
 
-				for (var i=1; i < 5; i++) {
+				for (var i=1; i < cdr.game.hands; i++) {
 					$("#hand"+i+card+" .card").className = $("#"+card+" .card").className;
 					// $$("hand"+i+card).classList.remove('flipped');
 					cdr.showCard("hand"+i+card, 0, 0);
 				}
          } else {
             $$(card + '-hold').style.visibility = "hidden";
-				for (var i=1; i < 5; i++) {
+				for (var i=1; i < cdr.game.hands; i++) {
 					// $$("hand"+i+card).classList.add('flipped');
 					cdr.hideCard("hand"+i+card, 0, 0);
 				}
@@ -345,13 +379,13 @@
          // if (cdr.game.discards[card]) { delete cdr.game.discards[card]; } else { cdr.game.discards[card] = true; }
       },
       hideCard: function(card, delay) {
-         setTimeout(function() { $$(card).classList.add('flipped'); setTimeout(function() { $("#"+card+" .card").style.visibility='hidden';}, 200); }, delay * 100);
+         setTimeout(function() { $$(card).classList.add('flipped'); setTimeout(function() { $("#"+card+" .card").style.visibility='hidden';}, 100); }, delay * 100);
       },
       showCard: function(card, delay, wait=500) {
-         setTimeout(function() { $("#"+card+" .card").style.visibility='visible'; $$(card).classList.remove('flipped'); }, (delay * 100) + wait);
+         setTimeout(function() { $("#"+card+" .card").style.visibility='visible'; $$(card).classList.remove('flipped'); }, (delay * 75) + wait);
       },
       setCard: function(i, draw, delay) {
-            setTimeout(function() { $("#card" + i + " .card").className = 'card card' + draw; }, (delay * 200));
+            setTimeout(function() { $("#card" + i + " .card").className = 'card card' + draw; }, (delay * 100));
       },
       clearHolds: function() {
          for (var i=0; i<5; i++) {
@@ -365,7 +399,7 @@
          
          setTimeout(function() {
             $("#" + card + " .card").className = "card card" + newcard;
-         }, delay * 100);
+         }, delay * 75);
 
       },
       draw: function() {
@@ -382,7 +416,7 @@
             }
          }
          var scr = document.createElement('script');
-			scr.src = cdr.game.endpoint + "exchangeCards?game=poker5&callback=cdr.newCards&hands=" + cdr.game.hands + "&uid=" + firebase.auth().currentUser.uid + "&discard=" + needcards.join(',');
+			scr.src = cdr.game.endpoint + "exchangeCards?game="+cdr.game.type+"&callback=cdr.newCards&hands=" + cdr.game.hands + "&uid=" + firebase.auth().currentUser.uid + "&discard=" + needcards.join(',');
 			document.body.appendChild(scr);
 		},
 		newCards: function(cards) {
@@ -426,7 +460,7 @@
 					$$("won").innerHTML = "WIN "+Math.floor(wintot / cdr.game.creditValue)+" CREDITS";
 					$$("won").style.display = "inline-block";
 					$$("win").innerHTML = "WIN: "+Math.floor(wintot / cdr.game.creditValue);
-				}, 750);
+				}, cdr.game.hands * 250);
 			} else {
 				cdr.gameoverTimeout = setTimeout(function() { $$("gameover").innerHTML = "GAME OVER"; $$("gameover").style.transform = "scale(1)"; }, 1000);
 			}
@@ -439,12 +473,12 @@
 				el.innerHTML = cards.results[i].replace(/([a-z0-9])([A-Z0-9])/g, '$1 $2').replace(/([A-Z])([A-Z])/g, '$1 $2');
 				el.style.display = "inline-block";
 				el.style.height = "";
-			}, 250 * i);
+			}, 100 * i);
 			
 		},
 		checkWin: function() {
          var scr = document.createElement('script');
-			scr.src = cdr.game.endpoint + "checkHand?callback=cdr.gotWin&game=poker5&uid=" + firebase.auth().currentUser.uid;
+			scr.src = cdr.game.endpoint + "checkHand?callback=cdr.gotWin&game="+cdr.game.type+"&uid=" + firebase.auth().currentUser.uid;
 			document.body.appendChild(scr); 
 		},
 		gotWin: function(hand, won) {
@@ -493,7 +527,7 @@
 			}
       },
 		resetCards: function() {
-			for (var h=1; h < 5; h++) {
+			for (var h=1; h < cdr.game.hands; h++) {
 				for (var c=0; c < 5; c++) {
 					$$("hand"+h+"card"+c).classList.add('flipped');
 				}
@@ -544,7 +578,7 @@
          cdr.newDeck();
          
 			var func = document.createElement('script');
-			func.src = cdr.game.endpoint + "newGame?game=poker5&hands="+cdr.game.hands+"&callback=cdr.gotGame&uid=" + firebase.auth().currentUser.uid + "&bet=" + cdr.game.bet *  cdr.game.creditValue;
+			func.src = cdr.game.endpoint + "newGame?game="+cdr.game.type+"&hands="+cdr.game.hands+"&callback=cdr.gotGame&uid=" + firebase.auth().currentUser.uid + "&bet=" + cdr.game.bet *  cdr.game.creditValue;
 			document.body.appendChild(func);
 		},
 		gotGame: function(cards) {
@@ -695,28 +729,50 @@
         return array;
       },
       genPaytable: function() {
-         var paytable = $('#paytable');
-         var keys = Object.keys(cdr.paytable);
-         var header = el('tr');
-         header.appendChild(el('td', 'paybet', '', '&#9660; Hand <span style="float:right;">Bet &#9654;</span>'));
-         for (var i=1; i < 6; i++) {
-            header.appendChild(el('td', 'paybet' + i, '', i));
-         }
-         paytable.appendChild(header);
+			firebase.database().ref("payouts/"+cdr.game.type).once("value", function(snap) {
+				var pt = snap.val();
+				var hands = Object.keys(pt.hands);
+				var newpaytable = {};
+				var sortable = [];
+				for (var i=0; i<hands.length; i++) {
+					var name = hands[i];
+					var displayName = name.replace(/([a-z0-9])([A-Z0-9])/g, "$1 $2").replace(/([A-Z0-9])([A-Z0-9])/g, "$1 $2");
+					sortable.push([name, pt.hands[name]]);
 
-         for (var i=0; i<keys.length; i++) {
-            var tr = el('tr');
-            tr.id = keys[i];
-            var pt = cdr.paytable[keys[i]];
+					var pay = [];
+					for (var j=1; j<6; j++) {
+						pay.push(parseInt(pt.hands[name]) * j);
+					}
+					newpaytable[name] = { "hand": displayName, win: pay };
+				}
+				cdr.paytable = newpaytable;
+				sortable.sort(function(a, b) {
+					return b[1] - a[1];
+				});
+				cdr.paytable[sortable[0][0]].win[4] = parseInt(pt.jackpot);
+				console.dir(newpaytable);
+				console.log("New pay table: " + JSON.stringify(newpaytable));
+				var payleft = $('#payleft');
+				var payright = $('#payright');
+				payleft.innerHTML = "";
+				payright.innerHTML = "";
+				var keys = Object.keys(cdr.paytable);
+				var half = Math.floor(keys.length / 2);
+				var entry, mypt, win;
 
-            tr.appendChild(el('td', pt.hand.replace(/\W/g, ''), '', pt.hand));
-            for (var j=0; j<pt.win.length; j++) {
-               var td = el('td', pt.hand.replace(/\W/g, '') + '_' + (j + 1), 'right', pt.win[j]);
-               td.id = keys[i] + j;
-               tr.appendChild(td); 
-            }
-            paytable.appendChild(tr);
-         }
+				for (var i=0; i < half; i++) {
+					mypt = cdr.paytable[sortable[i][0]];
+					win = mypt.win[cdr.game.bet - 1] || 0;
+					entry = el('div', 'payline'+i, 'payline', mypt.hand + " <div class='pay'>"+win+"</"+"div>");
+					payleft.appendChild(entry);
+				}
+				for (var i=half; i < sortable.length; i++) {
+					mypt = cdr.paytable[sortable[i][0]];
+					win = mypt.win[cdr.game.bet - 1] || 0;
+					entry = el('div', 'payline'+i, 'payline', mypt.hand + " <div class='pay'>"+win+"<"+"/div>");
+					payright.appendChild(entry);
+				}
+			});
       },
       newDeck: function() {
          cdr.deck = [];

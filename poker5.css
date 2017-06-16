@@ -21,10 +21,11 @@
 }
 #hands .cardwrap {
    transform-style: preserve-3d;
-   transition: transform 200ms;
+   transition: transform 150ms;
    width:7vw;
    height:18vh;
    display:inline-block;
+	margin-left:0.2vw;
 }
 .hands10 #hands .cardwrap {
 	width:5vw; 
@@ -48,6 +49,10 @@
    width:13vw;
    height:32vh;
    display:inline-block;
+}
+.hands10 .cardwrap {
+	width:12vw;
+	height:31vh;
 }
 #holds {
     font-size:2.2vw;
@@ -81,6 +86,14 @@
 	left:-1vw;
 	content: "\1f512";
 	z-index:2;
+}
+.hands10 .hold {
+	width:11.9vw;
+}
+.hands10 .hold:after {
+	width:13.1vw;
+	height:37vh;
+	top:1.5vh;
 }
 .cardwrap .card {
   margin: 0;
@@ -344,19 +357,22 @@
 
 .card2H figure:after,.card3H figure:after,.card4H figure:after,.card5H figure:after,.card6H figure:after,.card7H figure:after,.card8H figure:after,.card9H figure:after,.card10H figure:after,.card1H figure:after { display:inline-block; margin-top:2.8vh;margin-left:-1vw;content:" \A\2665"; color:#c00; font-size:5vw; } 
 #hands .card2H figure:after,#hands .card3H figure:after,#hands .card4H figure:after,#hands .card5H figure:after,#hands .card6H figure:after,#hands .card7H figure:after,#hands .card8H figure:after,#hands .card9H figure:after,#hands .card10H figure:after,#hands .card1H figure:after { display:inline-block; margin-top:2vh;margin-left:-0.2vw;content:" \A\2665"; color:#c00; font-size:3vw; } 
+.hands10 #hands .card2H figure:after,#hands .card3H figure:after,#hands .card4H figure:after,#hands .card5H figure:after,#hands .card6H figure:after,#hands .card7H figure:after,#hands .card8H figure:after,#hands .card9H figure:after,#hands .card10H figure:after,#hands .card1H figure:after { display:inline-block; margin-top:-1vh;margin-left:0vw;content:" \A\2665"; color:#c00; font-size:3vw; } 
 
 .card2D figure:after,.card3D figure:after,.card4D figure:after,.card5D figure:after,.card6D figure:after,.card7D figure:after,.card8D figure:after,.card9D figure:after,.card10D figure:after,.card1D figure:after { display:inline-block; margin-top:2.8vh;margin-left:-1vw;content:" \A\2666"; color:#c00; font-size:5vw; } 
 #hands .card2D figure:after,#hands .card3D figure:after,#hands .card4D figure:after,#hands .card5D figure:after,#hands .card6D figure:after,#hands .card7D figure:after,#hands .card8D figure:after,#hands .card9D figure:after,#hands .card10D figure:after,#hands .card1D figure:after { display:inline-block; margin-top:2vh;margin-left:-0.2vw;content:" \A\2666"; color:#c00; font-size:3vw; } 
+.hands10 #hands .card2D figure:after,#hands .card3D figure:after,#hands .card4D figure:after,#hands .card5D figure:after,#hands .card6D figure:after,#hands .card7D figure:after,#hands .card8D figure:after,#hands .card9D figure:after,#hands .card10D figure:after,#hands .card1D figure:after { display:inline-block; margin-top:-1vh;margin-left:0vw;content:" \A\2666"; color:#c00; font-size:3vw; } 
 
 .card2C figure:after,.card3C figure:after,.card4C figure:after,.card5C figure:after,.card6C figure:after,.card7C figure:after,.card8C figure:after,.card9C figure:after,.card10C figure:after,.card1C figure:after { display:inline-block; margin-top:2.8vh;margin-left:-1vw;content:" \A\2663"; color:#000; font-size:5vw; } 
 #hands .card2C figure:after,#hands .card3C figure:after,#hands .card4C figure:after,#hands .card5C figure:after,#hands .card6C figure:after,#hands .card7C figure:after,#hands .card8C figure:after,#hands .card9C figure:after,#hands .card10C figure:after,#hands .card1C figure:after { display:inline-block; margin-top:2vh;margin-left:-0.2vw;content:" \A\2663"; color:#000; font-size:3vw; } 
+.hands10 #hands .card2C figure:after,#hands .card3C figure:after,#hands .card4C figure:after,#hands .card5C figure:after,#hands .card6C figure:after,#hands .card7C figure:after,#hands .card8C figure:after,#hands .card9C figure:after,#hands .card10C figure:after,#hands .card1C figure:after { display:inline-block; margin-top:-1vh;margin-left:0vw;content:" \A\2663"; color:#000; font-size:3vw; } 
 
 .card2S figure:after,.card3S figure:after,.card4S figure:after,.card5S figure:after,.card6S figure:after,.card7S figure:after,.card8S figure:after,.card9S figure:after,.card10S figure:after,.card1S figure:after { display:inline-block; margin-top:2.8vh;margin-left:-1vw;content:" \A\2660"; color:#000; font-size:5vw; } 
 #hands .card2S figure:after,#hands .card3S figure:after,#hands .card4S figure:after,#hands .card5S figure:after,#hands .card6S figure:after,#hands .card7S figure:after,#hands .card8S figure:after,#hands .card9S figure:after,#hands .card10S figure:after,#hands .card1S figure:after { display:inline-block; margin-top:2vh;margin-left:-0.2vw;content:" \A\2660"; color:#000; font-size:3vw; } 
+.hands10 #hands .card2S figure:after,#hands .card3S figure:after,#hands .card4S figure:after,#hands .card5S figure:after,#hands .card6S figure:after,#hands .card7S figure:after,#hands .card8S figure:after,#hands .card9S figure:after,#hands .card10S figure:after,#hands .card1S figure:after { display:inline-block; margin-top:-1vh;margin-left:0vw;content:" \A\2660"; color:#000; font-size:3vw; } 
 
 .diamond { color: #cc0000; }
 #hands .cardback { 
-    border: 1px solid #000;
     border-radius:.5vw;
     width:100%;
     height:100%;
@@ -374,13 +390,16 @@
 #cards .cardback { 
     border: 1vw solid #fff;
     border-radius:.5vw;
-    width:11vw;
-    height:29vh;
+    width:84%;
+    height:89%;
     display:inline-block;
     box-shadow: .125em .125em 4px rgba(0,0,0,.4);
     transform-style:preserve-3d;
 	 backface-visibility:hidden;
 	 -webkit-backface-visibility:hidden;
+}
+.hands10 .cardback {
+	
 }
 #cards .cardback figure { 
 	border: none; 
