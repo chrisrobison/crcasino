@@ -65,7 +65,7 @@
 			left:0;
 			display:none;
 			overflow:hidden;
-			transition:all 500ms cubic-bezier(.25, .99, .71, 1.23);
+			transition:all 300ms cubic-bezier(.25, .99, .71, 1.23);
 			height:5vh;
 			text-transform:uppercase;
 		}
@@ -123,6 +123,7 @@
       th { border-bottom:3px solid #0df; border-right:3px solid #0df;  }
 		#payleft, #payright {
 			position:absolute;
+			line-height:1.4vw;
 			bottom:15vh;
 			width:16vw;
 			height:42vh;
@@ -132,11 +133,11 @@
 .payline {
     background-color: #f00;
     margin: 0.2vh .5vw;
-    font-size: 1.4vw;
+    font-size: 1.25vw;
     text-transform: uppercase;
     text-align: center;
     text-shadow: 1.5px 1.5px 0px #000;
-    border-radius: 2vw;
+    border-radius: 1.5vw;
     border: 0.2vw outset;
     font-weight: bold;
     padding-bottom: 0.3vh;
@@ -146,8 +147,10 @@
     display: block;
     width: 10vw;
     margin: 0 auto 0vh;
-    height: 3vh;
     border: 2px inset #ff0;
+	 padding:0.4vh 2vw;
+	 border-bottom-left-radius:1.2vw;
+	 border-bottom-right-radius:1.2vw;
 }
    </style>
    <link rel='manifest' href='manifest.json'>
@@ -225,10 +228,10 @@
    window.cdr = {
       game: {
 			endpoint: "https://us-central1-crblackjack-9e220.cloudfunctions.net/",
-			hands: 10,
+			hands: 5,
 			type: "poker",
 			chipColors: ["#dd0", "#0c0", "#c00", "#c0c", "#000", "#0be", "#fa0", "#999", "#0a6", "#69a", "#333", "#000"],
-			creditValues: [ 1, 2, 5, 10, 25, 100, 250, 500, 1000, 2000, 5000, 10000 ],
+			creditValues: [ 1, 2, 5, 10, 25, 100, 250, 500, 1000, 2000, 5000, 10000, 50000 ],
 			creditValueIdx:0,
 			creditValue:1,
          cards: [],
@@ -269,7 +272,7 @@
 				if ($(".paybet")) $(".paybet").classList.remove('paybet');
             $$("bet"+cdr.game.bet+"pay").classList.add('paybet');
          }
-         $$("bet").innerHTML = cdr.game.bet;
+         $$("bet").innerHTML = cdr.game.bet + "x"+cdr.game.hands;
 			cdr.genPaytable();
       },
       betmax: function() {
@@ -281,7 +284,7 @@
 				if ($(".paybet")) $(".paybet").classList.remove('paybet');
             $$("bet"+cdr.game.bet+"pay").classList.add('paybet');
          }
-         $$("bet").innerHTML = cdr.game.bet;
+         $$("bet").innerHTML = cdr.game.bet + "x"+cdr.game.hands;
 			cdr.genPaytable();
          cdr.deal();
       },
@@ -382,7 +385,7 @@
          setTimeout(function() { $$(card).classList.add('flipped'); setTimeout(function() { $("#"+card+" .card").style.visibility='hidden';}, 100); }, delay * 100);
       },
       showCard: function(card, delay, wait=500) {
-         setTimeout(function() { $("#"+card+" .card").style.visibility='visible'; $$(card).classList.remove('flipped'); }, (delay * 75) + wait);
+         setTimeout(function() { $("#"+card+" .card").style.visibility='visible'; $$(card).classList.remove('flipped'); }, (delay * 50) + wait);
       },
       setCard: function(i, draw, delay) {
             setTimeout(function() { $("#card" + i + " .card").className = 'card card' + draw; }, (delay * 100));
@@ -473,7 +476,7 @@
 				el.innerHTML = cards.results[i].replace(/([a-z0-9])([A-Z0-9])/g, '$1 $2').replace(/([A-Z])([A-Z])/g, '$1 $2');
 				el.style.display = "inline-block";
 				el.style.height = "";
-			}, 100 * i);
+			}, 200 * i);
 			
 		},
 		checkWin: function() {

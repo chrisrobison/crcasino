@@ -16,12 +16,12 @@
 #cards {
 	position:absolute;
 	bottom:22vh;
-	left:15vw;
+	left:16.5vw;
 	z-index:999;
 }
 #hands .cardwrap {
    transform-style: preserve-3d;
-   transition: transform 150ms;
+   transition: transform 250ms;
    width:7vw;
    height:18vh;
    display:inline-block;
@@ -46,8 +46,8 @@
 .cardwrap {
    transform-style: preserve-3d;
    transition: transform 200ms;
-   width:13vw;
-   height:32vh;
+   width:12vw;
+   height:31vh;
    display:inline-block;
 }
 .hands10 .cardwrap {
@@ -61,12 +61,12 @@
 	 width:100vw;
 	position:absolute;
 	bottom:33vh;
-	left:16.5vw;
+	left:18vw;
 	text-align:left;
 }
 .hold {
     color:#ff0;
-    width:13vw;
+    width:11.9vw;
     text-align:center;
     display:inline-block;
     font-weight:bold;
@@ -76,13 +76,13 @@
 	 margin-left:0.1vw;
 }
 .hold:after {
-	height:38vh;
+	height:37vh;
 	border-radius:1vw;
 	border:0.1vw solid #990;
 	background-color:#ff0;
-	width:13.9vw;
+	width:13.1vw;
 	position:absolute;
-	top:0;
+	top:1.5vh;
 	left:-1vw;
 	content: "\1f512";
 	z-index:2;
