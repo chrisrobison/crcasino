@@ -36,16 +36,19 @@
 	height:6.5vh;
 }
 .hands50 #hands .cardwrap {
-	width: 1.75vw;
-	height:3.25vh;
+	width: 2vw;
+	height:5vh;
 }
 .hands100 #hands .cardwrap {
-	width:1vw;
-	height:2vh;
+	width:1.4vw;
+	height:3.5vh;
+}
+.hands100 .card {
+	border-radius:1px;
 }
 .cardwrap {
    transform-style: preserve-3d;
-   transition: transform 200ms;
+   transition: transform 100ms;
    width:12vw;
    height:31vh;
    display:inline-block;
@@ -245,6 +248,7 @@
    right:0px;
    bottom:0px;
 }
+.hands25 #hands .card:after, .hands50 #hands .card:after, .hands100 #hands .card:after { display:none; }
 .card:after {
    line-height: 120%;
    transform-style:preserve-3d;
@@ -261,6 +265,7 @@
    right:0px;
    bottom:0px;
 }
+.card1D:after {color:#c00; content: "A\A\2666"; }
 .card2D:after { color:#c00; content: "2\A\2666"; }
 .card3D:after { color:#c00; content: "3\A\2666"; }
 .card4D:after { color:#c00; content: "4\A\2666"; }
@@ -273,7 +278,7 @@
 .card11D:after { color:#c00; content: "J\A\2666"; }
 .card12D:after { color:#c00; content: "Q\A\2666"; }
 .card13D:after { color:#c00; content: "K\A\2666"; }
-.card1D:after { color:#c00; content: "A\A\2666"; }
+.card1H:after { color:#c00; content: "A\A\2665"; }
 .card2H:after { color:#c00; content: "2\A\2665"; }
 .card3H:after { color:#c00; content: "3\A\2665"; }
 .card4H:after { color:#c00; content: "4\A\2665"; }
@@ -286,8 +291,8 @@
 .card11H:after { color:#c00; content: "J\A\2665"; }
 .card12H:after { color:#c00; content: "Q\A\2665"; }
 .card13H:after { color:#c00; content: "K\A\2665"; }
-.card1H:after {color:#c00; content: "A\A\2665"; }
 
+.card1S:after {color:#000; content: "A\A\2660"; }
 .card2S:after { color:#000; content: "2\A\2660"; }
 .card3S:after { color:#000; content: "3\A\2660"; }
 .card4S:after { color:#000; content: "4\A\2660"; }
@@ -300,7 +305,7 @@
 .card11S:after { color:#000; content: "J\A\2660"; }
 .card12S:after { color:#000; content: "Q\A\2660"; }
 .card13S:after { color:#000; content: "K\A\2660"; }
-.card1S:after { color:#000; content: "A\A\2660"; }
+.card1C:after {color:#000; content: "A\A\2663"; }
 .card2C:after { color:#000; content: "2\A\2663"; }
 .card3C:after { color:#000; content: "3\A\2663"; }
 .card4C:after { color:#000; content: "4\A\2663"; }
@@ -313,8 +318,10 @@
 .card11C:after { color:#000; content: "J\A\2663"; }
 .card12C:after { color:#000; content: "Q\A\2663"; }
 .card13C:after { color:#000; content: "K\A\2663"; }
-.card1C:after {color:#000; content: "A\A\2663"; }
 .hands10 #hands  .card1S:after,.hands10 #hands  .card2S:after,.hands10 #hands  .card3S:after,.hands10 #hands  .card4S:after,.hands10 #hands  .card5S:after,.hands10 #hands  .card6S:after,.hands10 #hands  .card7S:after,.hands10 #hands  .card8S:after,.hands10 #hands  .card9S:after,.hands10 #hands  .card10S:after,.hands10 #hands  .card11S:after,.hands10 #hands  .card12S:after,.hands10 #hands  .card13S:after,.hands10 #hands  .card1C:after,.hands10 #hands  .card2C:after,.hands10 #hands  .card3C:after,.hands10 #hands  .card4C:after,.hands10 #hands  .card5C:after,.hands10 #hands  .card6C:after,.hands10 #hands  .card7C:after,.hands10 #hands  .card8C:after,.hands10 #hands  .card9C:after,.hands10 #hands  .card10C:after,.hands10 #hands  .card11C:after,.hands10 #hands  .card12C:after,.hands10 #hands  .card13C:after,.hands10 #hands  .card1H:after,.hands10 #hands  .card2H:after,.hands10 #hands  .card3H:after,.hands10 #hands  .card4H:after,.hands10 #hands  .card5H:after,.hands10 #hands  .card6H:after,.hands10 #hands  .card7H:after,.hands10 #hands  .card8H:after,.hands10 #hands  .card9H:after,.hands10 #hands  .card10H:after,.hands10 #hands  .card11H:after,.hands10 #hands  .card12H:after,.hands10 #hands  .card13H:after,.hands10 #hands  .card1D:after,.hands10 #hands  .card2D:after,.hands10 #hands  .card3D:after,.hands10 #hands  .card4D:after,.hands10 #hands  .card5D:after,.hands10 #hands  .card6D:after,.hands10 #hands  .card7D:after,.hands10 #hands  .card8D:after,.hands10 #hands  .card9D:after,.hands10 #hands  .card10D:after,.hands10 #hands  .card11D:after,.hands10 #hands  .card12D:after,.hands10 #hands  .card13D:after { display:none; }
+.hands25 #hands  .card1S:after,.hands25 #hands  .card2S:after,.hands25 #hands  .card3S:after,.hands25 #hands  .card4S:after,.hands25 #hands  .card5S:after,.hands25 #hands  .card6S:after,.hands25 #hands  .card7S:after,.hands25 #hands  .card8S:after,.hands25 #hands  .card9S:after,.hands25 #hands  .card25S:after,.hands25 #hands  .card11S:after,.hands25 #hands  .card12S:after,.hands25 #hands  .card13S:after,.hands25 #hands  .card1C:after,.hands25 #hands  .card2C:after,.hands25 #hands  .card3C:after,.hands25 #hands  .card4C:after,.hands25 #hands  .card5C:after,.hands25 #hands  .card6C:after,.hands25 #hands  .card7C:after,.hands25 #hands  .card8C:after,.hands25 #hands  .card9C:after,.hands25 #hands  .card25C:after,.hands25 #hands  .card11C:after,.hands25 #hands  .card12C:after,.hands25 #hands  .card13C:after,.hands25 #hands  .card1H:after,.hands25 #hands  .card2H:after,.hands25 #hands  .card3H:after,.hands25 #hands  .card4H:after,.hands25 #hands  .card5H:after,.hands25 #hands  .card6H:after,.hands25 #hands  .card7H:after,.hands25 #hands  .card8H:after,.hands25 #hands  .card9H:after,.hands25 #hands  .card25H:after,.hands25 #hands  .card11H:after,.hands25 #hands  .card12H:after,.hands25 #hands  .card13H:after,.hands25 #hands  .card1D:after,.hands25 #hands  .card2D:after,.hands25 #hands  .card3D:after,.hands25 #hands  .card4D:after,.hands25 #hands  .card5D:after,.hands25 #hands  .card6D:after,.hands25 #hands  .card7D:after,.hands25 #hands  .card8D:after,.hands25 #hands  .card9D:after,.hands25 #hands  .card25D:after,.hands25 #hands  .card11D:after,.hands25 #hands  .card12D:after,.hands25 #hands  .card13D:after { display:none; }
+.hands50 #hands  .card1S:after,.hands50 #hands  .card2S:after,.hands50 #hands  .card3S:after,.hands50 #hands  .card4S:after,.hands50 #hands  .card5S:after,.hands50 #hands  .card6S:after,.hands50 #hands  .card7S:after,.hands50 #hands  .card8S:after,.hands50 #hands  .card9S:after,.hands50 #hands  .card50S:after,.hands50 #hands  .card11S:after,.hands50 #hands  .card12S:after,.hands50 #hands  .card13S:after,.hands50 #hands  .card1C:after,.hands50 #hands  .card2C:after,.hands50 #hands  .card3C:after,.hands50 #hands  .card4C:after,.hands50 #hands  .card5C:after,.hands50 #hands  .card6C:after,.hands50 #hands  .card7C:after,.hands50 #hands  .card8C:after,.hands50 #hands  .card9C:after,.hands50 #hands  .card50C:after,.hands50 #hands  .card11C:after,.hands50 #hands  .card12C:after,.hands50 #hands  .card13C:after,.hands50 #hands  .card1H:after,.hands50 #hands  .card2H:after,.hands50 #hands  .card3H:after,.hands50 #hands  .card4H:after,.hands50 #hands  .card5H:after,.hands50 #hands  .card6H:after,.hands50 #hands  .card7H:after,.hands50 #hands  .card8H:after,.hands50 #hands  .card9H:after,.hands50 #hands  .card50H:after,.hands50 #hands  .card11H:after,.hands50 #hands  .card12H:after,.hands50 #hands  .card13H:after,.hands50 #hands  .card1D:after,.hands50 #hands  .card2D:after,.hands50 #hands  .card3D:after,.hands50 #hands  .card4D:after,.hands50 #hands  .card5D:after,.hands50 #hands  .card6D:after,.hands50 #hands  .card7D:after,.hands50 #hands  .card8D:after,.hands50 #hands  .card9D:after,.hands50 #hands  .card50D:after,.hands50 #hands  .card11D:after,.hands50 #hands  .card12D:after,.hands50 #hands  .card13D:after { display:none; }
+.hands100 #hands  .card1S:after,.hands100 #hands  .card2S:after,.hands100 #hands  .card3S:after,.hands100 #hands  .card4S:after,.hands100 #hands  .card5S:after,.hands100 #hands  .card6S:after,.hands100 #hands  .card7S:after,.hands100 #hands  .card8S:after,.hands100 #hands  .card9S:after,.hands100 #hands  .card100S:after,.hands100 #hands  .card11S:after,.hands100 #hands  .card12S:after,.hands100 #hands  .card13S:after,.hands100 #hands  .card1C:after,.hands100 #hands  .card2C:after,.hands100 #hands  .card3C:after,.hands100 #hands  .card4C:after,.hands100 #hands  .card5C:after,.hands100 #hands  .card6C:after,.hands100 #hands  .card7C:after,.hands100 #hands  .card8C:after,.hands100 #hands  .card9C:after,.hands100 #hands  .card100C:after,.hands100 #hands  .card11C:after,.hands100 #hands  .card12C:after,.hands100 #hands  .card13C:after,.hands100 #hands  .card1H:after,.hands100 #hands  .card2H:after,.hands100 #hands  .card3H:after,.hands100 #hands  .card4H:after,.hands100 #hands  .card5H:after,.hands100 #hands  .card6H:after,.hands100 #hands  .card7H:after,.hands100 #hands  .card8H:after,.hands100 #hands  .card9H:after,.hands100 #hands  .card100H:after,.hands100 #hands  .card11H:after,.hands100 #hands  .card12H:after,.hands100 #hands  .card13H:after,.hands100 #hands  .card1D:after,.hands100 #hands  .card2D:after,.hands100 #hands  .card3D:after,.hands100 #hands  .card4D:after,.hands100 #hands  .card5D:after,.hands100 #hands  .card6D:after,.hands100 #hands  .card7D:after,.hands100 #hands  .card8D:after,.hands100 #hands  .card9D:after,.hands100 #hands  .card100D:after,.hands100 #hands  .card11D:after,.hands100 #hands  .card12D:after,.hands100 #hands  .card13D:after { display:none; }
 #hands .card figure {
 	background-repeat:no-repeat;
 	transform-style:preserve-3d;
@@ -352,6 +359,9 @@
 .card13D figure { background-image: url(img/KD.png); background-size:100% 100%; border:1px solid #aaa; }
 .card13C figure { background-image: url(img/KC.png); background-size:100% 100%; border:1px solid #aaa; }
 .card13S figure { background-image: url(img/KS.png); background-size:100% 100%; border:1px solid #aaa; }
+#hands .hands25 .card10C figure,#hands .hands25 .card10S figure,#hands .hands25 .card10D figure, #hands .hands25 .card10H figure,#hands .hands25 .card11C figure,#hands .hands25 .card11S figure,#hands .hands25 .card11D figure, #hands .hands25 .card11H figure,#hands .hands25 .card12C figure,#hands .hands25 .card12S figure,#hands .hands25 .card12D figure, #hands .hands25 .card12H figure,#hands .hands25 .card13C figure,#hands .hands25 .card13S figure,#hands .hands25 .card13D figure, #hands .hands25 .card13H figure { background:none; } 
+#hands .hands50 .card10C figure,#hands .hands50 .card10S figure,#hands .hands50 .card10D figure, #hands .hands50 .card10H figure,#hands .hands50 .card11C figure,#hands .hands50 .card11S figure,#hands .hands50 .card11D figure, #hands .hands50 .card11H figure,#hands .hands50 .card12C figure,#hands .hands50 .card12S figure,#hands .hands50 .card12D figure, #hands .hands50 .card12H figure,#hands .hands50 .card13C figure,#hands .hands50 .card13S figure,#hands .hands50 .card13D figure, #hands .hands50 .card13H figure { background:none; } 
+#hands .hands100 .card10C figure,#hands .hands100 .card10S figure,#hands .hands100 .card10D figure, #hands .hands100 .card10H figure,#hands .hands100 .card11C figure,#hands .hands100 .card11S figure,#hands .hands100 .card11D figure, #hands .hands100 .card11H figure,#hands .hands100 .card12C figure,#hands .hands100 .card12S figure,#hands .hands100 .card12D figure, #hands .hands100 .card12H figure,#hands .hands100 .card13C figure,#hands .hands100 .card13S figure,#hands .hands100 .card13D figure, #hands .hands100 .card13H figure { background:none; } 
 
 .hand { display:inline-block; margin-left:1vw; position:relative; margin-top:1vh; }
 
@@ -371,6 +381,13 @@
 #hands .card2S figure:after,#hands .card3S figure:after,#hands .card4S figure:after,#hands .card5S figure:after,#hands .card6S figure:after,#hands .card7S figure:after,#hands .card8S figure:after,#hands .card9S figure:after,#hands .card10S figure:after,#hands .card1S figure:after { display:inline-block; margin-top:2vh;margin-left:-0.2vw;content:" \A\2660"; color:#000; font-size:3vw; } 
 .hands10 #hands .card2S figure:after,#hands .card3S figure:after,#hands .card4S figure:after,#hands .card5S figure:after,#hands .card6S figure:after,#hands .card7S figure:after,#hands .card8S figure:after,#hands .card9S figure:after,#hands .card10S figure:after,#hands .card1S figure:after { display:inline-block; margin-top:-1vh;margin-left:0vw;content:" \A\2660"; color:#000; font-size:3vw; } 
 
+.hands25 #hands div.card figure:after,.hands50 #hands div.card figure:after, .hands100 #hands div.card figure:after { display:none; }
+.hands25 #hands div.card figure,.hands50 #hands div.card figure, .hands100 #hands div.card figure{ display:none; }
+
+.hands25 #hands .card:before {
+	line-height:3.1vh;
+	font-size:1.5vw;
+}
 .diamond { color: #cc0000; }
 #hands .cardback { 
     border-radius:.5vw;
@@ -386,6 +403,10 @@
     background: -webkit-linear-gradient(-45deg, rgba(254,255,255,1) 0%,rgba(255,252,226,1) 64%,rgba(242,238,201,1) 100%);
     background: linear-gradient(135deg, rgba(254,255,255,1) 0%,rgba(255,252,226,1) 64%,rgba(242,238,201,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#f2eec9',GradientType=0 );
+}
+.hands50 #hands .cardback { border-radius:.25vw; }
+.hands100 #hands .cardback {
+	border-radius:1px;
 }
 #cards .cardback { 
     border: 1vw solid #fff;
@@ -431,10 +452,20 @@
     background-position: 3em 3em, 3em 4em, auto auto, 0 1em;
     background-size:0.35vw 0.35vw;
 }
+.hands50 #hands .cardback figure { border-radius:.25vw; }
+.hands100 #hands .cardback figure { border-radius:1px; }
+
+.hands100 #hands { width:100% }
+.hands25 .handresult { font-size:1.3em;height:2.5vh; }
+.hands50 .handresult { font-size:1.1em;height:1.75vh; }
+.hands100 .handresult { font-size:0.8em;font-weight:normal;height:1.5vh; border-width:1px; }
+.hands50 #hands .card:before { line-height:1; font-size: 1.3vw; }
+.hands100 #hands .card:before { line-height:1; font-size: 1vw; }
+
 button:active { transform: translateY(0.25em); position:relative; display:inline-block; }
 button { background: #f4e130; background: -moz-linear-gradient(top, #f4e130 0%, #fff460 50%, #e5da02 51%, #d1ca00 100%); background: -webkit-linear-gradient(top, #f4e130 0%,#fff460 50%,#e5da02 51%,#d1ca00 100%); background: linear-gradient(to bottom, #f4e130 0%,#fff460 50%,#e5da02 51%,#d1ca00 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4e130', endColorstr='#d1ca00',GradientType=0 ); }
-#dealButton { border-top-right-radius:2em; border-bottom-right-radius:2em; }
-#backButton { border-top-left-radius:2em; border-bottom-left-radius:2em; }
+.rightButton { border-top-right-radius:2em; border-bottom-right-radius:2em; }
+.leftButton { border-top-left-radius:2em; border-bottom-left-radius:2em; }
 h2:before {
     display: inline-block;
     height: 7.3vh;

@@ -152,6 +152,40 @@
 	 border-bottom-left-radius:1.2vw;
 	 border-bottom-right-radius:1.2vw;
 }
+#handselect {
+	position:absolute;
+	display:inline-block;
+	bottom:11vh;
+	left:18vw;
+	width:14vw;
+	height:0vh;
+	background:linear-gradient(to top, #f4e130 0%,#fff460 100%);
+   z-index:999;
+	text-align:center;
+	font-size:3vw;
+	color:#000;
+	text-shadow:1px 1px 0px #fff;
+	box-shadow:.25vw -.25vw .25vw rgba(0,0,0,.4), -.25vw 0 .25vw rgba(0,0,0,.4);
+	overflow:hidden;
+;
+	font-weight:500;
+	text-transform:uppercase;
+	transition:all 300ms cubic-bezier(.25, .99, .71, 1.23);
+}
+div#handselect.open { height:33vh; }
+#handselect input { display:none; }
+#handcount {
+	margin:0;
+	padding:0;
+}
+#handcount li {
+	list-style-type:none;	
+	border-bottom: 1px solid #660;
+}
+.handcountSelected {
+	background-color:#660;
+	color:#fff;
+}
    </style>
    <link rel='manifest' href='manifest.json'>
    <link rel='stylesheet' type='text/css' href='poker5.css'>
@@ -209,17 +243,26 @@
    </div>
    <div id='won'></div>
    <div id='gameover'>PLAY 5 CREDITS</div>
+	<div id='handselect'>
+		<ul id='handcount'>
+			<li id='handcount5'>5</li>
+			<li id='handcount10'>10</li>
+			<li id='handcount25'>25</li>
+			<li id='handcount50'>50</li>
+			<li id='handcount100'>100</li>
+		</ul>
+	</div>
    <div id='toolbar'>
       <span class='left'>
-         <button onclick='window.close()' id='backButton'>Back...</button>
-         <button onclick='cdr.login()' id='loginButton'>Login</button>
+         <button onclick='cdr.login()' class='leftButton' id='loginButton'>Login</button>
+         <button onclick='cdr.changeHands()' id='handsButton'>Hands</button>
          <button onclick='cdr.betone()' id='betOne'>Bet 1</button>
       </span>
       <h2 id='denom'>$1</h2>
       <span class='right'>
          <button onclick='cdr.betmax()' id='betMax'>Bet 5</button>
          <button id='drawButton' onclick='cdr.draw()' disabled='true' class='disabled'>Draw</button>
-         <button id='dealButton' onclick='cdr.deal()' disabled='true' class='disabled'>Deal</button>
+         <button id='dealButton' onclick='cdr.deal()' disabled='true' class='rightButton disabled'>Deal</button>
       </span>
    </div>
 </div>
@@ -228,7 +271,7 @@
    window.cdr = {
       game: {
 			endpoint: "https://us-central1-crblackjack-9e220.cloudfunctions.net/",
-			hands: 5,
+			hands: 10,
 			type: "poker",
 			chipColors: ["#dd0", "#0c0", "#c00", "#c0c", "#000", "#0be", "#fa0", "#999", "#0a6", "#69a", "#333", "#000"],
 			creditValues: [ 1, 2, 5, 10, 25, 100, 250, 500, 1000, 2000, 5000, 10000, 50000 ],
@@ -256,6 +299,10 @@
          $$("card" + i).addEventListener("click", function(e) { cdr.toggleCard("card" + i, 0); });
 
       },
+		changeHands: function() {
+			$$("handcount"+cdr.game.hands).classList.add('handcountSelected');
+			$$("handselect").classList.toggle("open");
+		},
       betone: function() {
          if (cdr.game.bet > 0) $(".paybet").classList.remove('paybet');
          cdr.game.bet++;
@@ -312,6 +359,20 @@
 					}
 				}
 			}
+			$$("handcount").addEventListener("click", function(e) {
+				var tgt = e.target;
+				$$("handcount"+cdr.game.hands).classList.remove("handcountSelected");
+				setTimeout(function() { tgt.classList.add('handcountSelected');}, 150);
+				var matches = tgt.id.match(/handcount(\d+)/);
+				if (matches[1]) {
+					var newcount = parseInt(matches[1]);
+					cdr.game.hands = newcount;
+					$$("handselect").classList.toggle("open");
+					$$("main").className = "hands"+cdr.game.hands;
+					cdr.makeHands();
+				}
+			});
+
 			cdr.updateChip();
 			$$("denom").addEventListener("click", function(e) {
 				cdr.game.creditValueIdx++;
@@ -443,9 +504,9 @@
 				cdr.showResult(0, cards);
 				wintot += cards.wins[0];
 		   }
+			var discards = 0;
          for (var i=1; i < cards.hands.length; i++) {
             var c = cards.hands[i];
-
 				for (var j=0; j < c.length; j++) {
 					if ($$("hand"+i+"card"+j).classList.contains('flipped')) {
 						$("#hand"+i+"card"+j+" .card").className = "card card" + c[j];
@@ -453,6 +514,7 @@
 						cnt++;
 					}
 				}
+				if (!discards) discards = cnt;
 				if (cards.results[i]) {
 					cdr.showResult(i, cards);
 					wintot += cards.wins[i];
@@ -463,7 +525,7 @@
 					$$("won").innerHTML = "WIN "+Math.floor(wintot / cdr.game.creditValue)+" CREDITS";
 					$$("won").style.display = "inline-block";
 					$$("win").innerHTML = "WIN: "+Math.floor(wintot / cdr.game.creditValue);
-				}, cdr.game.hands * 250);
+				}, cnt * 50);
 			} else {
 				cdr.gameoverTimeout = setTimeout(function() { $$("gameover").innerHTML = "GAME OVER"; $$("gameover").style.transform = "scale(1)"; }, 1000);
 			}
@@ -476,7 +538,7 @@
 				el.innerHTML = cards.results[i].replace(/([a-z0-9])([A-Z0-9])/g, '$1 $2').replace(/([A-Z])([A-Z])/g, '$1 $2');
 				el.style.display = "inline-block";
 				el.style.height = "";
-			}, 200 * i);
+			}, 100 * i);
 			
 		},
 		checkWin: function() {
@@ -822,6 +884,7 @@
 		},
 		makeHands: function() {
 			var hands = $$("hands");
+			hands.innerHTML = "";
 			for (var i=1; i<cdr.game.hands; i++) {
 				hands.appendChild(cdr.makeHand(i));
 			}
@@ -829,15 +892,24 @@
 		makeHand: function(id) {
 			var suits = ['S', 'C', 'D', 'H'];
 			var hand = el('div', 'hand'+id, 'hand');
+			var nums = 1, snum = 0;
 			for (var i=0; i<5; i++) {
-				var cnum = Math.floor(Math.random()*12) + 1;
-				var suit = suits[Math.floor(Math.random()*4)];
+				var cnum = i + 1;
+				var suit = suits[3];
 				var card = el('div', '', 'card card' + cnum + suit, '<figure class="pic">&nbsp;</figure>');
 				var cardback = el('div', '', 'cardback', '<figure class="pic">&nbsp;</figure>');
 				var cardwrap = el('div', 'hand'+id+'card'+i, 'cardwrap flipped');
 				cardwrap.appendChild(card);
 				cardwrap.appendChild(cardback);
 				hand.appendChild(cardwrap);
+				nums++;
+				if (nums > 13) {
+					nums = 1;
+					snum++;
+					if (snum > 3) {
+						snum = 0;
+					}
+				}
 			}
 			hand.appendChild(el('div', 'hand'+id+'result', 'handresult'));
 			return hand;
