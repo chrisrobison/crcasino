@@ -273,6 +273,7 @@ div#handselect.open { height:33vh; }
 			endpoint: "https://us-central1-crblackjack-9e220.cloudfunctions.net/",
 			hands: 10,
 			type: "poker",
+			wilds: "",
 			chipColors: ["#dd0", "#0c0", "#c00", "#c0c", "#000", "#0be", "#fa0", "#999", "#0a6", "#69a", "#333", "#000"],
 			creditValues: [ 1, 2, 5, 10, 25, 100, 250, 500, 1000, 2000, 5000, 10000, 50000 ],
 			creditValueIdx:0,
@@ -331,11 +332,20 @@ div#handselect.open { height:33vh; }
 				if ($(".paybet")) $(".paybet").classList.remove('paybet');
             $$("bet"+cdr.game.bet+"pay").classList.add('paybet');
          }
-         $$("bet").innerHTML = cdr.game.bet + "x"+cdr.game.hands;
+         $$("bet").innerHTML = cdr.game.bet + "x" + cdr.game.hands + "(" + (cdr.game.bet * cdr.game.hands) + ")";
 			cdr.genPaytable();
          cdr.deal();
       },
       init: function() {
+         if (document.location.hash) {
+				cdr.game.type = document.location.hash.replace(/^#/, '');
+				if (cdr.game.type==="dueces") {
+					$$("main").classList.add('wilds');
+					cdr.game.wilds = "wilds";
+				} else {
+					cdr.game.wilds = "";
+				}
+			}
          cdr.genPaytable();
 			cdr.makeHands();
          //var cards = cdr.newDeck();
@@ -361,15 +371,10 @@ div#handselect.open { height:33vh; }
 			}
 			$$("handcount").addEventListener("click", function(e) {
 				var tgt = e.target;
-				$$("handcount"+cdr.game.hands).classList.remove("handcountSelected");
-				setTimeout(function() { tgt.classList.add('handcountSelected');}, 150);
 				var matches = tgt.id.match(/handcount(\d+)/);
 				if (matches[1]) {
 					var newcount = parseInt(matches[1]);
-					cdr.game.hands = newcount;
-					$$("handselect").classList.toggle("open");
-					$$("main").className = "hands"+cdr.game.hands;
-					cdr.makeHands();
+					cdr.switchHands(newcount);
 				}
 			});
 
@@ -385,6 +390,16 @@ div#handselect.open { height:33vh; }
 				localStorage.setItem("settings", JSON.stringify({"creditValue":cdr.game.creditValue, "creditValueIdx":cdr.game.creditValueIdx}));
 			});
       },
+		switchHands: function(handcount) {
+				$$("handcount"+cdr.game.hands).className = "";
+				$$("handcount"+handcount).className = "handcountSelected";
+				cdr.game.hands = handcount;
+				setTimeout(function() { $$("handselect").classList.toggle("open"); }, 250);
+				setTimeout(function() { 
+					cdr.makeHands(); 
+					$$("main").className = "hands"+cdr.game.hands + " " + cdr.game.wilds;
+				}, 250);
+		},
 		updateChip: function() {
 			$$("denom").className = "chip" + cdr.game.creditValue;
 			$$("denom").style.backgroundColor = cdr.game.chipColors[cdr.game.creditValueIdx];
@@ -443,10 +458,10 @@ div#handselect.open { height:33vh; }
          // if (cdr.game.discards[card]) { delete cdr.game.discards[card]; } else { cdr.game.discards[card] = true; }
       },
       hideCard: function(card, delay) {
-         setTimeout(function() { $$(card).classList.add('flipped'); setTimeout(function() { $("#"+card+" .card").style.visibility='hidden';}, 100); }, delay * 100);
+         setTimeout(function() { $$(card).classList.add('flipped'); setTimeout(function() { $("#"+card+" .card").style.visibility='hidden';}, 100); }, delay * 10);
       },
       showCard: function(card, delay, wait=500) {
-         setTimeout(function() { $("#"+card+" .card").style.visibility='visible'; $$(card).classList.remove('flipped'); }, (delay * 50) + wait);
+         setTimeout(function() { $("#"+card+" .card").style.visibility='visible'; $$(card).classList.remove('flipped'); }, (delay * 10) + wait);
       },
       setCard: function(i, draw, delay) {
             setTimeout(function() { $("#card" + i + " .card").className = 'card card' + draw; }, (delay * 100));
@@ -487,7 +502,8 @@ div#handselect.open { height:33vh; }
 			console.log("cards: "+JSON.stringify(cards));
 			console.dir(cards);
 			cdr.game.results = cards;
-		   
+		   cdr.game.resultCounts = {};
+
 			var cnt = 0;
 			var wintot = 0;
 			var c = cards.hands[0];
@@ -503,6 +519,9 @@ div#handselect.open { height:33vh; }
 			if (cards.results[0]) {
 				cdr.showResult(0, cards);
 				wintot += cards.wins[0];
+				if (!cdr.game.resultCounts[cards.results[0]]) cdr.game.resultCounts[cards.results[0]] = 0;
+				cdr.game.resultCounts[cards.results[0]]++;
+				cdr.genPaytable(cdr.game.resultCounts);
 		   }
 			var discards = 0;
          for (var i=1; i < cards.hands.length; i++) {
@@ -511,13 +530,15 @@ div#handselect.open { height:33vh; }
 					if ($$("hand"+i+"card"+j).classList.contains('flipped')) {
 						$("#hand"+i+"card"+j+" .card").className = "card card" + c[j];
 						cdr.showCard("hand"+i+"card"+j, cnt, 0);
-						cnt++;
 					}
 				}
+				cnt++;
 				if (!discards) discards = cnt;
 				if (cards.results[i]) {
 					cdr.showResult(i, cards);
 					wintot += cards.wins[i];
+					if (!cdr.game.resultCounts[cards.results[i]]) cdr.game.resultCounts[cards.results[i]] = 0;
+					cdr.updatePaytable(i, cards.results[i]);
 				}
          }
 			if (wintot > 0) {
@@ -525,12 +546,18 @@ div#handselect.open { height:33vh; }
 					$$("won").innerHTML = "WIN "+Math.floor(wintot / cdr.game.creditValue)+" CREDITS";
 					$$("won").style.display = "inline-block";
 					$$("win").innerHTML = "WIN: "+Math.floor(wintot / cdr.game.creditValue);
-				}, cnt * 50);
+				}, cnt * 25);
 			} else {
 				cdr.gameoverTimeout = setTimeout(function() { $$("gameover").innerHTML = "GAME OVER"; $$("gameover").style.transform = "scale(1)"; }, 1000);
 			}
 			cdr.resetButtons();
 			cdr.game.active = false;
+		},
+		updatePaytable: function(cnt, hand) {
+			setTimeout(function() {
+				cdr.game.resultCounts[hand]++;
+				cdr.genPaytable(cdr.game.resultCounts); 
+			}, cnt * 10);
 		},
 		showResult: function(i, cards) {
 			var el = (i > 0) ? $$("hand"+i+"result") : $$("result");
@@ -538,7 +565,7 @@ div#handselect.open { height:33vh; }
 				el.innerHTML = cards.results[i].replace(/([a-z0-9])([A-Z0-9])/g, '$1 $2').replace(/([A-Z])([A-Z])/g, '$1 $2');
 				el.style.display = "inline-block";
 				el.style.height = "";
-			}, 100 * i);
+			}, 10 * i);
 			
 		},
 		checkWin: function() {
@@ -566,6 +593,8 @@ div#handselect.open { height:33vh; }
 			cdr.game.active = false;
       },
 		resetButtons: function() {
+			$$("handsButton").classList.remove('disabled');
+			$$("handsButton").removeAttribute('disabled');
 			$$("betOne").classList.remove('disabled');
 			$$("betOne").removeAttribute('disabled');
 			$$("betMax").classList.remove('disabled');
@@ -629,6 +658,8 @@ div#handselect.open { height:33vh; }
          $$("win").innerHTML = "";
          $$("won").innerHTML = "";
          $$("won").style.display = "none";
+         $$("handsButton").classList.add("disabled");
+         $$("handsButton").setAttribute("disabled", true);
          $$("dealButton").classList.add("disabled");
          $$("dealButton").setAttribute("disabled", true);
          $$("betOne").classList.add("disabled");
@@ -793,7 +824,7 @@ div#handselect.open { height:33vh; }
 
         return array;
       },
-      genPaytable: function() {
+      genPaytable: function(counts) {
 			firebase.database().ref("payouts/"+cdr.game.type).once("value", function(snap) {
 				var pt = snap.val();
 				var hands = Object.keys(pt.hands);
@@ -823,18 +854,22 @@ div#handselect.open { height:33vh; }
 				payright.innerHTML = "";
 				var keys = Object.keys(cdr.paytable);
 				var half = Math.floor(keys.length / 2);
-				var entry, mypt, win;
+				var entry, mypt, win, cnt;
 
 				for (var i=0; i < half; i++) {
 					mypt = cdr.paytable[sortable[i][0]];
 					win = mypt.win[cdr.game.bet - 1] || 0;
-					entry = el('div', 'payline'+i, 'payline', mypt.hand + " <div class='pay'>"+win+"</"+"div>");
+					cnt = (counts && counts[sortable[i][0]]!=undefined) ? " X " + counts[sortable[i][0]] : "";
+					if (counts && cnt==="") win = 0;
+					entry = el('div', 'payline'+i, 'payline', mypt.hand + " <div class='pay'>" + win + cnt + "</"+"div>");
 					payleft.appendChild(entry);
 				}
 				for (var i=half; i < sortable.length; i++) {
 					mypt = cdr.paytable[sortable[i][0]];
 					win = mypt.win[cdr.game.bet - 1] || 0;
-					entry = el('div', 'payline'+i, 'payline', mypt.hand + " <div class='pay'>"+win+"<"+"/div>");
+					cnt = (counts && counts[sortable[i][0]]!=undefined) ? " X " + counts[sortable[i][0]] : "";
+					if (counts && cnt==="") win = 0;
+					entry = el('div', 'payline'+i, 'payline', mypt.hand + " <div class='pay'>"+win + cnt+"<"+"/div>");
 					payright.appendChild(entry);
 				}
 			});

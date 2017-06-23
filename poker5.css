@@ -265,6 +265,24 @@
    right:0px;
    bottom:0px;
 }
+
+.wilds #cards .card2S figure.pic::before, .wilds .card2C figure.pic::before { background-image:url("img/wild-black.gif"); }
+.wilds #cards .card2S figure.pic::before, .wilds #cards .card2C figure.pic::before, .wilds #cards .card2D figure.pic::before, .wilds #cards .card2H figure.pic::before { position: absolute; height: 10vh; width: 7vw; display: inline-block; top: -5vh; right: -3vw; content: ""; z-index: 99999; background-image: url(img/wild-red.gif); background-size: 100% 100%; }
+
+.wilds #hands .card2S figure.pic::before, .wilds #hands .card2C figure.pic::before, .wilds #hands .card2D figure.pic::before, .wilds #hands .card2H figure.pic::before { position: absolute; height: 7vh; width: 4vw; display: inline-block; top: -3vh; right: -2vw; content: ""; z-index: 99999; background-image: url(img/wild-red.gif); background-size: 100% 100%; }
+
+.hands10.wilds #hands .card2S figure.pic::before, .hands10.wilds #hands .card2C figure.pic::before, .hands10.wilds #hands .card2D figure.pic::before, .hands10.wilds #hands .card2H figure.pic::before { height: 4.5vh; width: 3vw; top: -2.6vh; right: -0.5vw; }
+
+.wilds #hands .card2S figure.pic::before, .wilds #hands .card2C figure.pic::before { background-image:url("img/wild-black.gif"); }
+.wilds #cards .card2S figure.pic::before, .wilds #cards .card2C figure.pic::before { background-image:url("img/wild-black.gif"); }
+
+.hands25.wilds #hands .card2S figure.pic::before, .hands25.wilds #hands .card2C figure.pic::before, .hands25.wilds #hands .card2D figure.pic::before, .hands25.wilds #hands .card2H figure.pic::before { display:none; }
+.hands25.wilds #hands .card2S, .hands25.wilds #hands .card2C, .hands25.wilds #hands .card2D, .hands25.wilds #hands .card2H { background-color:#ff9; }
+.hands50.wilds #hands .card2S, .hands50.wilds #hands .card2C, .hands50.wilds #hands .card2D, .hands50.wilds #hands .card2H { background-color:#ff9; }
+.hands100.wilds #hands .card2S, .hands100.wilds #hands .card2C, .hands100.wilds #hands .card2D, .hands100.wilds #hands .card2H { background-color:#ff9; }
+.hands25.wilds #hands .card2S figure.pic::before, .hands25.wilds #hands .card2C figure.pic::before { display:none; }
+
+
 .card1D:after {color:#c00; content: "A\A\2666"; }
 .card2D:after { color:#c00; content: "2\A\2666"; }
 .card3D:after { color:#c00; content: "3\A\2666"; }
