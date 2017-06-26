@@ -5,6 +5,7 @@
    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=yes'>
    <title>Video Poker</title>
    <style>
+		@import url('https://fonts.googleapis.com/css?family=Luckiest+Guy');
       body { background-color:#0032b4; color:#fff; font-family:"Helvetica Neue",Helvetica,sans-serif; font-size:1vw; }
       #main { perspective:1000px; position:absolute; top:0px; right:0px; bottom:0px; left:0px; text-align:center; }
       #paytable { 
@@ -186,6 +187,23 @@ div#handselect.open { height:33vh; }
 	background-color:#660;
 	color:#fff;
 }
+#doubleup {
+	position:absolute;
+	display:none;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	background-color:#0032b4;
+	z-index:99999;
+	width:100%;
+}
+#doubleup .cardwrap .card { width:90%; height:90%; }
+#doubleup .cardwrap { padding-left:1vw; }
+#doubleheader { font-size:2vw; font-family:"Luckiest Guy", cursive;  }
+#doubleheader h1 { color:#c00; -webkit-text-stroke: .125vw #ff0; font-size:2em; }
+#doubleheader button {font-size:1.5vw;margin-left:2vw;  }
+.dealercardlabel { display:inline-block; position:relative; top:-1.5vh; background-color:#0032b4; color:#ff0; font-size:1.2em; padding:0 .25vw; }
    </style>
    <link rel='manifest' href='manifest.json'>
    <link rel='stylesheet' type='text/css' href='poker5.css'>
@@ -265,6 +283,24 @@ div#handselect.open { height:33vh; }
          <button id='dealButton' onclick='cdr.deal()' disabled='true' class='rightButton disabled'>Deal</button>
       </span>
    </div>
+	<div id='doubleup'>
+		<div id='doubleheader'>
+			<h1>Double Up?</h1>
+			<p>YOU WON $<span id='doublewin'>0</span></p>
+			<p>DOUBLE UP TO $<span id='doubledouble'>0</span></p>
+			<p>
+				<button id='doubleButton'>Double</button>
+				<button id='collectButton'>Collect</button>
+			</p>
+		</div>
+		<div id='doublecards'>
+			<div id='doubledealer' style='display:inline-block;width:16vw;margin-right:2vw;border:.25vw solid #ff0; border-radius:1vw;'><span class='dealercardlabel'>DEALERS CARD</span><br><div id='doublecard0' class='cardwrap flipped' ><div class='card card1S'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div></div>
+			<div id='doublecard1' class='cardwrap flipped'><br><div class='card card3H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='doublecard2' class='cardwrap flipped'><br><div class='card card8D'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='doublecard3' class='cardwrap flipped'><br><div class='card card11C'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+			<div id='doublecard4' class='cardwrap flipped'><br><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+		</div>
+	</div>
 </div>
 <script>
 (function() {

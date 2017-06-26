@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Currency Exchange</title>
+	<link href="https://fonts.googleapis.com/css?family=Luckiest+Guy|Passion+One" rel="stylesheet">
+   <style>
+		body { background-color:#000; color:#eef; font-family:"Passion One",cursive; font-size:3vw; text-align:center;}
+		#wares td { text-align:left; padding:1vh 2vw; border-bottom:1px solid #fff; }
+		#wares th { border-bottom:1px solid #fff; font-family:"Luckiest Guy", cursive; padding:1vh 2vw; color:#f00; background-color:#00a; letter-spacing:4px;-webkit-text-stroke:1px #ff0;  }
+		#wares td.price { text-align:right; }
+		#wares {
+			display:inline-table;
+			width:36vw;
+			border:1vw solid #00f;
+			border-collapse:collapse;
+		}
+		.chip { width:3vw; height:auto; margin-right:1vw; }
+   </style>
+</head>
+<body>
+	<table id='wares'>
+		<tr>
+			<th>Chips</th>
+			<th>Price</th>
+		</tr>
+	</table>
+<script>
+(function() {
+	window.cdr = {
+		paytable: [
+			{ price: 0.99, product: 10000 }	
+		],
+		init:	function() {
+			
+			$$('wares').appendChild(cdr.paytable());
+		},
+		paytable: function() {
+			var prices = [1, 2, 5, 10, 20, 50, 100, 250];
+			var out = el('tbody');
+			
+			var cash = 10000;
+			for (var i=0; i<prices.length; i++) {
+				var row = el('tr', 'qty'+prices[i]);
+				var chips = ((cash * prices[i]) + (prices[i] * 1000) + (i * 5000)).toString();
+				chips = chips.replace(/(\d)(?=(\d{3})+$)/g,"$1,");
+				var qty = el('td','', '', "<img src='img/chip"+(i+1)+".png' style='filter:hue-rotate("+(-(360 / (prices.length - 1)) * i)+"deg);' class='chip'>" + chips);
+				var cost = prices[i] - 0.01;
+				var price = el('td', '', 'price', "$"+cost);
+				
+				row.appendChild(qty);
+				row.appendChild(price);
+				out.appendChild(row);
+			}
+			return out;
+		}
+	};
+	cdr.init();
+})();
+function el(tag, id, classname, content) {
+	var el = document.createElement(tag);
+	if (id) el.id = id;
+	if (classname) el.className = classname;
+	if (content) el.innerHTML = content;
+	return el;
+}
+function $(str) { return querySelector(str); }
+function $$(str) { return document.getElementById(str); }
+function $$$(str) { return querySelectorAll(str); }
+</script>
+</body>
+</html>
