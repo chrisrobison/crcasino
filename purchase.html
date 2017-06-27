@@ -5,47 +5,50 @@
 	<link href="https://fonts.googleapis.com/css?family=Luckiest+Guy|Passion+One" rel="stylesheet">
    <style>
 		body { background-color:#000; color:#eef; font-family:"Passion One",cursive; font-size:3vw; text-align:center;}
-		#wares td { text-align:left; padding:1vh 2vw; border-bottom:1px solid #fff; }
+		#wares td { text-align:left; padding:1vh 2vw; border-bottom:1px solid #fff; line-height:.5; vertical-align:top; }
 		#wares th { border-bottom:1px solid #fff; font-family:"Luckiest Guy", cursive; padding:1vh 2vw; color:#f00; background-color:#00a; letter-spacing:4px;-webkit-text-stroke:1px #ff0;  }
-		#wares td.price { text-align:right; }
+		#wares td.price { text-align:right; padding-top:2.5vh;}
 		#wares {
 			display:inline-table;
 			width:36vw;
 			border:1vw solid #00f;
 			border-collapse:collapse;
+			height:79vh;
+			overflow:scroll;
 		}
+		.more { font-size:1vw; clear:left; margin-left:4vw; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; color:#f00; padding:1vh 2vw;font-weight:bold;text-shadow:1px 1px 0px #990;  background-image:url('img/burst.png'); background-size:100% 100%;}
 		.chip { width:3vw; height:auto; margin-right:1vw; }
+		tr { transition: all 300ms cubic-bezier(.25,.99,.71,1.23); }
+		tr:hover { background-color:#c00; color:#fff; transform:scale(1.25); }
+		h1 { margin:0; color:#f00; -webkit-text-stroke:2px #ff0; }
    </style>
 </head>
 <body>
+	<h1>Purchase Chips</h1>
 	<table id='wares'>
-		<tr>
-			<th>Chips</th>
-			<th>Price</th>
-		</tr>
 	</table>
 <script>
 (function() {
 	window.cdr = {
-		paytable: [
-			{ price: 0.99, product: 10000 }	
-		],
 		init:	function() {
-			
-			$$('wares').appendChild(cdr.paytable());
+			$('#wares').appendChild(cdr.paytable());
 		},
 		paytable: function() {
 			var prices = [1, 2, 5, 10, 20, 50, 100, 250];
 			var out = el('tbody');
-			
+			out.appendChild(el('tr', '', '', '<th>Chips</th><th>Price</th>'));
+
 			var cash = 10000;
 			for (var i=0; i<prices.length; i++) {
 				var row = el('tr', 'qty'+prices[i]);
-				var chips = ((cash * prices[i]) + (prices[i] * 1000) + (i * 5000)).toString();
+				var chipsNum = ((cash * prices[i]) + (prices[i] * (i * 1500))); 
+				var chips = chipsNum.toString();
+				var percent = Math.ceil((1 - ((cash * prices[i]) / chipsNum)) * 100);
 				chips = chips.replace(/(\d)(?=(\d{3})+$)/g,"$1,");
-				var qty = el('td','', '', "<img src='img/chip"+(i+1)+".png' style='filter:hue-rotate("+(-(360 / (prices.length - 1)) * i)+"deg);' class='chip'>" + chips);
+				var more = (i > 0) ? "<br><span class='more'>" + percent + "% more chips!</span>" : "";
+				var qty = el('td','', '', "<img src='img/chip"+(i+1)+".png' style='filter:hue-rotate("+(-(360 / (prices.length - 1)) * i)+"deg);' class='chip'>" + chips + more);
 				var cost = prices[i] - 0.01;
-				var price = el('td', '', 'price', "$"+cost);
+				var price = el('td', '', 'price', "<span class='cost'>$" + cost + "</span>");
 				
 				row.appendChild(qty);
 				row.appendChild(price);
@@ -63,9 +66,9 @@ function el(tag, id, classname, content) {
 	if (content) el.innerHTML = content;
 	return el;
 }
-function $(str) { return querySelector(str); }
+function $(str) { return document.querySelector(str); }
 function $$(str) { return document.getElementById(str); }
-function $$$(str) { return querySelectorAll(str); }
+function $$$(str) { return document.querySelectorAll(str); }
 </script>
 </body>
 </html>
