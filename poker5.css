@@ -426,7 +426,7 @@
 .hands100 #hands .cardback {
 	border-radius:1px;
 }
-.cardback { 
+#cards .cardback { 
     border: 1vw solid #fff;
     border-radius:.5vw;
     width:84%;
