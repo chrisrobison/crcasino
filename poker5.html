@@ -79,23 +79,24 @@
 			position: absolute;
 			display: inline-block;
 			width:50vw;
-			top: 32%;
+			top: 22%;
 			left: 20%;
-			font-size: 5em;
+			font-size: 1.5vw;
 			color: #f9e945;
 			text-shadow: 2px 2px 0px #000;
 			font-weight: bold;
 			background-color: rgba(0,0,0,.5);
 			padding: 2vh 4vw 2vh;
-			border-radius: 1em;
+			border-radius: 4vw;
 			border: 1vw solid rgb(249, 233, 69);
 			transform: scale(1);
 			z-index: 99999;
 			box-shadow: 0 0.5vw 0.5vw rgba(0,0,0,.4);
 			animation: bounce 2s 2;
 			display:none;
-			animation: win 3000ms 4;
+			animation: win 2000ms 2;
       }
+		#won button { border-radius:4vw; }
 		@keyframes win {
 			0% { text-shadow:0 0 0 #fff; transform:scale(1); }
 			10% { transform:scale(1.25); }
@@ -153,11 +154,30 @@
 	 border-bottom-left-radius:1.2vw;
 	 border-bottom-right-radius:1.2vw;
 }
-#handselect {
+#gameselect {
 	position:absolute;
 	display:inline-block;
 	bottom:11vh;
 	left:18vw;
+	width:24vw;
+	height:0vh;
+	background:linear-gradient(to top, #f4e130 0%,#fff460 100%);
+   z-index:999;
+	font-size:2.4vw;
+	color:#000;
+	text-shadow:1px 1px 0px #fff;
+	box-shadow:.25vw -.25vw .25vw rgba(0,0,0,.4), -.25vw 0 .25vw rgba(0,0,0,.4);
+	overflow:hidden;
+	font-weight:500;
+	text-transform:uppercase;
+	transition:all 300ms cubic-bezier(.25, .99, .71, 1.23);
+	text-align:left;
+}
+#handselect {
+	position:absolute;
+	display:inline-block;
+	bottom:11vh;
+	left:32.3vw;
 	width:14vw;
 	height:0vh;
 	background:linear-gradient(to top, #f4e130 0%,#fff460 100%);
@@ -168,20 +188,21 @@
 	text-shadow:1px 1px 0px #fff;
 	box-shadow:.25vw -.25vw .25vw rgba(0,0,0,.4), -.25vw 0 .25vw rgba(0,0,0,.4);
 	overflow:hidden;
-;
 	font-weight:500;
 	text-transform:uppercase;
 	transition:all 300ms cubic-bezier(.25, .99, .71, 1.23);
 }
 div#handselect.open { height:33vh; }
+div#gameselect.open { height:36vh; }
 #handselect input { display:none; }
-#handcount {
-	margin:0;
-	padding:0;
-}
+#handcount { margin:0; padding:0; }
+#gameslist { margin:0; padding:0; }
+#gameslist li { list-style-type:none; border-bottom:1px solid #660; cursor:pointer; padding:1vh;}
+.gameslistSelected { background-color:#660; color:#fff; }
 #handcount li {
 	list-style-type:none;	
 	border-bottom: 1px solid #660;
+	cursor:pointer;
 }
 .handcountSelected {
 	background-color:#660;
@@ -199,11 +220,12 @@ div#handselect.open { height:33vh; }
 	width:100%;
 }
 #doubleup .cardwrap .card { width:90%; height:90%; }
-#doubleup .cardwrap { padding-left:1vw; }
+#doubleup .cardwrap { padding-left:2.5vw; }
 #doubleheader { font-size:2vw; font-family:"Luckiest Guy", cursive;  }
 #doubleheader h1 { color:#c00; -webkit-text-stroke: .125vw #ff0; font-size:2em; }
 #doubleheader button {font-size:1.5vw;margin-left:2vw;  }
-.dealercardlabel { display:inline-block; position:relative; top:-1.5vh; background-color:#0032b4; color:#ff0; font-size:1.2em; padding:0 .25vw; }
+.dealercardlabel { display: inline-block; position: relative; top: -2.2vh; background-color: #0032b4; color: #ff0; font-size: 1.5em; padding: 0px 0.25vw; left: -1.6vw; font-weight: bold; text-shadow: 2px 2px 0px #000; white-space: nowrap;}
+#doubledealer { display: inline-block; width: 12vw; margin-right: 4vw; border: .25vw solid #ff0; border-radius: 1vw; padding-left: 3vw; height: 38vh; }
    </style>
    <link rel='manifest' href='manifest.json'>
    <link rel='stylesheet' type='text/css' href='poker5.css'>
@@ -261,6 +283,15 @@ div#handselect.open { height:33vh; }
    </div>
    <div id='won'></div>
    <div id='gameover'>PLAY 5 CREDITS</div>
+	<div id='gameselect'>
+		<ul id='gameslist'>
+			<li id='game_poker'>Jacks or Better</li>
+			<li id='game_bonus'>Bonus Poker</li>
+			<li id='game_doublebonus'>Double Bonus</li>
+			<li id='game_dueces'>Dueces Wild</li>
+			<li id='game_joker'>Joker Poker</li>
+		</ul>
+	</div>
 	<div id='handselect'>
 		<ul id='handcount'>
 			<li id='handcount5'>5</li>
@@ -273,14 +304,14 @@ div#handselect.open { height:33vh; }
    <div id='toolbar'>
       <span class='left'>
          <button onclick='cdr.login()' class='leftButton' id='loginButton'>Login</button>
+         <button onclick='cdr.changeGames()' id='gamesButton'>Games</button>
          <button onclick='cdr.changeHands()' id='handsButton'>Hands</button>
-         <button onclick='cdr.betone()' id='betOne'>Bet 1</button>
       </span>
       <h2 id='denom'>$1</h2>
       <span class='right'>
+         <button onclick='cdr.betone()' id='betOne'>Bet 1</button>
          <button onclick='cdr.betmax()' id='betMax'>Bet 5</button>
-         <button id='drawButton' onclick='cdr.draw()' disabled='true' class='disabled'>Draw</button>
-         <button id='dealButton' onclick='cdr.deal()' disabled='true' class='rightButton disabled'>Deal</button>
+         <button id='dealdrawButton' onclick='cdr.dealdraw()' disabled='true' class='rightButton disabled'>Deal</button>
       </span>
    </div>
 	<div id='doubleup'>
@@ -294,7 +325,7 @@ div#handselect.open { height:33vh; }
 			</p>
 		</div>
 		<div id='doublecards'>
-			<div id='doubledealer' style='display:inline-block;width:16vw;margin-right:2vw;border:.25vw solid #ff0; border-radius:1vw;'><span class='dealercardlabel'>DEALERS CARD</span><br><div id='doublecard0' class='cardwrap flipped' ><div class='card card1S'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div></div>
+			<div id='doubledealer'><span class='dealercardlabel'>DEALERS CARD</span><br><div id='doublecard0' class='cardwrap flipped' ><div class='card card1S'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div></div>
 			<div id='doublecard1' class='cardwrap flipped'><br><div class='card card3H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
 			<div id='doublecard2' class='cardwrap flipped'><br><div class='card card8D'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
 			<div id='doublecard3' class='cardwrap flipped'><br><div class='card card11C'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
@@ -319,7 +350,8 @@ div#handselect.open { height:33vh; }
          holds: {},
          bet: 0,
          credit: 1000,
-			uid:""
+			uid:"",
+			stage:0
       },
       paytable: {
          "RoyalFlush": { hand: 'Royal Flush', win: [ 250, 500, 750, 1000, 4000]},
@@ -332,26 +364,41 @@ div#handselect.open { height:33vh; }
          "TwoPair": { hand: 'Two Pair', win: [ 2, 4, 6, 8, 10]},
          "OnePair": { hand: 'Jacks or Better', win: [ 1, 2, 3, 4, 5]}
       },
+		games: {
+			"poker": "Jacks or Better",
+			"bonus": "Bonus Poker",
+			"doublebonus": "Double Bonus Poker",
+			"dueces": "Dueces Wild",
+			"joker": "Joker Poker"
+		},
       addListener: function(i) {
          $$("card" + i).addEventListener("click", function(e) { cdr.toggleCard("card" + i, 0); });
 
       },
+		changeGames: function() {
+			$$("game_"+cdr.game.type).classList.add('gameslistSelected');
+			$$("gameselect").classList.toggle("open");
+			$$("handselect").classList.remove("open");
+		},
 		changeHands: function() {
 			$$("handcount"+cdr.game.hands).classList.add('handcountSelected');
 			$$("handselect").classList.toggle("open");
+			$$("gameselect").classList.remove("open");
 		},
       betone: function() {
+			$$("handselect").classList.remove("open");
+			$$("gameselect").classList.remove("open");
          if (cdr.game.bet > 0) $(".paybet").classList.remove('paybet');
          cdr.game.bet++;
          
          if (cdr.game.bet > 5) { 
             cdr.game.bet = 0;
+				$$("dealdrawButton").setAttribute("disabled", true);
+				$$("dealdrawButton").classList.add("disabled");
          }
-			$$("dealButton").removeAttribute("disabled");
-			$$("dealButton").classList.remove("disabled");
          if (cdr.game.bet > 0) {
-				$$("dealButton").removeAttribute("disabled");
-				$$("dealButton").classList.remove("disabled");
+				$$("dealdrawButton").removeAttribute("disabled");
+				$$("dealdrawButton").classList.remove("disabled");
             $$("paytable").className = "paybet" + cdr.game.bet;
 				if ($(".paybet")) $(".paybet").classList.remove('paybet');
             $$("bet"+cdr.game.bet+"pay").classList.add('paybet');
@@ -360,18 +407,85 @@ div#handselect.open { height:33vh; }
 			cdr.genPaytable();
       },
       betmax: function() {
+			$$("handselect").classList.remove("open");
+			$$("gameselect").classList.remove("open");
          cdr.game.bet = 5;
          if (cdr.game.bet > 0) {
-				$$("dealButton").removeAttribute("disabled");
-				$$("dealButton").classList.remove("disabled");
+				$$("dealdrawButton").removeAttribute("disabled");
+				$$("dealdrawButton").classList.remove("disabled");
+				$$("dealdrawButton").innerHTML = "DEAL";
             $$("paytable").className = "paybet" + cdr.game.bet;
 				if ($(".paybet")) $(".paybet").classList.remove('paybet');
             $$("bet"+cdr.game.bet+"pay").classList.add('paybet');
-         }
+         } else {
+				$$("dealdrawButton").setAttribute("disabled");
+				$$("dealdrawButton").classList.add("disabled");
+			}
          $$("bet").innerHTML = cdr.game.bet + "x" + cdr.game.hands + "(" + (cdr.game.bet * cdr.game.hands) + ")";
 			cdr.genPaytable();
          cdr.deal();
       },
+		dealdraw: function() {
+			$$("handselect").classList.remove("open");
+			$$("gameselect").classList.remove("open");
+			if (cdr.game.stage === 0) {
+				cdr.deal();
+			} else if (cdr.game.stage === 1) {
+				cdr.draw();
+			}
+		},
+		addListeners: function() {
+		   $$("cards").addEventListener("mousedown", function(e) {
+				var tgt = e.target;
+				if (tgt.classList.contains('card')) {
+					cdr.toggleCard(tgt.parentNode.id, 0, 0);
+				} else if (tgt.classList.contains('cardwrap')) {
+					cdr.toggleCard(tgt.id, 0, 0);
+				}
+			});
+			$$("gameslist").addEventListener("click", function(e) {
+				$(".gameslistSelected").classList.remove("gameslistSelected");
+				var tgt = e.target;
+				var matches = tgt.id.match(/game_(\w+)/);
+				if (matches[1]) {
+					cdr.game.type = matches[1];
+					tgt.classList.add('gameslistSelected');
+					var url = document.location.href.replace(/#.*/, '');
+					document.location.href = url + "#" + cdr.game.type;
+					$$("gameselect").classList.remove('open');
+					cdr.init();
+					$$('win').innerHTML = tgt.innerHTML;
+					cdr.settings.type = matches[1];
+					localStorage.setItem("settings", JSON.stringify(cdr.settings));
+				}
+			});
+
+			$$("handcount").addEventListener("click", function(e) {
+				var tgt = e.target;
+				var matches = tgt.id.match(/handcount(\d+)/);
+				if (matches[1]) {
+					var newcount = parseInt(matches[1]);
+					cdr.switchHands(newcount);
+					cdr.settings.hands = newcount;
+					localStorage.setItem("settings", JSON.stringify(cdr.settings));
+				}
+			});
+
+			$$("denom").addEventListener("click", function(e) {
+				cdr.game.creditValueIdx++;
+				if (cdr.game.creditValueIdx > cdr.game.creditValues.length - 1) cdr.game.creditValueIdx = 0;
+				if (cdr.game.balance / cdr.game.creditValues[cdr.game.creditValueIdx] < 0) cdr.game.creditValueIdx = 0;
+
+				cdr.game.creditValue = cdr.game.creditValues[cdr.game.creditValueIdx];
+				cdr.updateChip();
+				cdr.updateCredits();
+				cdr.settings.creditValue = cdr.game.creditValue;
+				cdr.settings.creditValueIdx = cdr.game.creditValueIdx;
+
+				localStorage.setItem("settings", JSON.stringify(cdr.settings));
+			});
+
+		},
       init: function() {
          if (document.location.hash) {
 				cdr.game.type = document.location.hash.replace(/^#/, '');
@@ -382,19 +496,6 @@ div#handselect.open { height:33vh; }
 					cdr.game.wilds = "";
 				}
 			}
-         cdr.genPaytable();
-			cdr.makeHands();
-         //var cards = cdr.newDeck();
-			$$("main").classList.add("hands"+cdr.game.hands);
-         $$("gameover").style.transform = "scale(1)";
-		   $$("cards").addEventListener("mousedown", function(e) {
-				var tgt = e.target;
-				if (tgt.classList.contains('card')) {
-					cdr.toggleCard(tgt.parentNode.id, 0, 0);
-				} else if (tgt.classList.contains('cardwrap')) {
-					cdr.toggleCard(tgt.id, 0, 0);
-				}
-			});
 			var savedJS = localStorage.getItem("settings");
 			if (savedJS) {
 				cdr.settings = JSON.parse(savedJS);
@@ -405,32 +506,23 @@ div#handselect.open { height:33vh; }
 					}
 				}
 			}
-			$$("handcount").addEventListener("click", function(e) {
-				var tgt = e.target;
-				var matches = tgt.id.match(/handcount(\d+)/);
-				if (matches[1]) {
-					var newcount = parseInt(matches[1]);
-					cdr.switchHands(newcount);
-				}
-			});
-
 			cdr.updateChip();
-			$$("denom").addEventListener("click", function(e) {
-				cdr.game.creditValueIdx++;
-				if (cdr.game.creditValueIdx > cdr.game.creditValues.length - 1) cdr.game.creditValueIdx = 0;
-				if (cdr.game.balance / cdr.game.creditValues[cdr.game.creditValueIdx] < 0) cdr.game.creditValueIdx = 0;
-
-				cdr.game.creditValue = cdr.game.creditValues[cdr.game.creditValueIdx];
-				cdr.updateChip();
-				cdr.updateCredits();
-				localStorage.setItem("settings", JSON.stringify({"creditValue":cdr.game.creditValue, "creditValueIdx":cdr.game.creditValueIdx}));
-			});
+         cdr.genPaytable();
+			cdr.makeHands();
+         //var cards = cdr.newDeck();
+			$$("main").classList.add("hands"+cdr.game.hands);
+         $$("gameover").style.transform = "scale(1)";
+			$$("gameover").innerHTML = cdr.games[cdr.game.type];
+			if (!cdr.game.listening) {
+				cdr.addListeners();
+				cdr.game.listening = true;
+			}
       },
 		switchHands: function(handcount) {
 				$$("handcount"+cdr.game.hands).className = "";
 				$$("handcount"+handcount).className = "handcountSelected";
 				cdr.game.hands = handcount;
-				setTimeout(function() { $$("handselect").classList.toggle("open"); }, 250);
+				setTimeout(function() { $$("handselect").classList.remove("open"); }, 250);
 				setTimeout(function() { 
 					cdr.makeHands(); 
 					$$("main").className = "hands"+cdr.game.hands + " " + cdr.game.wilds;
@@ -448,7 +540,15 @@ div#handselect.open { height:33vh; }
 				  var balance = snapshot.val();
 				  cdr.game.balance = balance;
 				  cdr.game.credit = Math.floor(balance / cdr.game.creditValue);
-				  $$("credit").innerHTML = cdr.game.credit;
+				  var showCredit = cdr.game.credit;
+				  if (showCredit > 1000000000) {
+						showCredit = Math.floor(showCredit / 1000000) / 100 + "B";
+				  } else if (showCredit > 1000000) {
+						showCredit = Math.floor(showCredit / 1000) / 100 + "M";
+				  } else if (showCredit > 1000) {
+						showCredit = Math.floor(showCredit / 100) / 10 + "K";
+				  }
+				  $$("credit").innerHTML = showCredit;
 
 				  if ((cdr.game.credit < 1) || cdr.game.active) {
 					  cdr.disable("betOne");
@@ -520,8 +620,10 @@ div#handselect.open { height:33vh; }
       draw: function() {
          var cnt = 0;
 			var needcards = [];
-			$$("drawButton").setAttribute("disabled", true);
-			$$("drawButton").classList.add('disabled');
+			$$("dealdrawButton").setAttribute("disabled", true);
+			$$("dealdrawButton").classList.add('disabled');
+			$$("dealdrawButton").innerHTML = "DEAL";
+
          for (var i=0; i<5; i++) {
             if (!cdr.game.holds["card"+i]) {
 					cdr.hideCard('card' + i, cnt);
@@ -539,6 +641,7 @@ div#handselect.open { height:33vh; }
 			console.dir(cards);
 			cdr.game.results = cards;
 		   cdr.game.resultCounts = {};
+			cdr.game.stage = 2;
 
 			var cnt = 0;
 			var wintot = 0;
@@ -579,15 +682,24 @@ div#handselect.open { height:33vh; }
          }
 			if (wintot > 0) {
 				setTimeout(function() { 
-					$$("won").innerHTML = "WIN "+Math.floor(wintot / cdr.game.creditValue)+" CREDITS";
+					$$("won").innerHTML = "<h1>YOU'VE WON "+Math.floor(wintot / cdr.game.creditValue)+" CREDITS!</h1><h1>\"DOUBLE IT\" TO "+Math.floor(wintot / cdr.game.creditValue) * 2 +"?</h1><button onclick='cdr.doubleup()'>DOUBLE IT</button> <button onclick='$$(\"won\").style.display = \"none\"'>COLLECT</button>";
 					$$("won").style.display = "inline-block";
 					$$("win").innerHTML = "WIN: "+Math.floor(wintot / cdr.game.creditValue);
+					cdr.resetButtons();
+					cdr.game.active = false;
+					cdr.game.stage = 0;
+					/*setTimeout(function() { 
+						$$("doublewin").innerHTML = Math.floor(wintot / cdr.game.creditValue);
+						$$("doubledouble").innerHTML = Math.floor(wintot / cdr.game.creditValue) * 2;
+						$$("doubleup").style.display = "inline-block";
+					}, 2000);*/
 				}, cnt * 25);
 			} else {
 				cdr.gameoverTimeout = setTimeout(function() { $$("gameover").innerHTML = "GAME OVER"; $$("gameover").style.transform = "scale(1)"; }, 1000);
+				cdr.game.active = false;
+				cdr.resetButtons();
+				cdr.game.stage = 0;
 			}
-			cdr.resetButtons();
-			cdr.game.active = false;
 		},
 		updatePaytable: function(cnt, hand) {
 			setTimeout(function() {
@@ -629,21 +741,24 @@ div#handselect.open { height:33vh; }
 			cdr.game.active = false;
       },
 		resetButtons: function() {
+			$$("gamesButton").classList.remove('disabled');
+			$$("gamesButton").removeAttribute('disabled');
 			$$("handsButton").classList.remove('disabled');
 			$$("handsButton").removeAttribute('disabled');
+			$$("handselect").classList.remove("open");
+			$$("gameselect").classList.remove("open");
 			$$("betOne").classList.remove('disabled');
 			$$("betOne").removeAttribute('disabled');
 			$$("betMax").classList.remove('disabled');
 			$$("betMax").removeAttribute('disabled');
 			if (cdr.game.bet) {
-				$$("dealButton").classList.remove('disabled');
-				$$("dealButton").removeAttribute('disabled');
+				$$("dealdrawButton").classList.remove('disabled');
+				$$("dealdrawButton").removeAttribute('disabled');
 			} else {
-				$$("dealButton").classList.add('disabled');
-				$$("dealButton").setAttribute('disabled');
+				$$("dealdrawButton").classList.add('disabled');
+				$$("dealdrawButton").setAttribute('disabled');
 			}
-			$$("drawButton").classList.add('disabled');
-			$$("drawButton").setAttribute('disabled', true);
+			$$("dealdrawButton").innerHTML = "DEAL";
 		},
       clearWinners: function() {
          var els = $$$('.winner');
@@ -683,10 +798,9 @@ div#handselect.open { height:33vh; }
 			}
 			$$("gameover").style.transform = "scale(0)";
 			$$("won").style.display = "none";
-         //cdr.game.credit -= cdr.game.bet;
-			//$$("credit").innerHTML = cdr.game.credit;
 			
 			cdr.game.active = true;
+			cdr.game.stage = 1;
          cdr.clearHolds();
 			cdr.clearWinners();
 			cdr.resetCards();
@@ -694,16 +808,15 @@ div#handselect.open { height:33vh; }
          $$("win").innerHTML = "";
          $$("won").innerHTML = "";
          $$("won").style.display = "none";
+         $$("gamesButton").classList.add("disabled");
+         $$("gamesButton").setAttribute("disabled", true);
          $$("handsButton").classList.add("disabled");
          $$("handsButton").setAttribute("disabled", true);
-         $$("dealButton").classList.add("disabled");
-         $$("dealButton").setAttribute("disabled", true);
+         $$("dealdrawButton").innerHTML = "DRAW";
          $$("betOne").classList.add("disabled");
          $$("betOne").setAttribute("disabled", true);
          $$("betMax").classList.add("disabled");
          $$("betMax").setAttribute("disabled", true);
-         $$("drawButton").classList.remove("disabled");
-         $$("drawButton").removeAttribute("disabled");
          
          cdr.game.cards = [];
          cdr.game.discards = [];
