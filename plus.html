@@ -9,10 +9,13 @@
 			width:33.3px;
 			height:100px;
 			background-color:#000;
-			transition:all 2s linear;
-			animation:spin 4s infinite;
+			transition:all 500ms linear;
+			/*animation:spin 4s infinite; */
 			z-index:1;
 		}
+        .plus:hover {
+            transform: rotate(90deg);
+        }
 		.plus:after {
 			display:inline-block;
 			position:absolute;
@@ -31,7 +34,7 @@
 			height:100px;
 			background-color:#fff;
 			transition:all 2s linear;
-			animation:spin 4s infinite;
+		/*	animation:spin 4s infinite; */
 		}
 		.white:after {
 			display:inline-block;
@@ -62,17 +65,18 @@
 		for (var r=0; r<5; r++) {
 			for (var c=0; c<5; c++) {
 				cnt++;
-				var e = el("div", "plus"+c+''+r, "plus");
-				e.style.top = (r * 100) + (c * 66.3) + "px";
-				e.style.left = (c * 133) + (r * 33.3) + "px";
-				e.style.animationDelay = (c * 500) + (r * 250) + "ms";
+				var e = el("div", "plus"+c+'_'+r, "plus");
+				e.style.top = (r * 100) + "px"; //+ (c * 66.3) + "px";
+				e.style.left = (c * 133) + (r%2 * 66.6) + "px"; // + (r * 33.3) + "px";
+				e.style.animationDelay = (c * 500) + (r * 500) + "ms";
 				document.body.appendChild(e);
 				
-				var w = el("div", "white"+c+''+r, "white");
-				w.style.top = (r * 100) + (c * 66.3) + 33.3 + "px";
-				w.style.left = (c * 133) + (r * 33.3) + 66.6 + "px";
-				w.style.animationDelay = (c * 2000) + (r * 1000) + "ms";
+				var w = el("div", "white"+c+'_'+r, "white");
+				w.style.top = (r * 100)+ 33.3 + "px"; // + (c * 66.3) + 33.3 + "px";
+				w.style.left = (c * 133) + ((r- 1)%2 * 66.6) + "px"; // (r * 33.3) + 66.6 + "px";
+				w.style.animationDelay = (c * 1000) + (r * 1000) + "ms";
 				document.body.appendChild(w);
+                
 
 			}
 		}

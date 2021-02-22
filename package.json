@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@firebase/app": "^0.6.15",
+    "@firebase/database": "^0.9.4",
+    "@firebase/functions": "^0.6.2",
+    "firebase": "^8.2.9",
+    "pokersolver": "^2.1.4"
+  }
+}

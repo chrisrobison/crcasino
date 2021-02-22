@@ -1,83 +1,220 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
-	 <meta name="viewport" content="width=device-width, initial-scale=0.25, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=0.25, user-scalable=yes">
     <title>Video Hold'em</title>
     <link rel='stylesheet' type='text/css' href='holdem.css'>
     <script src='pokersolver.js'></script>
-	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
-	<script>
-	  // Initialize Firebase
-	  var config = {
-		 apiKey: "AIzaSyDxGzBuvFA2qrOZZPBdTmIjsXAgWpcrmcs",
-		 authDomain: "crblackjack-9e220.firebaseapp.com",
-		 databaseURL: "https://crblackjack-9e220.firebaseio.com",
-		 projectId: "crblackjack-9e220",
-		 storageBucket: "crblackjack-9e220.appspot.com",
-		 messagingSenderId: "32143422101"
-	  };
-	  firebase.initializeApp(config);
-	</script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-database.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDxGzBuvFA2qrOZZPBdTmIjsXAgWpcrmcs",
+            authDomain: "crblackjack-9e220.firebaseapp.com",
+            databaseURL: "https://crblackjack-9e220.firebaseio.com",
+            projectId: "crblackjack-9e220",
+            storageBucket: "crblackjack-9e220.appspot.com",
+            messagingSenderId: "32143422101"
+        };
+        firebase.initializeApp(config);
+    </script>
 
 </head>
+
 <body>
-<div id='main'>
-    <div id='playarea'> </div>
-    <div id='dealer' class='hidden'>
-        <img id='dealerAvatar' src='img/smiley-smiling.gif'>
-        <h1>OPPONENT</h1>
-        <div id='dealer-card0' class='cardwrap undealt'><div class='card card5S'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-        <div id='dealer-card1' class='cardwrap undealt'><div class='card card10D'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+    <div id='main'>
+        <div id='playarea'> </div>
+        <div id='dealer' class='hidden'>
+            <img id='dealerAvatar' src='img/smiley-smiling.gif'>
+            <h1>OPPONENT</h1>
+            <div id='dealer-card0' class='cardwrap undealt'>
+                <div class='card card5S'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='dealer-card1' class='cardwrap undealt'>
+                <div class='card card10D'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+        </div>
+        <div id='river' class='hidden'>
+            <div id='card0' class='cardwrap undealt'>
+                <div class='card card1H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='card1' class='cardwrap undealt'>
+                <div class='card card13H suitH face'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='card2' class='cardwrap undealt'>
+                <div class='card card12H suitH face'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='card3' class='cardwrap undealt'>
+                <div class='card card11H suitH face'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='card4' class='cardwrap undealt'>
+                <div class='card card10H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+        </div>
+        <div id='player' class='hidden'>
+            <h1>PLAYER</h1>
+            <div id='player-card0' class='cardwrap undealt'>
+                <div class='card card1S'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='player-card1' class='cardwrap undealt'>
+                <div class='card card13D'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='player-handinfo'></div>
+        </div>
+        <div id='pot'></div>
     </div>
-    <div id='river' class='hidden'>
-      <div id='card0' class='cardwrap undealt'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card1' class='cardwrap undealt'><div class='card card13H suitH face'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card2' class='cardwrap undealt'><div class='card card12H suitH face'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card3' class='cardwrap undealt'><div class='card card11H suitH face'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card4' class='cardwrap undealt'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-    </div>
-    <div id='player' class='hidden'>
-        <h1>PLAYER</h1>
-        <div id='player-card0' class='cardwrap undealt'><div class='card card1S'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-        <div id='player-card1' class='cardwrap undealt'><div class='card card13D'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-        <div id='player-handinfo'></div>
-    </div>
-    <div id='pot'></div>
-</div>
     <div id='results'>
         <h1 id='result'>RESULTS</h1>
         <div id='dealer-results' class='results'>
             <h3>DEALER</h3>
             <div id='dealer-hand'>Royal Flush</div><br>
-           <div id='dealer-result-card0' class='cardwrap'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-           <div id='dealer-result-card1' class='cardwrap'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-           <div id='dealer-result-card2' class='cardwrap'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-           <div id='dealer-result-card3' class='cardwrap'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-           <div id='dealer-result-card4' class='cardwrap'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+            <div id='dealer-result-card0' class='cardwrap'>
+                <div class='card card1H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='dealer-result-card1' class='cardwrap'>
+                <div class='card card13H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='dealer-result-card2' class='cardwrap'>
+                <div class='card card12H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='dealer-result-card3' class='cardwrap'>
+                <div class='card card11H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='dealer-result-card4' class='cardwrap'>
+                <div class='card card10H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
         </div>
         <div id='player-results' class='results'>
             <h3>PLAYER</h3>
             <div id='player-hand'>Straight Flush</div><br>
-           <div id='player-result-card0' class='cardwrap'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-           <div id='player-result-card1' class='cardwrap'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-           <div id='player-result-card2' class='cardwrap'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-           <div id='player-result-card3' class='cardwrap'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-           <div id='player-result-card4' class='cardwrap'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
+            <div id='player-result-card0' class='cardwrap'>
+                <div class='card card1H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='player-result-card1' class='cardwrap'>
+                <div class='card card13H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='player-result-card2' class='cardwrap'>
+                <div class='card card12H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='player-result-card3' class='cardwrap'>
+                <div class='card card11H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='player-result-card4' class='cardwrap'>
+                <div class='card card10H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
         </div>
         <div id='fold-result'></div>
-		  <br clear='left'>
+        <br clear='left'>
         <button onclick="cdr.playAgain(true)">Play Again</button>
         <button onclick="cdr.playAgain(false)">Change Bet</button>
     </div>
-<div id='status'>
-    <h3>Game Info</h3>
-    <label for='gameBet'>Bet: </label> <span id='gameBet'>0</span><br>
-    <label for='gamePot'>Pot: </label> <span id='gamePot'>0</span><br>
-    <label for='gamePot'>Bank: </label> <span id='credits'>1000</span>
-</div>
-<div id='toolbar'>
-    <!--div id='info'>
+    <div id='status'>
+        <h3>Game Info</h3>
+        <label for='gameBet'>Bet: </label> <span id='gameBet'>0</span><br>
+        <label for='gamePot'>Pot: </label> <span id='gamePot'>0</span><br>
+        <label for='gamePot'>Bank: </label> <span id='credits'>1000</span>
+    </div>
+    <div id='toolbar'>
+        <!--div id='info'>
         <span><label for='credits'>BALANCE</label><br><span id='credits'>1000</span></span>
         <span id='betwrap'><label for='bet'>BET: 
             <select id='bet'>
@@ -95,755 +232,860 @@
             </select>
         </span>
     </div-->
-    <div id='chipscroll'>
-        <div id='chips'>
-            <div class='chip' id='chip1'><span>1</span></div>
-            <div class='chip' id='chip2'><span>2</span></div>
-            <div class='chip selected' id='chip5'><span>5</span></div>
-            <div class='chip' id='chip10'><span>10</span></div>
-            <div class='chip' id='chip25'><span>25</span></div>
-            <div class='chip' id='chip50'><span>50</span></div>
-            <div class='chip' id='chip100'><span>100</span></div>
-            <div class='chip' id='chip250'><span>250</span></div>
-            <div class='chip' id='chip500'><span>500</span></div>
+        <div id='chipscroll'>
+            <div id='chips'>
+                <div class='chip' id='chip1'><span>1</span></div>
+                <div class='chip' id='chip2'><span>2</span></div>
+                <div class='chip selected' id='chip5'><span>5</span></div>
+                <div class='chip' id='chip10'><span>10</span></div>
+                <div class='chip' id='chip25'><span>25</span></div>
+                <div class='chip' id='chip50'><span>50</span></div>
+                <div class='chip' id='chip100'><span>100</span></div>
+                <div class='chip' id='chip250'><span>250</span></div>
+                <div class='chip' id='chip500'><span>500</span></div>
+            </div>
+        </div>
+        <div id='buttons'>
+            <button id='betButton' style='transform:translateY(0em)' onclick="cdr.bet()" class='button'>
+                <div class='outer'>
+                    <div class='height'>
+                        <div class='inner'>Bet</div>
+                    </div>
+                </div>
+            </button>
+            <button id='foldButton' style='transform:translateY(22vh)' onclick="!this.classList.contains('disabled') && cdr.fold()" class='button disabled'>
+                <div class='outer'>
+                    <div class='height'>
+                        <div class='inner'>Fold</div>
+                    </div>
+                </div>
+            </button>
+            <button id='callButton' style='transform:translateY(22vh)' onclick="!this.classList.contains('disabled') && cdr.callbet()" class='button disabled'>
+                <div class='outer'>
+                    <div class='height'>
+                        <div class='inner'>Call</div>
+                    </div>
+                </div>
+            </button>
         </div>
     </div>
-    <div id='buttons'>
-        <button id='betButton' style='transform:translateY(0em)' onclick="cdr.bet()" class='button'><div class='outer'><div class='height'><div class='inner'>Bet</div></div></div></button>
-        <button id='foldButton' style='transform:translateY(22vh)' onclick="!this.classList.contains('disabled') && cdr.fold()" class='button disabled'><div class='outer'><div class='height'><div class='inner'>Fold</div></div></div></button>
-        <button id='callButton' style='transform:translateY(22vh)' onclick="!this.classList.contains('disabled') && cdr.callbet()" class='button disabled'><div class='outer'><div class='height'><div class='inner'>Call</div></div></div></button>
-    </div>
-</div>
-<script>
-(function() {
-    window.cdr = {
-        game: {
+    <script>
+        (function() {
+            window.cdr = {
+                game: {
 
-        },
-        state: {
-            flopped: false,
-            bet:5,
-            pot:0,
-            chipscroll:0.5
-        },
-        chips: [],
-        cards: {
-            deck: [],
-            dealer: [],
-            player: [],
-            river: []
-        },
-        player: {
-            credits:1000
-        },
-        dealer: {
-            credits:0
-        },
-        rand: function(cnt, start=0) {
-            return Math.floor(Math.random()*cnt) + start;
-        },
-        addEvents: function() {
-            if (cdr.state.eventsBound) return false;
-            
-            $$("chipscroll").addEventListener("mousedown", function(e) {
-                console.dir(e);
-                var tgt = e.target;
-                var matches = tgt.id.match(/chip(\d+)/);
+                },
+                state: {
+                    flopped: false,
+                    bet: 5,
+                    pot: 0,
+                    chipscroll: 0.5
+                },
+                chips: [],
+                cards: {
+                    deck: [],
+                    dealer: [],
+                    player: [],
+                    river: []
+                },
+                player: {
+                    credits: 1000
+                },
+                dealer: {
+                    credits: 0
+                },
+                rand: function(cnt, start = 0) {
+                    return Math.floor(Math.random() * cnt) + start;
+                },
+                addEvents: function() {
+                    if (cdr.state.eventsBound) return false;
 
-                if (matches && matches[1]) {
-                    cdr.state.bet = parseInt(matches[1]);
-                    var csound = new Audio("sound/chipsStack"+(cdr.rand(6, 1))+".mp3");
-                    csound.play();
-                    cdr.updateInfo();
-                    $(".chip.selected").classList.remove('selected');
-                    $$("chip" + matches[1]).classList.add('selected');
-                } else if ((e.offsetX < 100) && (tgt.id === 'chipscroll')) {
-                    var csound = new Audio("sound/cardSlide4.mp3");
-                    csound.play();
-                    cdr.state.chipscroll += 16.5;
-                    if (cdr.state.chipscroll > 17) {
-                        cdr.state.chipscroll = 17;
+                    $$("chipscroll").addEventListener("mousedown", function(e) {
+                        console.dir(e);
+                        var tgt = e.target;
+                        var matches = tgt.id.match(/chip(\d+)/);
+
+                        if (matches && matches[1]) {
+                            cdr.state.bet = parseInt(matches[1]);
+                            var csound = new Audio("sound/chipsStack" + (cdr.rand(6, 1)) + ".mp3");
+                            csound.play();
+                            cdr.updateInfo();
+                            $(".chip.selected").classList.remove('selected');
+                            $$("chip" + matches[1]).classList.add('selected');
+                        } else if ((e.offsetX < 100) && (tgt.id === 'chipscroll')) {
+                            var csound = new Audio("sound/cardSlide4.mp3");
+                            csound.play();
+                            cdr.state.chipscroll += 16.5;
+                            if (cdr.state.chipscroll > 17) {
+                                cdr.state.chipscroll = 17;
+                            }
+                            $$("chips").style.left = cdr.state.chipscroll + "vw";
+                        } else if ((e.offsetX > 400) && (tgt.id === 'chipscroll')) {
+                            var csound = new Audio("sound/cardSlide6.mp3");
+                            csound.play();
+                            cdr.state.chipscroll -= 16.5;
+                            if (cdr.state.chipscroll < -32.5) {
+                                cdr.state.chipscroll = -32.5;
+                            }
+                            $$("chips").style.left = cdr.state.chipscroll + "vw";
+                        }
+                    });
+
+                    cdr.state.eventsBound = true;
+                },
+                init: function() {
+                    cdr.addEvents();
+                    cdr.cards.deck = cdr.makeDeck();
+                    console.log(cdr.cards.deck);
+                    var cnt = Math.floor(Math.random() * 20) + 5;
+                    while (cnt > 0) {
+                        cdr.cards.deck = cdr.shuffle(cdr.cards.deck);
+                        cnt--;
                     }
-                    $$("chips").style.left = cdr.state.chipscroll + "vw";
-                } else if ((e.offsetX > 400) && (tgt.id === 'chipscroll')) {
-                    var csound = new Audio("sound/cardSlide6.mp3");
-                    csound.play();
-                    cdr.state.chipscroll -= 16.5; 
-                    if (cdr.state.chipscroll < -32.5) {
-                        cdr.state.chipscroll = -32.5;
-                    }
-                    $$("chips").style.left = cdr.state.chipscroll + "vw";
-                } 
-            });
-
-            cdr.state.eventsBound = true;
-        },
-        init: function() {
-            cdr.addEvents();
-            cdr.cards.deck = cdr.makeDeck();
-            console.log(cdr.cards.deck);
-            var cnt = Math.floor(Math.random() * 20) + 5;
-            while (cnt > 0) {
-                cdr.cards.deck = cdr.shuffle(cdr.cards.deck);
-                cnt--;
-            }
-            $$("dealerAvatar").src = "img/smiley-smiling.gif";
-        },
-        updateInfo: function() {
-            $$("gameBet").innerHTML = cdr.state.bet;
-            $$("gamePot").innerHTML = cdr.state.pot;
-            $$("credits").innerHTML = cdr.player.credits;
-        },
-        shuffle: function(array) {
-            var currentIndex = array.length, temporaryValue, randomIndex;
-
-            while (0 !== currentIndex) {
-              randomIndex = Math.floor(Math.random() * currentIndex);
-              currentIndex -= 1;
-
-              temporaryValue = array[currentIndex];
-              array[currentIndex] = array[randomIndex];
-              array[randomIndex] = temporaryValue;
-            }
-
-            return array;
-        },
-        makeDeck: function() {
-            var suits = ['H', 'D', 'S', 'C'];
-            var deck = [];
-            for (var s=0; s < suits.length; s++) {
-                for (var c=1; c < 14; c++) {
-                    deck.push(c + suits[s]);
-                }
-            }
-            return deck;
-        },
-        bet: function() {
-            $$("dealerAvatar").src = "img/smiley-luck.gif";
-            setTimeout(function() { $$("dealerAvatar").src = "img/smiley-cardcheck.gif"; }, 3500);
-            cdr.state.pot += cdr.state.bet;
-            cdr.player.credits -= cdr.state.bet;
-            cdr.callchips("player");
-            cdr.updateInfo();
-                
-				setTimeout(function() { 
-					cdr.state.pot += cdr.state.bet;
-					cdr.callchips("dealer"); 
-					cdr.updateInfo();
-				}, 500);
-            
-
-				// cd = cdr.cards.dealer;
-            // cd.push(cdr.cards.deck.shift());
-            // cd.push(cdr.cards.deck.shift());
-            
-				var scr = document.createElement('script');
-				scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/newGame?game=holdem&callback=cdr.gotGame&uid=" + firebase.auth().currentUser.uid + "&bet=" + cdr.state.bet;
-				document.body.appendChild(scr);
-			},
-			gotGame: function(cards) {
-				cp = cdr.cards.player;
-				cp.push(cards[0]);
-            cp.push(cards[1]);
-
-            $("#player-card0 .card").className = "card card" + cp[0] + " suit" + cp[0].replace(/\d+/,'') + " " + ((parseInt(cp[0]) > 10) ? 'face' : '');
-            $("#player-card1 .card").className = "card card" + cp[1] + " suit" + cp[1].replace(/\d+/,'') + " " + ((parseInt(cp[1]) > 10) ? 'face' : '');
-            
-            //$("#dealer-card0 .card").className = "card card" + cd[0] + " suit" + cd[0].replace(/\d+/,'') + " " + ((parseInt(cd[0]) > 10) ? 'face' : '');
-            //$("#dealer-card1 .card").className = "card card" + cd[1] + " suit" + cd[1].replace(/\d+/,'') + " " + ((parseInt(cd[1]) > 10) ? 'face' : '');
-
-            setTimeout(function() { var s = new Audio('sound/cardPlace'+(cdr.rand(4, 1))+'.mp3'); s.play(); $$("dealer-card0").classList.remove("undealt"); }, 1750);
-            setTimeout(function() { var s = new Audio('sound/cardPlace'+(cdr.rand(4, 1))+'.mp3'); s.play(); $$("dealer-card1").classList.remove("undealt"); }, 2250);
-            setTimeout(function() { var s = new Audio('sound/cardPlace'+(cdr.rand(4, 1))+'.mp3'); s.play(); $$("player-card0").classList.remove("undealt"); }, 1500);
-            setTimeout(function() { var s = new Audio('sound/cardPlace'+(cdr.rand(4, 1))+'.mp3'); s.play(); $$("player-card1").classList.remove("undealt"); }, 2000);
-            setTimeout(function() { var s = new Audio('sound/cardPlace'+(cdr.rand(4, 1))+'.mp3'); s.play(); $$("player").classList.remove('hidden');},2750);
-
-            //cdr.showCallFold(0);
-            //$$("foldButton").classList.add("disabled");
-            //$$("callButton").classList.add("disabled");
-            
-            cdr.callfold('showdisable', 1000);
-            
-            setTimeout(function() { 
-					 $$("dealerAvatar").src = "img/smiley-cardcheck.gif";
-                $$("dealer-card0").style.transform = "rotateY(120deg)";
-                $$("dealer-card1").style.transform = "rotateY(120deg)";
-                setTimeout(function() {
-                    $$("dealer-card0").style.transform = "";
-                    $$("dealer-card1").style.transform = "";
-                }, 1500 + cdr.rand(2000, 500));
-            }, 3250);
-
-            if (!cdr.aceorface() && !cdr.havepair() && !cdr.haveflush() && Math.random() > 0.25) {
-                setTimeout(function() {
-						cdr.updateInfo();
-						cdr.foldDealer();
-					}, 5000);
-            } else {
-                setTimeout(function() {
-                    cdr.state.pot += cdr.state.bet;
-                    cdr.callchips("dealer"); 
-                    cdr.updateInfo();
-                    $$("foldButton").classList.remove("disabled");
-                    $$("callButton").classList.remove("disabled");
-                    if (cdr.yawn) clearTimeout(cdr.yawn);
-                    cdr.yawn = setTimeout(function() { $$("dealerAvatar").src = "img/smiley-yawn.gif"; cdr.yawn = setTimeout(function() { $$("dealerAvatar").src = "img/smiley-tired.gif"; }, 30000); }, 30000);
                     $$("dealerAvatar").src = "img/smiley-smiling.gif";
-                }, (Math.floor(Math.random() * 3000) + 5500));
-            } 
-        },
-        callfold: function(action, delay=10) {
-            setTimeout(function() {
-                if ((action==='disable') || (action==='hidedisable') || (action==='showdisable')) {
-                    $$("callButton").classList.add("disabled");
-                    $$("foldButton").classList.add("disabled");
-                }
-                if ((action==='enable') || (action==='showenable')) {
-                    $$("callButton").classList.remove("disabled");
-                    $$("foldButton").classList.remove("disabled");
-                }
+                },
+                updateInfo: function() {
+                    $$("gameBet").innerHTML = cdr.state.bet;
+                    $$("gamePot").innerHTML = cdr.state.pot;
+                    $$("credits").innerHTML = cdr.player.credits;
+                },
+                shuffle: function(array) {
+                    var currentIndex = array.length,
+                        temporaryValue, randomIndex;
 
-                if ((action==='hide') || (action==='hidedisable')) {
-                    $$("foldButton").style.transform = "translateY(22vh)";
-                    $$("callButton").style.transform = "translateY(22vh)";
-                }
-                
-                if ((action==='show') || (action==='showenable') || (action==='showdisable')) {
-                    $$("foldButton").style.transform = "translateY(0em)";
-                    $$("callButton").style.transform = "translateY(0em)";
-                }
+                    while (0 !== currentIndex) {
+                        randomIndex = Math.floor(Math.random() * currentIndex);
+                        currentIndex -= 1;
 
-                if ((action==='hidebet') || (action==='showdisable')) {
-                    $$("betButton").classList.add("disabled");
-                    $$("betButton").style.transform = "translateY(22vh)";
-                    $$("chipscroll").style.transform = "translateY(22vh)";
-                }
-                
-                if (action==='showbet') {
-                    $$("betButton").classList.remove("disabled");
-                    $$("betButton").style.transform = "translateY(0em)";
-                    $$("chipscroll").style.transform = "translateY(0em)";
-                }
-            }, delay);
-        },
-        hideCallFold: function(delay=10) {
-            setTimeout(function() {
-                $$("foldButton").classList.add("disabled");
-                $$("foldButton").style.transform = "translateY(22vh)";
-
-                $$("callButton").classList.add("disabled");
-                $$("callButton").style.transform = "translateY(22vh)";
-                
-            }, delay);
-        },
-        showCallFold: function(delay=10) {
-            setTimeout(function() {
-                $$("foldButton").style.transform = "translateY(0em)";
-                $$("callButton").style.transform = "translateY(0em)";
-                
-                $$("betButton").classList.add("disabled");
-                $$("betButton").style.transform = "translateY(22vh)";
-                $$("chipscroll").style.transform = "translateY(22vh)";
-            }, delay);
-        },
-        callchips: function(who="player") {
-            var newchip = $("#chipscroll .selected").cloneNode(true);
-            newchip.style.position = "absolute";
-            newchip.classList.remove('selected');
-            
-            var csound = new Audio("sound/chipsStack"+(cdr.rand(5,1))+".mp3");
-            csound.play();
-
-            var t = (who==='player') ? 500 : 500;
-            newchip.style.transition = "all "+ t +"ms cubic-bezier(0.785, 0.135, 0.15, 0.86)"; //cubic-bezier(.67,1.13,.89,1.12)"; //cubic-bezier(.6,1.51,.75,.85)"; //cubic-bezier(.79,1.75,.64,.63)";
-            newchip.style.outline = "none";
-            newchip.style.filter = "brightness(1) drop-shadow(0px 120px 4px rgba(0,0,0,.3)";
-            var rd = (who==='player') ? -1080 : 720;
-            newchip.style.transform = "scale(1.4) rotateX("+rd+"deg)";
-            setTimeout(function() { newchip.style.filter = "brightness(1) drop-shadow(3px 3px 4px rgba(0,0,0,.3)"; }, t / 4);
-            cdr.chips.push(newchip);
-            if (who==="player") {
-                newchip.style.top = "30em";
-                newchip.style.left = "2em";
-            } else if (who==='dealer') {
-                newchip.style.top = "-25em";
-                newchip.style.left = "13em";
-            }
-            $$("pot").appendChild(newchip);
-            setTimeout(function() { 
-                newchip.style.top =  150 + (Math.floor(Math.random() * 200) - 150) + "px";
-                newchip.style.left = 150 + (Math.floor(Math.random() * 200) - 150) + "px";
-                newchip.style.transform = "scale(.8) rotateX(0deg)";
-            }, 150);
-        },
-        havepair: function() {
-            var pairmatch = "";
-            var nums = {};
-            var cards = cdr.cards.dealer.concat(cdr.cards.river).sort();
-            for (var i=0; i<cards.length; i++) {
-                var c = cards[i];
-                console.log(c);
-                var match = c.match(/(\d+)(\w)/);
-                console.dir(match);
-                if (!nums[match[1]]) {
-                    nums[match[1]] = 1;
-                } else {
-                    nums[match[1]]++;
-                }
-            }
-            for (var i in nums) {
-                if (nums.hasOwnProperty(i)) {
-                    if (nums[i] >= 2) {
-                        return true;
+                        temporaryValue = array[currentIndex];
+                        array[currentIndex] = array[randomIndex];
+                        array[randomIndex] = temporaryValue;
                     }
-                }
-            }
-            return false; 
-        },
-        haveflush: function() {
-            var flushmatch = "";
-            var cards = cdr.cards.dealer.concat(cdr.cards.river);
-            for (var i=0; i<cards.length; i++) {
-                var c = cards[i];
-                console.log(c);
-                var match = c.match(/(\d+)(\w)/);
-                console.dir(match);
-                if (match) {
-                    if (flushmatch==="") {
-                        flushmatch = match[2];
-                    } else if (flushmatch !== match[2]) {
-                        return false;
+
+                    return array;
+                },
+                makeDeck: function() {
+                    var suits = ['H', 'D', 'S', 'C'];
+                    var deck = [];
+                    for (var s = 0; s < suits.length; s++) {
+                        for (var c = 1; c < 14; c++) {
+                            deck.push(c + suits[s]);
+                        }
                     }
-                }
-            }
-            return true;
-        },
-        aceorface: function() {
-            var cards = cdr.cards.dealer.concat(cdr.cards.river);
-            for (var i=0; i<cards.length; i++) {
-                var c = cards[i];
-                console.log(c);
-                var match = c.match(/(\d+)(\w)/);
-                console.dir(match);
-                if (match) {
-                    if ((parseInt(match[1]) > 9) || (parseInt(match[1]) === 1)) {
-                        console.log("aceorface matched card " + c);
-                        return true;
-                    }
-                }
-            }
-            return false;
-        },
-		  flop: function() {
-			 for (var i=0; i<3; i++) {
-				  card = cdr.cards.deck.shift();
-				  cdr.cards.river.push(card);
-				  $("#card" + i + " .card").className = "card card" + card + " suit" + card.replace(/\d+/,'') + " " + ((parseInt(card) > 10) ? 'face' : '');
-
-				  cdr.dealCard("card" + i, i, true);
-			 }
-			 var csound = new Audio("sound/deal-river.mp3");
-			 csound.play();
-
-			 cdr.state.flopped = true;
-			 cdr.state.nextCard = 3;
-		
-			 if (!cdr.aceorface() && !cdr.havepair() && !cdr.haveflush() && Math.random() > 0.25) {
-				  cdr.foldDealer();
-			 } else {
-				  setTimeout(function() { 
-						$$("foldButton").classList.remove("disabled");
-						$$("callButton").classList.remove("disabled");
-						$$("dealerAvatar").src = "img/smiley-smiling.gif";
-						if (cdr.yawn) clearTimeout(cdr.yawn);
-						cdr.yawn = setTimeout(function() { $$("dealerAvatar").src = "img/smiley-yawn.gif"; cdr.yawn = setTimeout(function() { $$("dealerAvatar").src = "img/smiley-tired.gif"; }, 30000); }, 30000);
-
-						cdr.state.pot += cdr.state.bet; // Dealer call
-						cdr.updateInfo();
-						cdr.callchips("dealer"); 
-				  }, Math.floor(Math.random() * 2000) + 1000);
-			 } 
-
-		  },
-        callbet: function() {
-            var card;
-            cdr.state.pot += cdr.state.bet;
-            cdr.player.credits -= cdr.state.bet;
-            cdr.updateInfo();
-            cdr.callchips("player");
-            $$("foldButton").classList.add("disabled");
-            $$("callButton").classList.add("disabled");
-            if (cdr.yawn) clearTimeout(cdr.yawn);
-            $$("dealerAvatar").src = "img/smiley-think.gif";
-
-            if (!cdr.state.flopped) {
-					var scr = el("script");
-					scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/callBet?callback=cdr.flop&game=holdem&uid="+firebase.auth().currentUser.uid;
-					document.body.appendChild(scr);
-					cdr.state.flopped = true;
-					cdr.state.nextCard = 3;
-				} else {
-                if (cdr.state.nextCard < 5) {
-						var scr = el("script");
-						scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/callBet?callback=cdr.nextCard&game=holdem&uid="+firebase.auth().currentUser.uid;
-						document.body.appendChild(scr);
-						cdr.state.nextCard++;
-                } else if (cdr.state.nextCard >= 5) {
-                    cdr.state.pot += cdr.state.bet; // Player final call
+                    return deck;
+                },
+                bet: function() {
+                    $$("dealerAvatar").src = "img/smiley-luck.gif";
+                    setTimeout(function() {
+                        $$("dealerAvatar").src = "img/smiley-cardcheck.gif";
+                    }, 3500);
+                    cdr.state.pot += cdr.state.bet;
+                    cdr.player.credits -= cdr.state.bet;
+                    cdr.callchips("player");
                     cdr.updateInfo();
-                    cdr.state.pot += cdr.state.bet; // Dealer final call
-                    if (cdr.yawn) clearTimeout(cdr.yawn);
-                    $$("dealerAvatar").src = "img/smiley-worried.gif"; 
 
-                    setTimeout(function() { cdr.callchips("dealer"); }, 1000);
-                    cdr.updateInfo();
-                    setTimeout(function() { cdr.reckoning(); }, 2000);
-                }
-            }
-            var result = cdr.solveHand(cdr.cards.player.concat(cdr.cards.river));
-            console.dir(result);
-            $$("player-handinfo").innerHTML = result.name;
-        },
-		  nextCard: function(obj) {
-			  var card = obj.card;
-			  //card = cdr.cards.deck.shift();
-			  console.log("nextCard:"+JSON.stringify(obj) + " ["+cdr.state.nextCard+"]");
-			  console.dir(obj);
-			  cdr.cards.river.push(card);
-			  console.log("Card: "+card);
-			  var suit = card.replace(/\d+/,'');
-			  var face = (parseInt(card) > 10) ? "face" : "";
-			  console.log("Suit: "+suit+" Face: "+face);
-			  var newclass = "card card" + card + " suit" + suit + " " + face;
-			  console.log("newclass: "+newclass);
-			  $("#card" + obj.cardID + " .card").className = "card card" + card + " suit" + suit + " " + face;
-			  
-			  cdr.dealCard("card" + obj.cardID);
-			  cdr.state.nextCard++;
-			  
+                    setTimeout(function() {
+                        cdr.state.pot += cdr.state.bet;
+                        cdr.callchips("dealer");
+                        cdr.updateInfo();
+                    }, 500);
 
-			  if (!cdr.havepair() && !cdr.haveflush() && Math.random() > 0.5) {
-					cdr.foldDealer();
-			  } else {
-					setTimeout(function() { 
-						 $$("foldButton").classList.remove("disabled");
-						 $$("callButton").classList.remove("disabled");
-						 
-						 $$("dealerAvatar").src = "img/smiley-smiling.gif";
-						 if (cdr.yawn) clearTimeout(cdr.yawn);
-						 cdr.yawn = setTimeout(function() { $$("dealerAvatar").src = "img/smiley-yawn.gif"; cdr.yawn = setTimeout(function() { $$("dealerAvatar").src = "img/smiley-tired.gif"; }, 30000); }, 30000);
-						
-						 cdr.state.pot += cdr.state.bet; // Dealer call
-						 cdr.callchips("dealer"); 
-						 cdr.updateInfo();
-					}, (Math.floor(Math.random() * 3000) + 1000));
-			  }
 
-		  },
-        dealCard: function(card, delay=0, nosound=false) {
-            var card = $$(card);
+                    // cd = cdr.cards.dealer;
+                    // cd.push(cdr.cards.deck.shift());
+                    // cd.push(cdr.cards.deck.shift());
 
-            setTimeout(function() { 
-                if (!nosound) {
-                    var csound = new Audio("sound/cardSlide" + (cdr.rand(6, 1)) + ".mp3");
+                    var scr = document.createElement('script');
+                    scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/newGame?game=holdem&callback=cdr.gotGame&uid=" + firebase.auth().currentUser.uid + "&bet=" + cdr.state.bet;
+                    document.body.appendChild(scr);
+                },
+                gotGame: function(cards) {
+                    cp = cdr.cards.player;
+                    cp.push(cards[0]);
+                    cp.push(cards[1]);
+
+                    $("#player-card0 .card").className = "card card" + cp[0] + " suit" + cp[0].replace(/\d+/, '') + " " + ((parseInt(cp[0]) > 10) ? 'face' : '');
+                    $("#player-card1 .card").className = "card card" + cp[1] + " suit" + cp[1].replace(/\d+/, '') + " " + ((parseInt(cp[1]) > 10) ? 'face' : '');
+
+                    //$("#dealer-card0 .card").className = "card card" + cd[0] + " suit" + cd[0].replace(/\d+/,'') + " " + ((parseInt(cd[0]) > 10) ? 'face' : '');
+                    //$("#dealer-card1 .card").className = "card card" + cd[1] + " suit" + cd[1].replace(/\d+/,'') + " " + ((parseInt(cd[1]) > 10) ? 'face' : '');
+
+                    setTimeout(function() {
+                        var s = new Audio('sound/cardPlace' + (cdr.rand(4, 1)) + '.mp3');
+                        s.play();
+                        $$("dealer-card0").classList.remove("undealt");
+                    }, 1750);
+                    setTimeout(function() {
+                        var s = new Audio('sound/cardPlace' + (cdr.rand(4, 1)) + '.mp3');
+                        s.play();
+                        $$("dealer-card1").classList.remove("undealt");
+                    }, 2250);
+                    setTimeout(function() {
+                        var s = new Audio('sound/cardPlace' + (cdr.rand(4, 1)) + '.mp3');
+                        s.play();
+                        $$("player-card0").classList.remove("undealt");
+                    }, 1500);
+                    setTimeout(function() {
+                        var s = new Audio('sound/cardPlace' + (cdr.rand(4, 1)) + '.mp3');
+                        s.play();
+                        $$("player-card1").classList.remove("undealt");
+                    }, 2000);
+                    setTimeout(function() {
+                        var s = new Audio('sound/cardPlace' + (cdr.rand(4, 1)) + '.mp3');
+                        s.play();
+                        $$("player").classList.remove('hidden');
+                    }, 2750);
+
+                    //cdr.showCallFold(0);
+                    //$$("foldButton").classList.add("disabled");
+                    //$$("callButton").classList.add("disabled");
+
+                    cdr.callfold('showdisable', 1000);
+
+                    setTimeout(function() {
+                        $$("dealerAvatar").src = "img/smiley-cardcheck.gif";
+                        $$("dealer-card0").style.transform = "rotateY(120deg)";
+                        $$("dealer-card1").style.transform = "rotateY(120deg)";
+                        setTimeout(function() {
+                            $$("dealer-card0").style.transform = "";
+                            $$("dealer-card1").style.transform = "";
+                        }, 1500 + cdr.rand(2000, 500));
+                    }, 3250);
+
+                    if (!cdr.aceorface() && !cdr.havepair() && !cdr.haveflush() && Math.random() > 0.25) {
+                        setTimeout(function() {
+                            cdr.updateInfo();
+                            cdr.foldDealer();
+                        }, 5000);
+                    } else {
+                        setTimeout(function() {
+                            cdr.state.pot += cdr.state.bet;
+                            cdr.callchips("dealer");
+                            cdr.updateInfo();
+                            $$("foldButton").classList.remove("disabled");
+                            $$("callButton").classList.remove("disabled");
+                            if (cdr.yawn) clearTimeout(cdr.yawn);
+                            cdr.yawn = setTimeout(function() {
+                                $$("dealerAvatar").src = "img/smiley-yawn.gif";
+                                cdr.yawn = setTimeout(function() {
+                                    $$("dealerAvatar").src = "img/smiley-tired.gif";
+                                }, 30000);
+                            }, 30000);
+                            $$("dealerAvatar").src = "img/smiley-smiling.gif";
+                        }, (Math.floor(Math.random() * 3000) + 5500));
+                    }
+                },
+                callfold: function(action, delay = 10) {
+                    setTimeout(function() {
+                        if ((action === 'disable') || (action === 'hidedisable') || (action === 'showdisable')) {
+                            $$("callButton").classList.add("disabled");
+                            $$("foldButton").classList.add("disabled");
+                        }
+                        if ((action === 'enable') || (action === 'showenable')) {
+                            $$("callButton").classList.remove("disabled");
+                            $$("foldButton").classList.remove("disabled");
+                        }
+
+                        if ((action === 'hide') || (action === 'hidedisable')) {
+                            $$("foldButton").style.transform = "translateY(22vh)";
+                            $$("callButton").style.transform = "translateY(22vh)";
+                        }
+
+                        if ((action === 'show') || (action === 'showenable') || (action === 'showdisable')) {
+                            $$("foldButton").style.transform = "translateY(0em)";
+                            $$("callButton").style.transform = "translateY(0em)";
+                        }
+
+                        if ((action === 'hidebet') || (action === 'showdisable')) {
+                            $$("betButton").classList.add("disabled");
+                            $$("betButton").style.transform = "translateY(22vh)";
+                            $$("chipscroll").style.transform = "translateY(22vh)";
+                        }
+
+                        if (action === 'showbet') {
+                            $$("betButton").classList.remove("disabled");
+                            $$("betButton").style.transform = "translateY(0em)";
+                            $$("chipscroll").style.transform = "translateY(0em)";
+                        }
+                    }, delay);
+                },
+                hideCallFold: function(delay = 10) {
+                    setTimeout(function() {
+                        $$("foldButton").classList.add("disabled");
+                        $$("foldButton").style.transform = "translateY(22vh)";
+
+                        $$("callButton").classList.add("disabled");
+                        $$("callButton").style.transform = "translateY(22vh)";
+
+                    }, delay);
+                },
+                showCallFold: function(delay = 10) {
+                    setTimeout(function() {
+                        $$("foldButton").style.transform = "translateY(0em)";
+                        $$("callButton").style.transform = "translateY(0em)";
+
+                        $$("betButton").classList.add("disabled");
+                        $$("betButton").style.transform = "translateY(22vh)";
+                        $$("chipscroll").style.transform = "translateY(22vh)";
+                    }, delay);
+                },
+                callchips: function(who = "player") {
+                    var newchip = $("#chipscroll .selected").cloneNode(true);
+                    newchip.style.position = "absolute";
+                    newchip.classList.remove('selected');
+
+                    var csound = new Audio("sound/chipsStack" + (cdr.rand(5, 1)) + ".mp3");
                     csound.play();
-                }
-                card.classList.remove('undealt'); 
-                setTimeout(function() {
-                    card.style.transform = "rotateY(0deg)";
-                }, (delay * 200) + 600);
-            }, delay * 200);
-        },
-        fold: function() {
-            if (cdr.yawn) clearTimeout(cdr.yawn);
-					 cdr.yawn = setTimeout(function() { $$("dealerAvatar").src = "img/smiley-yawn.gif"; cdr.yawn = setTimeout(function() { $$("dealerAvatar").src = "img/smiley-tired.gif"; }, 30000); }, 30000);
-            $$("dealerAvatar").src = ["img/smiley-indifferent.gif", "img/smiley-facepalm.gif", "img/smiley-sarcastic.gif", "img/smiley-suspicious.gif" ][cdr.rand(4)] ;
-            setTimeout(function() { $$("dealerAvatar").src = "img/smiley-smiling.gif"; }, 10000);
-            cdr.state.folded = 'player';
-            
-            $$("player-results").style.display = "none";
-            $$("dealer-results").style.display = "none";
-            $$("foldButton").classList.add("disabled");
-            $$("foldButton").style.transform = "translateY(22vh)";
 
-            $$("callButton").classList.add("disabled");
-            $$("callButton").style.transform = "translateY(22vh)";
-             for (var i=0; i<cdr.chips.length; i++) {
-                cdr.chips[i].style.top = "-25em";
-                cdr.chips[i].style.left = "13em";
+                    var t = (who === 'player') ? 500 : 500;
+                    newchip.style.transition = "all " + t + "ms cubic-bezier(0.785, 0.135, 0.15, 0.86)"; //cubic-bezier(.67,1.13,.89,1.12)"; //cubic-bezier(.6,1.51,.75,.85)"; //cubic-bezier(.79,1.75,.64,.63)";
+                    newchip.style.outline = "none";
+                    newchip.style.filter = "brightness(1) drop-shadow(0px 120px 4px rgba(0,0,0,.3)";
+                    var rd = (who === 'player') ? -1080 : 720;
+                    newchip.style.transform = "scale(1.4) rotateX(" + rd + "deg)";
+                    setTimeout(function() {
+                        newchip.style.filter = "brightness(1) drop-shadow(3px 3px 4px rgba(0,0,0,.3)";
+                    }, t / 4);
+                    cdr.chips.push(newchip);
+                    if (who === "player") {
+                        newchip.style.top = "30em";
+                        newchip.style.left = "2em";
+                    } else if (who === 'dealer') {
+                        newchip.style.top = "-25em";
+                        newchip.style.left = "13em";
+                    }
+                    $$("pot").appendChild(newchip);
+                    setTimeout(function() {
+                        newchip.style.top = 150 + (Math.floor(Math.random() * 200) - 150) + "px";
+                        newchip.style.left = 150 + (Math.floor(Math.random() * 200) - 150) + "px";
+                        newchip.style.transform = "scale(.8) rotateX(0deg)";
+                    }, 150);
+                },
+                havepair: function() {
+                    var pairmatch = "";
+                    var nums = {};
+                    var cards = cdr.cards.dealer.concat(cdr.cards.river).sort();
+                    for (var i = 0; i < cards.length; i++) {
+                        var c = cards[i];
+                        console.log(c);
+                        var match = c.match(/(\d+)(\w)/);
+                        console.dir(match);
+                        if (!nums[match[1]]) {
+                            nums[match[1]] = 1;
+                        } else {
+                            nums[match[1]]++;
+                        }
+                    }
+                    for (var i in nums) {
+                        if (nums.hasOwnProperty(i)) {
+                            if (nums[i] >= 2) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                },
+                haveflush: function() {
+                    var flushmatch = "";
+                    var cards = cdr.cards.dealer.concat(cdr.cards.river);
+                    for (var i = 0; i < cards.length; i++) {
+                        var c = cards[i];
+                        console.log(c);
+                        var match = c.match(/(\d+)(\w)/);
+                        console.dir(match);
+                        if (match) {
+                            if (flushmatch === "") {
+                                flushmatch = match[2];
+                            } else if (flushmatch !== match[2]) {
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                },
+                aceorface: function() {
+                    var cards = cdr.cards.dealer.concat(cdr.cards.river);
+                    for (var i = 0; i < cards.length; i++) {
+                        var c = cards[i];
+                        console.log(c);
+                        var match = c.match(/(\d+)(\w)/);
+                        console.dir(match);
+                        if (match) {
+                            if ((parseInt(match[1]) > 9) || (parseInt(match[1]) === 1)) {
+                                console.log("aceorface matched card " + c);
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                },
+                flop: function() {
+                    for (var i = 0; i < 3; i++) {
+                        card = cdr.cards.deck.shift();
+                        cdr.cards.river.push(card);
+                        $("#card" + i + " .card").className = "card card" + card + " suit" + card.replace(/\d+/, '') + " " + ((parseInt(card) > 10) ? 'face' : '');
+
+                        cdr.dealCard("card" + i, i, true);
+                    }
+                    var csound = new Audio("sound/deal-river.mp3");
+                    csound.play();
+
+                    cdr.state.flopped = true;
+                    cdr.state.nextCard = 3;
+
+                    if (!cdr.aceorface() && !cdr.havepair() && !cdr.haveflush() && Math.random() > 0.25) {
+                        cdr.foldDealer();
+                    } else {
+                        setTimeout(function() {
+                            $$("foldButton").classList.remove("disabled");
+                            $$("callButton").classList.remove("disabled");
+                            $$("dealerAvatar").src = "img/smiley-smiling.gif";
+                            if (cdr.yawn) clearTimeout(cdr.yawn);
+                            cdr.yawn = setTimeout(function() {
+                                $$("dealerAvatar").src = "img/smiley-yawn.gif";
+                                cdr.yawn = setTimeout(function() {
+                                    $$("dealerAvatar").src = "img/smiley-tired.gif";
+                                }, 30000);
+                            }, 30000);
+
+                            cdr.state.pot += cdr.state.bet; // Dealer call
+                            cdr.updateInfo();
+                            cdr.callchips("dealer");
+                        }, Math.floor(Math.random() * 2000) + 1000);
+                    }
+
+                },
+                callbet: function() {
+                    var card;
+                    cdr.state.pot += cdr.state.bet;
+                    cdr.player.credits -= cdr.state.bet;
+                    cdr.updateInfo();
+                    cdr.callchips("player");
+                    $$("foldButton").classList.add("disabled");
+                    $$("callButton").classList.add("disabled");
+                    if (cdr.yawn) clearTimeout(cdr.yawn);
+                    $$("dealerAvatar").src = "img/smiley-think.gif";
+
+                    if (!cdr.state.flopped) {
+                        var scr = el("script");
+                        scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/callBet?callback=cdr.flop&game=holdem&uid=" + firebase.auth().currentUser.uid;
+                        document.body.appendChild(scr);
+                        cdr.state.flopped = true;
+                        cdr.state.nextCard = 3;
+                    } else {
+                        if (cdr.state.nextCard < 5) {
+                            var scr = el("script");
+                            scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/callBet?callback=cdr.nextCard&game=holdem&uid=" + firebase.auth().currentUser.uid;
+                            document.body.appendChild(scr);
+                            cdr.state.nextCard++;
+                        } else if (cdr.state.nextCard >= 5) {
+                            cdr.state.pot += cdr.state.bet; // Player final call
+                            cdr.updateInfo();
+                            cdr.state.pot += cdr.state.bet; // Dealer final call
+                            if (cdr.yawn) clearTimeout(cdr.yawn);
+                            $$("dealerAvatar").src = "img/smiley-worried.gif";
+
+                            setTimeout(function() {
+                                cdr.callchips("dealer");
+                            }, 1000);
+                            cdr.updateInfo();
+                            setTimeout(function() {
+                                cdr.reckoning();
+                            }, 2000);
+                        }
+                    }
+                    var result = cdr.solveHand(cdr.cards.player.concat(cdr.cards.river));
+                    console.dir(result);
+                    $$("player-handinfo").innerHTML = result.name;
+                },
+                nextCard: function(obj) {
+                    var card = obj.card;
+                    //card = cdr.cards.deck.shift();
+                    console.log("nextCard:" + JSON.stringify(obj) + " [" + cdr.state.nextCard + "]");
+                    console.dir(obj);
+                    cdr.cards.river.push(card);
+                    console.log("Card: " + card);
+                    var suit = card.replace(/\d+/, '');
+                    var face = (parseInt(card) > 10) ? "face" : "";
+                    console.log("Suit: " + suit + " Face: " + face);
+                    var newclass = "card card" + card + " suit" + suit + " " + face;
+                    console.log("newclass: " + newclass);
+                    $("#card" + obj.cardID + " .card").className = "card card" + card + " suit" + suit + " " + face;
+
+                    cdr.dealCard("card" + obj.cardID);
+                    cdr.state.nextCard++;
+
+
+                    if (!cdr.havepair() && !cdr.haveflush() && Math.random() > 0.5) {
+                        cdr.foldDealer();
+                    } else {
+                        setTimeout(function() {
+                            $$("foldButton").classList.remove("disabled");
+                            $$("callButton").classList.remove("disabled");
+
+                            $$("dealerAvatar").src = "img/smiley-smiling.gif";
+                            if (cdr.yawn) clearTimeout(cdr.yawn);
+                            cdr.yawn = setTimeout(function() {
+                                $$("dealerAvatar").src = "img/smiley-yawn.gif";
+                                cdr.yawn = setTimeout(function() {
+                                    $$("dealerAvatar").src = "img/smiley-tired.gif";
+                                }, 30000);
+                            }, 30000);
+
+                            cdr.state.pot += cdr.state.bet; // Dealer call
+                            cdr.callchips("dealer");
+                            cdr.updateInfo();
+                        }, (Math.floor(Math.random() * 3000) + 1000));
+                    }
+
+                },
+                dealCard: function(card, delay = 0, nosound = false) {
+                    var card = $$(card);
+
+                    setTimeout(function() {
+                        if (!nosound) {
+                            var csound = new Audio("sound/cardSlide" + (cdr.rand(6, 1)) + ".mp3");
+                            csound.play();
+                        }
+                        card.classList.remove('undealt');
+                        setTimeout(function() {
+                            card.style.transform = "rotateY(0deg)";
+                        }, (delay * 200) + 600);
+                    }, delay * 200);
+                },
+                fold: function() {
+                    if (cdr.yawn) clearTimeout(cdr.yawn);
+                    cdr.yawn = setTimeout(function() {
+                        $$("dealerAvatar").src = "img/smiley-yawn.gif";
+                        cdr.yawn = setTimeout(function() {
+                            $$("dealerAvatar").src = "img/smiley-tired.gif";
+                        }, 30000);
+                    }, 30000);
+                    $$("dealerAvatar").src = ["img/smiley-indifferent.gif", "img/smiley-facepalm.gif", "img/smiley-sarcastic.gif", "img/smiley-suspicious.gif"][cdr.rand(4)];
+                    setTimeout(function() {
+                        $$("dealerAvatar").src = "img/smiley-smiling.gif";
+                    }, 10000);
+                    cdr.state.folded = 'player';
+
+                    $$("player-results").style.display = "none";
+                    $$("dealer-results").style.display = "none";
+                    $$("foldButton").classList.add("disabled");
+                    $$("foldButton").style.transform = "translateY(22vh)";
+
+                    $$("callButton").classList.add("disabled");
+                    $$("callButton").style.transform = "translateY(22vh)";
+                    for (var i = 0; i < cdr.chips.length; i++) {
+                        cdr.chips[i].style.top = "-25em";
+                        cdr.chips[i].style.left = "13em";
+                    }
+                    var s = new Audio("sound/uhoh.mp3");
+                    s.play();
+                    $$("result").innerHTML = "DEALER WINS";
+                    $$("fold-result").innerHTML = "<h1>PLAYER FOLDS</h1><h2>DEALER TAKES $" + cdr.state.pot + "</h2>";
+                    $$("fold-result").style.display = "inline-block";
+                    $$("results").style.display = "inline-block";
+                    $$("results").style.transform = "scale(1)";
+                    for (var i = 0; i < cdr.chips.length; i++) {
+                        cdr.chips[i].style.top = "-25em";
+                        cdr.chips[i].style.left = "13em";
+                    }
+
+                },
+                foldDealer: function() {
+                    if (cdr.yawn) clearTimeout(cdr.yawn);
+                    cdr.yawn = setTimeout(function() {
+                        $$("dealerAvatar").src = "img/smiley-yawn.gif";
+                    }, 30000);
+                    $$("dealerAvatar").src = ["img/smiley-indifferent.gif", "img/smiley-facepalm.gif", "img/smiley-sarcastic.gif", "img/smiley-sad.gif"][cdr.rand(4)];
+                    setTimeout(function() {
+                        $$("dealerAvatar").src = "img/smiley-smiling.gif";
+                    }, 10000);
+                    $$("player-results").style.display = "none";
+                    $$("dealer-results").style.display = "none";
+                    $$("foldButton").classList.add("disabled");
+                    $$("foldButton").style.transform = "translateY(22vh)";
+
+                    $$("callButton").classList.add("disabled");
+                    $$("callButton").style.transform = "translateY(22vh)";
+                    cdr.player.credits += cdr.state.pot;
+                    cdr.updateInfo();
+
+                    for (var i = 0; i < cdr.chips.length; i++) {
+                        cdr.chips[i].style.top = "30em";
+                        cdr.chips[i].style.left = "13em";
+                    }
+                    $$("result").innerHTML = "PLAYER WINS!";
+                    $$("fold-result").innerHTML = "<h1>DEALER FOLDS</h1><h2>YOU WON <span class='winthrob'>$" + cdr.state.pot + "!</span></h2>";
+                    $$("fold-result").style.display = "inline-block";
+                    $$("results").style.transform = "scale(0)";
+                    $$("results").style.display = "inline-block";
+                    setTimeout(function() {
+                        $$("dealer").classList.remove('hidden');
+                    }, 1000);
+                    setTimeout(function() {
+                        $$("results").style.transform = "scale(1)";
+                    }, 2000);
+                    cdr.state.folded = 'dealer';
+
+                    setTimeout(function() {
+                        for (var i = 0; i < cdr.chips.length; i++) {
+                            cdr.chips[i].style.top = "30em";
+                            cdr.chips[i].style.left = "3em";
+                        }
+                    }, 1000);
+                },
+                reckoning: function() {
+                    cdr.state.pot += cdr.state.bet; // Player final call
+                    cdr.player.credits -= cdr.state.bet;
+                    cdr.state.pot += cdr.state.bet; // Dealer final call
+                    cdr.updateInfo();
+                    $$("foldButton").classList.add("disabled");
+                    $$("foldButton").style.transform = "translateY(22vh)";
+
+                    $$("callButton").classList.add("disabled");
+                    $$("callButton").style.transform = "translateY(22vh)";
+
+                    cdr.player.credits -= cdr.state.bet;
+                    cdr.state.pot += cdr.state.bet; // Dealer call
+                    cdr.updateInfo();
+
+                    $$("dealer").classList.remove("hidden");
+
+                    var player = cdr.cards.player.concat(cdr.cards.river);
+                    var dealer = cdr.cards.dealer.concat(cdr.cards.river);
+
+                    var presult = cdr.solveHand(player);
+                    var dresult = cdr.solveHand(dealer);
+
+                    var phand = presult.constructor.name;
+                    var dhand = dresult.constructor.name;
+
+                    var winner = Hand.winners([presult, dresult]);
+                    console.log("winners");
+                    console.dir(winner);
+
+                    if (cdr.yawn) clearTimeout(cdr.yawn);
+                    cdr.yawn = setTimeout(function() {
+                        $$("dealerAvatar").src = "img/smiley-yawn.gif";
+                    }, 30000);
+
+                    $$("player-results").style.display = "inline-block";
+                    $$("dealer-results").style.display = "inline-block";
+                    $$("fold-result").style.display = "none";
+                    $$("main").classList.add('gameover');
+
+                    if (winner.length === 2) {
+                        $$("dealerAvatar").src = "img/smiley-indifferent.gif";
+                        $$("result").innerHTML = "TIE GAME";
+                        cdr.player.credits += cdr.state.pot / 2;
+                        cdr.updateInfo();
+                        for (var i = 0; i < cdr.chips.length / 2; i++) {
+                            cdr.chips[i].style.top = "-25em";
+                            cdr.chips[i].style.left = "13em";
+                        }
+                        for (var i = cdr.chips.length / 2; i < cdr.chips.length; i++) {
+                            if (cdr.chips[i]) {
+                                cdr.chips[i].style.top = "30em";
+                                cdr.chips[i].style.left = "-1em";
+                            }
+                        }
+                        var s = new Audio("sound/boopboopboop.mp3");
+                        s.play();
+                    } else if (winner[0] === presult) {
+                        $$("dealerAvatar").src = ["img/smiley-indifferent.gif", "img/smiley-facepalm.gif", "img/smiley-sarcastic.gif", "img/smiley-sad.gif"][cdr.rand(4)];
+                        $$("result").innerHTML = "YOU WON $" + cdr.state.pot + "!";
+                        cdr.player.credits += cdr.state.pot;
+                        cdr.updateInfo();
+                        cdr.winChips('player');
+                        var s = new Audio("sound/boopboop.mp3");
+                        s.play();
+                    } else {
+                        $$("dealerAvatar").src = "img/smiley-happy.gif";
+                        $$("result").innerHTML = "DEALER WINS";
+                        cdr.winChips('dealer');
+                        var s = new Audio("sound/uhoh.mp3");
+                        s.play();
+                    }
+                    setTimeout(function() {
+                        cdr.chips = [];
+                        $$("pot").innerHTML = "";
+                    }, 4000);
+                    setTimeout(function() {
+                        $$("dealerAvatar").src = "img/smiley-smiling.gif";
+                    }, 10000);
+
+                    $$("dealer-hand").innerHTML = dresult.descr;
+                    $$("player-hand").innerHTML = presult.descr;
+
+                    var pcards = presult.cards;
+                    var dcards = dresult.cards;
+
+                    var xlate = {
+                        "T": 10,
+                        "J": 11,
+                        "Q": 12,
+                        "K": 13,
+                        "A": 1
+                    };
+
+                    for (var i = 0; i < presult.cards.length; i++) {
+                        var val = (xlate[presult.cards[i].value]) ? xlate[presult.cards[i].value] : presult.cards[i].value;
+                        $("#player-result-card" + i + " .card").className = "card card" + val + presult.cards[i].suit.toUpperCase() + " suit" + presult.cards[i].suit.toUpperCase() + " " + ((val > 10) ? "face" : "");
+                    }
+
+                    for (var i = 0; i < dresult.cards.length; i++) {
+                        var val = (xlate[dresult.cards[i].value]) ? xlate[dresult.cards[i].value] : dresult.cards[i].value;
+                        $("#dealer-result-card" + i + " .card").className = "card card" + val + dresult.cards[i].suit.toUpperCase() + " suit" + dresult.cards[i].suit.toUpperCase() + " " + ((val > 10) ? "face" : "");
+                    }
+
+                    $$("fold-result").style.display = "none";
+                    $$("results").style.transform = "scale(0)";
+                    $$("results").style.display = "inline-block";
+                    setTimeout(function() {
+                        $$("results").style.transform = "scale(1)";
+                    }, 1000);
+                },
+                winChips: function(who = 'player') {
+                    var eltop = (who === 'player') ? "30em" : "-25em";
+                    var elleft = (who === 'player') ? "-1em" : "13em";
+
+                    for (var i = 0; i < cdr.chips.length; i++) {
+                        cdr.chips[i].style.top = eltop;
+                        cdr.chips[i].style.left = elleft;
+                    }
+                },
+                solveHand: function(cards) {
+                    var hand = [];
+
+                    for (var i = 0; i < cards.length; i++) {
+                        var card = cards[i].toLowerCase();
+                        var match = card.match(/(\d*)([cdsh])/i);
+                        var num = parseInt(match[1]);
+                        var suit = match[2];
+                        if ((num > 9) || (num == 1)) {
+                            switch (num) {
+                                case 1:
+                                    num = "A";
+                                    break;
+                                case 10:
+                                    num = "T";
+                                    break;
+                                case 11:
+                                    num = "J";
+                                    break;
+                                case 12:
+                                    num = "Q";
+                                    break;
+                                case 13:
+                                    num = "K";
+                                    break;
+                            }
+                        }
+                        hand.push(num + suit);
+                    }
+                    console.log("hand:");
+                    console.dir(hand);
+                    var result = Hand.solve(hand, "paigowpokerhi");
+                    // cdr.results = result.constructor.name;
+
+                    return result;
+                },
+                playAgain: function(autostart = false) {
+                    cdr.init();
+                    for (var i = 0; i < 5; i++) {
+                        $$("card" + i).style.transform = "";
+                        $$("card" + i).classList.add('undealt');
+
+                        if (i < 2) {
+                            $$("player-card" + i).classList.add('undealt');
+                            $$("dealer-card" + i).classList.add('undealt');
+                        }
+                    }
+                    $$("player").classList.add("hidden");
+                    $$("dealer").classList.add("hidden");
+                    $$("main").classList.remove('gameover');
+
+                    cdr.state.flopped = false;
+                    cdr.state.nextCard = 0;
+                    cdr.cards.dealer = [];
+                    cdr.cards.river = [];
+                    cdr.cards.player = [];
+                    cdr.state.pot = 0;
+                    cdr.updateInfo();
+                    cdr.chips = [];
+                    $$("pot").innerHTML = "";
+
+                    $$("foldButton").classList.add("disabled");
+                    $$("foldButton").style.transform = "translateY(22vh)";
+
+                    $$("callButton").classList.add("disabled");
+                    $$("callButton").style.transform = "translateY(22vh)";
+
+                    if (!autostart) {
+                        $$("betButton").classList.remove("disabled");
+                        $$("betButton").style.transform = "translateY(0em)";
+                        $$("chipscroll").style.transform = "translateY(0em)";
+                    }
+                    $$("results").style.transform = 'scale(0)';
+                    $$("player-handinfo").innerHTML = "";
+
+                    if (autostart) setTimeout(function() {
+                        cdr.bet();
+                    }, 2000);
+                }
+            };
+            cdr.init();
+        })();
+
+        function $(str) {
+            return document.querySelector(str);
+        }
+
+        function $$(str) {
+            return document.getElementById(str);
+        }
+
+        function $$$(str) {
+            return document.querySelectorAll(str);
+        }
+
+        function el(tag, id, classname, content, attr) {
+            var el = document.createElement(tag);
+            if (id) el.id = id;
+            if (classname) el.className = classname;
+            if (content) el.innerHTML = content;
+
+            if (attr && typeof attr === "object") {
+                for (var i in attr) {
+                    if (attr.hasOwnProperty(i)) {
+                        el[i] = attr[i];
+                    }
+                }
             }
-            var s = new Audio("sound/uhoh.mp3");
-            s.play();
-            $$("result").innerHTML = "DEALER WINS";
-            $$("fold-result").innerHTML = "<h1>PLAYER FOLDS</h1><h2>DEALER TAKES $"+cdr.state.pot+"</h2>";
-            $$("fold-result").style.display = "inline-block";
-            $$("results").style.display = "inline-block";
-            $$("results").style.transform = "scale(1)";
-            for (var i=0; i<cdr.chips.length; i++) {
-                cdr.chips[i].style.top = "-25em";
-                cdr.chips[i].style.left = "13em";
-            }
-         
-        },
-        foldDealer: function() {
-            if (cdr.yawn) clearTimeout(cdr.yawn);
-            cdr.yawn = setTimeout(function() { $$("dealerAvatar").src = "img/smiley-yawn.gif"; }, 30000);
-            $$("dealerAvatar").src = ["img/smiley-indifferent.gif", "img/smiley-facepalm.gif", "img/smiley-sarcastic.gif", "img/smiley-sad.gif" ][cdr.rand(4)] ;
-            setTimeout(function() { $$("dealerAvatar").src = "img/smiley-smiling.gif"; }, 10000);
-            $$("player-results").style.display = "none";
-            $$("dealer-results").style.display = "none";
-            $$("foldButton").classList.add("disabled");
-            $$("foldButton").style.transform = "translateY(22vh)";
-
-            $$("callButton").classList.add("disabled");
-            $$("callButton").style.transform = "translateY(22vh)";
-             cdr.player.credits += cdr.state.pot;
-            cdr.updateInfo();
-
-            for (var i=0; i<cdr.chips.length; i++) {
-                cdr.chips[i].style.top = "30em";
-                cdr.chips[i].style.left = "13em";
-            }
-            $$("result").innerHTML = "PLAYER WINS!";
-            $$("fold-result").innerHTML = "<h1>DEALER FOLDS</h1><h2>YOU WON <span class='winthrob'>$"+cdr.state.pot+"!</span></h2>";
-            $$("fold-result").style.display = "inline-block";
-            $$("results").style.transform = "scale(0)";
-            $$("results").style.display = "inline-block";
-            setTimeout(function() { $$("dealer").classList.remove('hidden'); }, 1000);
-            setTimeout(function() { $$("results").style.transform = "scale(1)";}, 2000);
-            cdr.state.folded = 'dealer';
-
-            setTimeout(function() {
-                for (var i=0; i<cdr.chips.length; i++) {
-                    cdr.chips[i].style.top = "30em";
-                    cdr.chips[i].style.left = "3em";
-                }
-            }, 1000);
-        },
-        reckoning: function() {
-            cdr.state.pot += cdr.state.bet; // Player final call
-            cdr.player.credits -= cdr.state.bet;
-            cdr.state.pot += cdr.state.bet; // Dealer final call
-            cdr.updateInfo();
-            $$("foldButton").classList.add("disabled");
-            $$("foldButton").style.transform = "translateY(22vh)";
-
-            $$("callButton").classList.add("disabled");
-            $$("callButton").style.transform = "translateY(22vh)";
-            
-            cdr.player.credits -= cdr.state.bet;
-            cdr.state.pot += cdr.state.bet; // Dealer call
-            cdr.updateInfo();
-            
-            $$("dealer").classList.remove("hidden");
-            
-            var player = cdr.cards.player.concat(cdr.cards.river);
-            var dealer = cdr.cards.dealer.concat(cdr.cards.river);
-            
-            var presult = cdr.solveHand(player);
-            var dresult = cdr.solveHand(dealer);
-            
-            var phand = presult.constructor.name;
-            var dhand = dresult.constructor.name;
-
-            var winner = Hand.winners([presult, dresult]);
-            console.log("winners");
-            console.dir(winner);
-
-            if (cdr.yawn) clearTimeout(cdr.yawn);
-            cdr.yawn = setTimeout(function() { $$("dealerAvatar").src = "img/smiley-yawn.gif"; }, 30000);
-            
-            $$("player-results").style.display = "inline-block";
-            $$("dealer-results").style.display = "inline-block";
-            $$("fold-result").style.display = "none";
-            $$("main").classList.add('gameover');
-
-            if (winner.length === 2) {
-                $$("dealerAvatar").src = "img/smiley-indifferent.gif";
-                $$("result").innerHTML = "TIE GAME";
-                cdr.player.credits += cdr.state.pot / 2;
-                cdr.updateInfo();
-                for (var i=0; i<cdr.chips.length/2; i++) {
-                    cdr.chips[i].style.top = "-25em";
-                    cdr.chips[i].style.left = "13em";
-                }
-                for (var i=cdr.chips.length/2; i<cdr.chips.length; i++) {
-                    if (cdr.chips[i]) {
-							cdr.chips[i].style.top = "30em";
-							cdr.chips[i].style.left = "-1em";
-						  }
-                }
-                var s = new Audio("sound/boopboopboop.mp3");
-                s.play();
-             } else if (winner[0] === presult) {
-				 	 $$("dealerAvatar").src = ["img/smiley-indifferent.gif", "img/smiley-facepalm.gif", "img/smiley-sarcastic.gif", "img/smiley-sad.gif" ][cdr.rand(4)] ;
-                $$("result").innerHTML = "YOU WON $" + cdr.state.pot + "!";
-                cdr.player.credits += cdr.state.pot;
-                cdr.updateInfo();
-                cdr.winChips('player');
-                var s = new Audio("sound/boopboop.mp3");
-                s.play();
+            return el;
+        }
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var photoURL = user.photoURL;
+                var isAnonymous = user.isAnonymous;
+                var uid = user.uid;
+                var providerData = user.providerData;
+                firebase.database().ref("bank/" + uid + "/balance").on("value", function(snapshot) {
+                    var balance = snapshot.val();
+                    cdr.player.credits = balance;
+                    $$("credits").innerHTML = balance;
+                });
             } else {
-                $$("dealerAvatar").src = "img/smiley-happy.gif";
-                $$("result").innerHTML = "DEALER WINS";
-                cdr.winChips('dealer');
-                var s = new Audio("sound/uhoh.mp3");
-                s.play();
+                // User is signed out.
+                // ...
+                $$("loginButton").innerHTML = "LOGIN";
             }
-            setTimeout(function() { cdr.chips = []; $$("pot").innerHTML = ""; }, 4000);
-            setTimeout(function() { $$("dealerAvatar").src = "img/smiley-smiling.gif"; }, 10000);
-
-            $$("dealer-hand").innerHTML = dresult.descr;
-            $$("player-hand").innerHTML = presult.descr;
-            
-            var pcards = presult.cards;
-            var dcards = dresult.cards;
-            
-            var xlate = { "T":10, "J":11, "Q":12, "K":13, "A":1 };
-
-            for (var i=0; i < presult.cards.length; i++) {
-               var val = (xlate[presult.cards[i].value]) ? xlate[presult.cards[i].value] : presult.cards[i].value;
-               $("#player-result-card" + i + " .card").className = "card card" + val + presult.cards[i].suit.toUpperCase() + " suit" + presult.cards[i].suit.toUpperCase() + " " + ((val > 10) ? "face" : "");
-            }
-            
-            for (var i=0; i < dresult.cards.length; i++) {
-               var val = (xlate[dresult.cards[i].value]) ? xlate[dresult.cards[i].value] : dresult.cards[i].value;
-               $("#dealer-result-card" + i + " .card").className = "card card" + val + dresult.cards[i].suit.toUpperCase() + " suit" + dresult.cards[i].suit.toUpperCase() + " " + ((val > 10) ? "face" : "");
-            }
-            
-            $$("fold-result").style.display = "none";
-            $$("results").style.transform = "scale(0)";
-            $$("results").style.display = "inline-block";
-            setTimeout(function() { $$("results").style.transform = "scale(1)"; }, 1000);
-        },
-        winChips: function(who='player') {
-            var eltop = (who==='player') ? "30em" : "-25em";
-            var elleft = (who==='player') ? "-1em" : "13em";
-
-            for (var i=0; i<cdr.chips.length; i++) {
-                cdr.chips[i].style.top = eltop;
-                cdr.chips[i].style.left = elleft;
-            }
-        },
-        solveHand: function(cards) {
-         var hand = [];
-         
-         for (var i=0; i<cards.length; i++) {
-            var card = cards[i].toLowerCase();
-            var match = card.match(/(\d*)([cdsh])/i);
-            var num = parseInt(match[1]);
-            var suit = match[2];
-            if ((num > 9) || (num==1)) {
-               switch (num) {
-                  case 1:
-                     num = "A";
-                     break;
-                  case 10:
-                     num = "T";
-                     break;
-                  case 11:
-                     num = "J";
-                     break;
-                  case 12:
-                     num = "Q";
-                     break;
-                  case 13:
-                     num = "K";
-                     break;
-               }
-            }
-            hand.push(num + suit);
-         }
-         console.log("hand:");
-         console.dir(hand);
-         var result = Hand.solve(hand, "paigowpokerhi");
-         // cdr.results = result.constructor.name;
-
-         return result;
-      },
-      playAgain: function(autostart=false) {
-        cdr.init();
-        for (var i=0; i < 5; i++) {
-            $$("card"+i).style.transform = "";
-            $$("card"+i).classList.add('undealt');
-
-				if (i < 2) { 
-					$$("player-card"+i).classList.add('undealt');
-					$$("dealer-card"+i).classList.add('undealt');
-				}
-        }
-        $$("player").classList.add("hidden");
-        $$("dealer").classList.add("hidden");
-        $$("main").classList.remove('gameover');
-        
-        cdr.state.flopped = false;
-        cdr.state.nextCard = 0;
-        cdr.cards.dealer = [];
-        cdr.cards.river = [];
-        cdr.cards.player = [];
-        cdr.state.pot = 0;
-        cdr.updateInfo();
-        cdr.chips = []; $$("pot").innerHTML = "";  
-
-        $$("foldButton").classList.add("disabled");
-        $$("foldButton").style.transform = "translateY(22vh)";
-
-        $$("callButton").classList.add("disabled");
-        $$("callButton").style.transform = "translateY(22vh)";
-        
-		  if (!autostart) {
-			  $$("betButton").classList.remove("disabled");
-			  $$("betButton").style.transform = "translateY(0em)";
-			  $$("chipscroll").style.transform = "translateY(0em)";
-        } 
-        $$("results").style.transform = 'scale(0)';
-		  $$("player-handinfo").innerHTML = "";
-
-		  if (autostart) setTimeout(function() { cdr.bet(); }, 2000);
-      }
-    };
-    cdr.init();
-})();
-function $(str) { return document.querySelector(str); }
-function $$(str) { return document.getElementById(str); }
-function $$$(str) { return document.querySelectorAll(str); }
-function el(tag, id, classname, content, attr) {
-    var el = document.createElement(tag);
-    if (id) el.id = id;
-    if (classname) el.className = classname;
-    if (content) el.innerHTML = content;
-    
-    if (attr && typeof attr === "object") {
-        for (var i in attr) {
-            if (attr.hasOwnProperty(i)) {
-                el[i] = attr[i];
-            }
-        }
-    }
-    return el;
-}
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    // User is signed in.
-    var displayName = user.displayName;
-    var email = user.email;
-    var emailVerified = user.emailVerified;
-    var photoURL = user.photoURL;
-    var isAnonymous = user.isAnonymous;
-    var uid = user.uid;
-    var providerData = user.providerData;
-    firebase.database().ref("bank/"+uid+"/balance").on("value", function(snapshot) {
-		  var balance = snapshot.val();
-		  cdr.player.credits = balance;
-		  $$("credits").innerHTML = balance;
-  	 });
-  } else {
-    // User is signed out.
-    // ...
-	 $$("loginButton").innerHTML = "LOGIN";
-  }
-});
-
-</script>
+        });
+    </script>
 </body>
+
 </html>

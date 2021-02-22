@@ -1,776 +1,1104 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-   <meta charset="utf-8">
-   <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=yes'>
-	<link rel='icon' href='favicon.png'>
-	<link rel='shortcut icon' href='favicon.png'>
-   <title>Video Poker</title>
-   <style>
-      body { background-color:#0032b4; color:#fff; font-family:"Helvetica Neue",Helvetica,sans-serif; font-size:1vw; }
-      #main { perspective:1000px; position:absolute; top:0px; right:0px; bottom:0px; left:0px; text-align:center; }
-      #paytable { 
-         width:70vw;
-         color:#ffffff;
-         border: 4px outset #0df;
-         margin:.5em auto 0px 20vw;
-         background-color:#142850;
-         border-collapse:collapse;
-         line-height:1em;
-         font-weight: 700; font-size:130%;text-transform: uppercase;  
-      }
-		#gameName {
-			display: inline-block;
-			color:#f00;
-			-webkit-text-stroke: 3px #ff0;
-			width: 20vw;
-			position: absolute;
-			left: 0vw;
-			top: 3vh;
-			font-size: 4vw;
-			text-transform: uppercase;
-			text-align: center;
-			text-shadow: 2px 2px 0px rgba(0,0,0,.8);
-			font-family:"Titan One", cursive;
-		}
-      #paybet { background-color:#0af; color:#ff0;border-bottom: 2px solid #fff;  }
-      #paytable td#paybet1, #paytable td#paybet2,#paytable td#paybet3,#paytable td#paybet4,#paytable td#paybet5 { background-color:#0af; color:#ff0; text-align:center; border-bottom: 2px solid #fff; }
-      table#paytable .paybet { background-color:#c00; color:#ff0; }
-      #paytable td { text-align:left; border-left:3px solid #0af; white-space:nowrap; padding:.125em .25em .125em .25em;}
-      #paytable td.right { text-align:right; }
-      .paybet { background-color:#ff0; }
-      #toolbar { display:inline-block; position:absolute; left:0px; bottom:0px; right:0px; height:15%; text-align:center; background-color:rgba(0,0,0,.5); }
-      button { z-index:999; margin-top:1em; font-size:200%; color:#000; background-color:#cccc00; border:.25em outset #ffff00; width:7em; height 3em; text-transform:uppercase; height:3em; font-weight:bold;   position:relative; text-shadow: 2px 2px 1px rgba(255,255,255,.5);}
-      button.disabled { color: #cccc00; text-shadow: none; }
-      .right { text-align:right; }
-      .left { text-align:left; }
-      h2 { width:3.3vw; height:6.1vh; margin:0; padding:1.3vw 1.6vw 1.1vw 0.7vw; color:#fff; z-index:9999; border-radius:5vw; display:inline-block; border:0.6vw dashed #fff; font-size:3vw; top:-1vh; position:relative; letter-spacing:-4px; text-shadow:-1px -2px 0px #000; }
-      .status { display:inline-block; }
-      #bet { width:30%; color:#eee; position:absolute; left:2vw; height:8vh; font-size:4vw; top:5vh; text-align:left; }
-      #bet:before { content: "BET: "; }
-      #credit { width:40vw; color:#eef; position:absolute; right:2vw; height:8vh; font-size:4vw; top:5vh; text-align:right; }
-      #credit:before { content: "CREDITS: "; }
-      #win { width:33%; color:#eee; position:absolute; left:33%; height:9vh; top:5vh; font-size:4vw;  }
-		@keyframes bounce {
-			0% { transform: rotate(0deg) scale(1); }
-			10% { transform: rotate(-15deg) scale(1.5); }
-			20% { transform: rotate(15deg) scale(1); }
-			30% { transform: rotate(-10deg) scale(1.5); }
-			40% { transform: rotate(10deg) scale(1); }
-			50% { transform: rotate(-5deg) scale(1.5); }
-			60% { transform: rotate(5deg) scale(1); }
-			70% { transform: scale(1.5); }
-			80% { transform: scale(1); }
-			90% { transform: scale(1.5); }
-			100% { transform: scale(1); }
-		}
-		#result { 
-			transition: all 1000ms cubic-bezier(.25, .99, .71, 1.23);
-			position:relative;
-			width:81vw;
-			background-color: rgba(174,84,231,1);
-			color: #fff;
-			border: .25vw solid rgba(107,36,154,1);
-			border-bottom-left-radius: 1vw;
-			border-bottom-right-radius: 1vw;
-			font-weight: bold;
-			top:-7vh;
-			height:8.5vh;
-			transform:scaleY(0);
-			box-shadow: 0 -0.25vh 0.25vw rgba(0,0,0,.4);
-			text-shadow: 2px 2px 2px #000;
-			z-index: 99999;
-			margin:0 auto;
-			font-size:4vw;
-		}
-		#cards { position:relative; }
-      #won {
-         position: absolute;
-         display: inline-block;
-         top: 49%;
-         left: 31%;
-         font-size: 6em;
-         color: #ff0;
-         text-shadow: 2px 2px 0px #000;
-         font-weight: bold;
-         background-color: rgba(0,0,0,.5);
-         padding: 0 1em;
-         border-radius: 1em;
-			transform:scale(0);
-			animation: bounce 3s 2;
-      }
-      table#paytable tr.winner { background-color:#00d8ff; color:#000;}
-      td.winner { background-color:#fff; transform:scale(1); text-align:center; animation: throb 2s; }
-      #results { margin-top:-2em; display:none;}
-      .status { height: 10vh; position: absolute; font-weight: bold; bottom:18vh; text-shadow: 2px 2px 1px rgba(0,0,0,.5); left: 0px; width:100%; }
-      @keyframes throb {
-         0% { transform: scale(2); }
-        20% { transform: scale(1); }
-        40% { transform: scale(2); }
-        60% { transform: scale(1); }
-        80% { transform: scale(2); }
-        100% { transform: scale(1); }
-      }
-      th { border-bottom:3px solid #0df; border-right:3px solid #0df;  }
-   </style>
-   <link rel='manifest' href='manifest.json'>
-   <link rel='stylesheet' type='text/css' href='poker.css'>
-   <script src="pokersolver.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
-	<script>
-	  // Initialize Firebase
-	  var config = {
-		 apiKey: "AIzaSyDxGzBuvFA2qrOZZPBdTmIjsXAgWpcrmcs",
-		 authDomain: "crblackjack-9e220.firebaseapp.com",
-		 databaseURL: "https://crblackjack-9e220.firebaseio.com",
-		 projectId: "crblackjack-9e220",
-		 storageBucket: "crblackjack-9e220.appspot.com",
-		 messagingSenderId: "32143422101"
-	  };
-	  firebase.initializeApp(config);
-	</script>
-
-</head>
-<body>
-<div id='main'>
-	<div id='gameName'>
-		Video<br>
-		Poker
-	</div>
-   <table id='paytable'>
-      <colgroup>
-         <col>
-         <col id='bet1pay'>
-         <col id='bet2pay'>
-         <col id='bet3pay'>
-         <col id='bet4pay'>
-         <col id='bet5pay'>
-      </colgroup>
-   </table>
-   <div id='holds'>
-      <div id='card0-hold' class='hold'>HOLD</div>
-      <div id='card1-hold' class='hold'>HOLD</div>
-      <div id='card2-hold' class='hold'>HOLD</div>
-      <div id='card3-hold' class='hold'>HOLD</div>
-      <div id='card4-hold' class='hold'>HOLD</div>
-   </div>
-   <div id='cards'>
-      <div id='card0' class='cardwrap'><div class='card card1H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card1' class='cardwrap'><div class='card card13H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card2' class='cardwrap'><div class='card card12H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card3' class='cardwrap'><div class='card card11H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-      <div id='card4' class='cardwrap'><div class='card card10H'><figure class='pic'>&nbsp;</figure></div><div class='cardback'><figure class='pic'>&nbsp;</figure></div></div>
-		<div id='result' class='result'></div>
-   </div>
-   <div id='status' class='status'>
-      <div id='bet'>0</div>
-      <div id='win'></div>
-      <div id='credit'></div>
-   </div>
-   <div id='won'></div>
-   <div id='gameover'>PLAY 5 CREDITS</div>
-   <div id='toolbar'>
-      <span class='left'>
-         <button onclick='window.close()' id='backButton'>Back...</button>
-         <button onclick='cdr.login()' id='loginButton'>Login</button>
-         <button onclick='cdr.betone()' id='betOne'>Bet 1</button>
-      </span>
-      <h2 id='denom'>$1</h2>
-      <span class='right'>
-         <button onclick='cdr.betmax()' id='betMax'>Bet 5</button>
-         <button id='drawButton' onclick='cdr.draw()' disabled='true' class='disabled'>Draw</button>
-         <button id='dealButton' onclick='cdr.deal()' disabled='true' class='disabled'>Deal</button>
-      </span>
-   </div>
-</div>
-<script>
-(function() {
-   window.cdr = {
-      game: {
-			type: "poker",
-			chipColors: ["#dd0", "#0c0", "#c00", "#c0c", "#000", "#0be", "#fa0", "#999", "#0a6", "#69a", "#333", "#000"],
-			creditValues: [ 1, 2, 5, 10, 25, 100, 250, 500, 1000, 2000, 5000, 10000 ],
-			creditValueIdx:0,
-			creditValue:1,
-         cards: [],
-         discards: {},
-         holds: {},
-         bet: 0,
-         credit: 1000,
-			uid:""
-      },
-      paytable: {
-         "RoyalFlush": { hand: 'Royal Flush', win: [ 250, 500, 750, 1000, 4000]},
-         "StraightFlush": { hand: 'Straight Flush', win: [ 50, 100, 150, 200, 250]},
-         "FourOfAKind": { hand: 'Four of a Kind', win: [ 25, 50, 75, 100, 125]},
-         "FullHouse": { hand: 'Full House', win: [ 9, 18, 27, 36, 45]},
-         "Flush": { hand: 'Flush', win: [ 6, 12, 18, 24, 30]},
-         "Straight": { hand: 'Straight', win: [ 4, 8, 12, 16, 20]},
-         "ThreeOfAKind": { hand: 'Three of a Kind', win: [ 3, 6, 9, 12, 15]},
-         "TwoPair": { hand: 'Two Pair', win: [ 2, 4, 6, 8, 10]},
-         "OnePair": { hand: 'Jacks or Better', win: [ 1, 2, 3, 4, 5]}
-      },
-      addListener: function(i) {
-         $$("card" + i).addEventListener("click", function(e) { cdr.toggleCard("card" + i, 0); });
-
-      },
-      betone: function() {
-         if (cdr.game.bet > 0) $(".paybet").classList.remove('paybet');
-         cdr.game.bet++;
-         
-         if (cdr.game.bet > 5) { 
-            cdr.game.bet = 0;
-         }
-			$$("dealButton").removeAttribute("disabled");
-			$$("dealButton").classList.remove("disabled");
-         if (cdr.game.bet > 0) {
-				$$("dealButton").removeAttribute("disabled");
-				$$("dealButton").classList.remove("disabled");
-            $$("paytable").className = "paybet" + cdr.game.bet;
-				if ($(".paybet")) $(".paybet").classList.remove('paybet');
-            $$("bet"+cdr.game.bet+"pay").classList.add('paybet');
-         }
-         $$("bet").innerHTML = cdr.game.bet;
-      },
-      betmax: function() {
-         cdr.game.bet = 5;
-         if (cdr.game.bet > 0) {
-				$$("dealButton").removeAttribute("disabled");
-				$$("dealButton").classList.remove("disabled");
-            $$("paytable").className = "paybet" + cdr.game.bet;
-				if ($(".paybet")) $(".paybet").classList.remove('paybet');
-            $$("bet"+cdr.game.bet+"pay").classList.add('paybet');
-         }
-         $$("bet").innerHTML = cdr.game.bet;
-         cdr.deal();
-      },
-      init: function() {
-			if (document.location.hash) {
-				cdr.game.type = document.location.hash.replace(/^#/, '');
-				if (cdr.game.type==="dueces") {
-					$$("main").classList.add('wilds');
-				}
-			}
-         cdr.genPaytable();
-         var cards = cdr.newDeck();
-         
-         for (var i=0; i<5; i++) {
-            cdr.addListener(i);
-         }
-		   
-			var savedJS = localStorage.getItem("settings");
-			if (savedJS) {
-				cdr.settings = JSON.parse(savedJS);
-
-				for (var i in cdr.settings) {
-					if (cdr.settings.hasOwnProperty(i)) {
-						cdr.game[i] = cdr.settings[i];
-					}
-				}
-			}
-			cdr.updateChip();
-			$$("denom").addEventListener("click", function(e) {
-				cdr.game.creditValueIdx++;
-				if (cdr.game.creditValueIdx > cdr.game.creditValues.length - 1) cdr.game.creditValueIdx = 0;
-				if (cdr.game.balance / cdr.game.creditValues[cdr.game.creditValueIdx] < 1) cdr.game.creditValueIdx = 0;
-
-				cdr.game.creditValue = cdr.game.creditValues[cdr.game.creditValueIdx];
-				cdr.updateChip();
-				cdr.updateCredits();
-				localStorage.setItem("settings", JSON.stringify({"creditValue":cdr.game.creditValue, "creditValueIdx":cdr.game.creditValueIdx}));
-			});
-      },
-		updateChip: function() {
-			$$("denom").className = "chip" + cdr.game.creditValue;
-			$$("denom").style.backgroundColor = cdr.game.chipColors[cdr.game.creditValueIdx];
-			var show = (cdr.game.creditValue>999) ? (cdr.game.creditValue / 1000) + "K" : cdr.game.creditValue;
-			$$("denom").innerHTML = "$" + show;
-		},
-		updateCredits: function() {
-			var uid = cdr.game.uid;
-			 firebase.database().ref("bank/"+uid+"/balance").on("value", function(snapshot) {
-				  var balance = snapshot.val();
-				  cdr.game.balance = balance;
-				  cdr.game.credit = Math.floor(balance / cdr.game.creditValue);
-				  var showCredit = cdr.game.credit;
-				  if (showCredit > 1000000000) {
-						showCredit = Math.floor(showCredit / 1000000) / 100 + "B";
-				  } else if (showCredit > 1000000) {
-						showCredit = Math.floor(showCredit / 1000) / 100 + "M";
-				  } else if (showCredit > 1000) {
-						showCredit = Math.floor(showCredit / 100) / 10 + "K";
-				  }
-				  $$("credit").innerHTML = showCredit;
-
-				  if ((cdr.game.credit < 1) || cdr.game.active) {
-					  $$("betOne").setAttribute("disabled",true);
-					  $$("betOne").classList.add('disabled');
-					  
-					  $$("betMax").setAttribute("disabled",true);
-					  $$("betMax").classList.add('disabled');
-				  } else if (cdr.game.credit < 5) {
-					  $$("betOne").removeAttribute("disabled");
-					  $$("betOne").classList.remove('disabled');
-					  
-					  $$("betMax").setAttribute("disabled",true);
-					  $$("betMax").classList.add('disabled');
-				  } else {
-					  $$("betOne").removeAttribute("disabled");
-					  $$("betOne").classList.remove('disabled');
-
-					  $$("betMax").removeAttribute("disabled");
-					  $$("betMax").classList.remove('disabled');
-				  }
-			 });
-		},
-      toggleCard: function(card, delay) {
-         // setTimeout(function() { $$(card).classList.toggle('flipped'); }, delay * 100);
-         var current = $$(card + '-hold').style.visibility;
-         if (current==="hidden") {
-            $$(card + '-hold').style.visibility = "";
-            cdr.game.holds[card] = true;
-         } else {
-            $$(card + '-hold').style.visibility = "hidden";
-            delete cdr.game.holds[card];
-         }
-         // if (cdr.game.discards[card]) { delete cdr.game.discards[card]; } else { cdr.game.discards[card] = true; }
-      },
-      hideCard: function(card, delay) {
-         setTimeout(function() { $$(card).classList.add('flipped'); setTimeout(function() { $("#"+card+" .card").style.visibility='hidden';}, 200); }, delay * 50);
-      },
-      showCard: function(card, delay, wait=500) {
-         setTimeout(function() { $("#"+card+" .card").style.visibility='visible'; $$(card).classList.remove('flipped'); }, (delay * 50) + wait);
-      },
-      setCard: function(i, draw, delay) {
-            setTimeout(function() { $("#card" + i + " .card").className = 'card card' + draw; }, (delay * 200));
-      },
-      clearHolds: function() {
-         for (var i=0; i<5; i++) {
-            $$("card"+i+"-hold").style.visibility = "hidden";
-         }
-         cdr.game.holds = [];
-      },
-      newCard: function(card, newcard, delay) {
-         var match = card.match(/card(\d)/);
-         cdr.game.cards[match[1]] = newcard;
-         
-         setTimeout(function() {
-            $("#" + card + " .card").className = "card card" + newcard;
-         }, delay * 100);
-
-      },
-      draw: function() {
-         var cnt = 0;
-			var needcards = [];
-			$$("drawButton").setAttribute("disabled", true);
-			$$("drawButton").classList.add('disabled');
-         for (var i=0; i<5; i++) {
-            if (!cdr.game.holds["card"+i]) {
-					cdr.hideCard('card' + i, cnt);
-					cnt++;
-               cdr.game.discards["card"+i] = true;
-					needcards.push(i);
-            }
-         }
-         var scr = document.createElement('script');
-			scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/exchangeCards?game="+cdr.game.type+"&callback=cdr.newCards&uid=" + firebase.auth().currentUser.uid + "&discard=" + needcards.join(',');
-			document.body.appendChild(scr);
-		},
-		newCards: function(cards) {
-			setTimeout(function() { cdr.realNewCards(cards); }, 500);	
-		},
-		realNewCards: function(cards) {
-			console.log("cards: "+JSON.stringify(cards));
-			console.dir(cards);
-		   var cnt = 0;
-			cdr.game.results = cards;
-			
-			var c = cards.hands[0];
-
-			for (var j=0; j < c.length; j++) {
-				if ($$("card"+j).classList.contains('flipped')) {
-					$("#card"+j+" .card").className = "card card" + c[j];
-					cdr.showCard("card"+j, cnt, 0);
-					cnt++;
-				}
-			}
-			if (cards.results[0]) {
-				$$("result").style.transform = "scaleY(1)";
-				$$("win").innerHTML = 'WON ' + Math.floor(cards.wins[0] / cdr.game.creditValue);;
-				$$("result").innerHTML = cards.results[0].replace(/([a-z0-9])([A-Z0-9])/g, '$1 $2').replace(/([A-Z])([A-Z])/g, '$1 $2');
-				$$("won").style.display = "inline-block";
-				$$("won").innerHTML = "WON " + Math.floor(cards.wins[0] / cdr.game.creditValue).toString().replace(/(\d)(?=(\d{3})+$)/, "$1,");
-				cdr.gameoverTimeout = setTimeout(function() { $$("gameover").innerHTML = "GAME OVER"; $$("gameover").style.transform = "scale(1)"; }, 10000);
-            cdr.clearWinners(); 
-            $$(cards.results[0]).classList.add('winner');
-            $$(cards.results[0] + (cdr.game.bet - 1)).classList.add('winner');
-	         } else { 
-				cdr.gameoverTimeout = setTimeout(function() {
-					$$("gameover").innerHTML = "GAME OVER";
-					$$("gameover").style.transform = "scale(1)";
-				}, 2000);
-		   }
-			cdr.resetButtons();
-			cdr.game.active = false;
-		},
-		checkWin: function() {
-         var scr = document.createElement('script');
-			scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/checkHand?game="+cdr.game.type+"&callback=cdr.gotWin&uid=" + firebase.auth().currentUser.uid;
-			document.body.appendChild(scr); 
-		},
-		gotWin: function(hand, won) {
-         if (hand && won) {
-            var win = cdr.paytable[hand];
-            if (win) {
-               $$("win").innerHTML = win.hand;
-               $$("won").style.display = "inline-block";
-               $$("won").innerHTML = "WON " + win.win[cdr.game.bet - 1];
-               cdr.clearWinners(); 
-               $$(hand).classList.add('winner');
-               $$(hand + (cdr.game.bet - 1)).classList.add('winner');
-					cdr.gameoverTimeout = setTimeout(function() { $$("gameover").innerHTML = "GAME OVER"; $$("gameover").style.transform = "scale(1)"; }, 10000);
-            }
-         } else { 
-				$$("gameover").innerHTML = "GAME OVER";
-				$$("gameover").style.transform = "scale(1)";
-			}
-			cdr.resetButtons();
-			cdr.game.active = false;
-      },
-		resetButtons: function() {
-			$$("betOne").classList.remove('disabled');
-			$$("betOne").removeAttribute('disabled');
-			$$("betMax").classList.remove('disabled');
-			$$("betMax").removeAttribute('disabled');
-			if (cdr.game.bet) {
-				$$("dealButton").classList.remove('disabled');
-				$$("dealButton").removeAttribute('disabled');
-			} else {
-				$$("dealButton").classList.add('disabled');
-				$$("dealButton").setAttribute('disabled');
-			}
-			$$("drawButton").classList.add('disabled');
-			$$("drawButton").setAttribute('disabled', true);
-		},
-      clearWinners: function() {
-         var els = $$$('.winner');
-         for (var i=0; i<els.length; i++) {
-            els[i].classList.remove('winner');
-         }
-      },
-      deal: function() {
-         if (cdr.game.bet == 0) {
-            $$("gameover").innerHTML = "ADD CREDITS TO PLAY";
-            return false;
-         }
-			if (cdr.gameoverTimeout) {
-				clearTimeout(cdr.gameoverTimeout);
-				cdr.gameoverTimeout = 0;
-			}
-			$$("result").style.transform = "scaleY(0)";
-			$$("gameover").style.transform = "scale(0)";
-         //cdr.game.credit -= cdr.game.bet;
-			//$$("credit").innerHTML = cdr.game.credit;
-			
-			cdr.game.active = true;
-         cdr.clearHolds();
-			cdr.clearWinners();
-         $$("win").innerHTML = "";
-         $$("won").innerHTML = "";
-         $$("won").style.display = "none";
-         $$("dealButton").classList.add("disabled");
-         $$("dealButton").setAttribute("disabled", true);
-         $$("betOne").classList.add("disabled");
-         $$("betOne").setAttribute("disabled", true);
-         $$("betMax").classList.add("disabled");
-         $$("betMax").setAttribute("disabled", true);
-         $$("drawButton").classList.remove("disabled");
-         $$("drawButton").removeAttribute("disabled");
-         
-         cdr.game.cards = [];
-         cdr.game.discards = [];
-         cdr.newDeck();
-         
-			var func = document.createElement('script');
-			func.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/newGame?game="+cdr.game.type+"&callback=cdr.gotGame&uid=" + firebase.auth().currentUser.uid + "&bet=" + cdr.game.bet *  cdr.game.creditValue;
-			document.body.appendChild(func);
-		},
-		gotGame: function(cards) {
-         for (var i=0; i<5; i++) {
-            draw = cards[i];
-            cards.push(draw);
-            cdr.hideCard("card" + i, i);
-            cdr.setCard(i, draw, i);
-            cdr.showCard("card" + i, i + 1);
-         }
-         cdr.game.cards = cards;
-         cdr.game.active = true;
-         cdr.game.draws = 1;
-      },
-      solve: function() {
-         var hand = [];
-         
-         for (var i=0; i<cdr.game.cards.length; i++) {
-            var card = cdr.game.cards[i].toLowerCase();
-            var match = card.match(/(\d*)([cdsh])/i);
-            var num = parseInt(match[1]);
-            var suit = match[2];
-            if ((num > 9) || (num==1)) {
-               switch (num) {
-                  case 1:
-                     num = "A";
-                     break;
-                  case 10:
-                     num = "T";
-                     break;
-                  case 11:
-                     num = "J";
-                     break;
-                  case 12:
-                     num = "Q";
-                     break;
-                  case 13:
-                     num = "K";
-                     break;
-               }
-            }
-            hand.push(num + suit);
-         }
-         console.log("hand:");
-         console.dir(hand);
-         var result = Hand.solve(hand, "jacksbetter", true);
-         cdr.game.result = result.constructor.name;
-
-         console.dir(result);
-         return result;
-      },
-      solveHand: function(hand) {
-         var suits = [];
-         var cards = [];
-         var seen = {};
-         var suit = '';
-         var canFlush = 1;
-			var haveAce = 0;
-         for (var i=0; i<hand.length; i++) {
-            var match = hand[i].match(/^(\d+)([HDSC])/i);
-            if (match[1] && match[2]) {
-               if (suit === '') suit = match[2];
-               if (match[1] == 1) {
-						haveAce++;
-               }
-               if (suit && (suit !== match[2])) {
-                  canFlush = 0;
-               }
-               if (!seen[match[1]]) {
-                  seen[match[1]] = 1;
-               } else {
-                  seen[match[1]]++;
-               }
-               cards.push(parseInt(match[1]));
-               suits.push(match[2]);
-            }
-         }
-         var isFlush = canFlush;
-         cards = cards.sort(function(a, b) { return a - b; });
-         var lastCard, isStraight = true;
-         for (var i=0; i<cards.length - 1; i++) {
-            if (!lastCard) {
-               lastCard = parseInt(cards[i]);
-            } else if ((lastCard + 1) !== parseInt(cards[i])) {
-					if (isStraight!==false && (lastCard===1) && (cards[i]===10)) {
-                  isStraight = true;
-               } else {
-                  isStraight = false;
-               }
-            }
-            lastCard = parseInt(cards[i]);
-         }
-         var isPair = false;
-			var isTwoPair = false;
-         var isQualifiedPair = false;
-         var isThreeOfAKind = false;
-         var isFourOfAKind = false;
-
-         for (var i in seen) {
-            if (seen.hasOwnProperty(i)) {
-               if (seen[i] > 1) {
-                  switch (seen[i]) {
-                     case 2:
-                        if ((i > 10) || (i == 1)) {
-                           isQualifiedPair = true;
-                        }
-								if (isPair===true) isTwoPair = true;
-                        isPair = true;
-                        break;
-                     case 3:
-                        isThreeOfAKind = true;
-                        break;
-                     case 4:
-                        isFourOfAKind = true;
-                        break;
-                  }
-               }
-            }
-         }
-         if (isStraight && isFlush && (cards[0] === 10)) return "RoyalFlush"; 
-         if (isStraight && isFlush) return "StraightFlush";
-         if (isFourOfAKind) return "FourOfAKind";
-         if (isThreeOfAKind && isPair) return "FullHouse";
-         if (isFlush) return "Flush";
-         if (isStraight) return "Straight";
-         if (isThreeOfAKind) return "ThreeOfAKind";
-         if (isTwoPair) return "TwoPair";
-         if (isQualifiedPair) return "OnePair";
-
-         return false;
-      },
-      shuffle: function(array) {
-        var currentIndex = array.length, temporaryValue, randomIndex;
-
-        // While there remain elements to shuffle...
-        while (0 !== currentIndex) {
-
-          // Pick a remaining element...
-          randomIndex = Math.floor(Math.random() * currentIndex);
-          currentIndex -= 1;
-
-          // And swap it with the current element.
-          temporaryValue = array[currentIndex];
-          array[currentIndex] = array[randomIndex];
-          array[randomIndex] = temporaryValue;
+    <meta charset="utf-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=yes'>
+    <link rel='icon' href='favicon.png'>
+    <link rel='shortcut icon' href='favicon.png'>
+    <title>Video Poker</title>
+    <style>
+        body {
+            background-color: #0032b4;
+            color: #fff;
+            font-family: "Helvetica Neue", Helvetica, sans-serif;
+            font-size: 1vw;
         }
 
-        return array;
-      },
-      genPaytable: function() {
-			firebase.database().ref("payouts/"+cdr.game.type).once("value", function(snap) {
-				var pt = snap.val();
-				var hands = Object.keys(pt.hands);
-				var newpaytable = {};
-				var sortable = [];
-				$$("gameName").innerHTML = pt.name;
-				for (var i=0; i<hands.length; i++) {
-					var name = hands[i];
-					var displayName = name.replace(/([a-z0-9])([A-Z0-9])/g, "$1 $2").replace(/([A-Z0-9])([A-Z0-9])/g, "$1 $2");
-					sortable.push([name, pt.hands[name]]);
+        #main {
+            perspective: 1000px;
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            left: 0px;
+            text-align: center;
+        }
 
-					var pay = [];
-					for (var j=1; j<6; j++) {
-						pay.push(parseInt(pt.hands[name]) * j);
-					}
-					newpaytable[name] = { "hand": displayName, win: pay };
-				}
-				cdr.paytable = newpaytable;
-				sortable.sort(function(a, b) {
-					return b[1] - a[1];
-				});
-				cdr.paytable[sortable[0][0]].win[4] = parseInt(pt.jackpot);
-				console.dir(newpaytable);
-				console.log("New pay table: " + JSON.stringify(newpaytable));
-				var paytable = $('#paytable');
-				var keys = Object.keys(cdr.paytable);
-				var header = el('tr');
-				header.appendChild(el('td', 'paybet', '', '&#9660; Hand <span style="float:right;">Bet &#9654;</span>'));
-				for (var i=1; i < 6; i++) {
-					header.appendChild(el('td', 'paybet' + i, '', i));
-				}
-				paytable.appendChild(header);
+        #paytable {
+            width: 70vw;
+            color: #ffffff;
+            border: 4px outset #0df;
+            margin: .5em auto 0px 20vw;
+            background-color: #142850;
+            border-collapse: collapse;
+            line-height: 1em;
+            font-weight: 700;
+            font-size: 130%;
+            text-transform: uppercase;
+        }
 
-				for (var i=0; i<sortable.length; i++) {
-					var tr = el('tr');
-					tr.id = sortable[i][0];
-					var mypt = cdr.paytable[sortable[i][0]];
-					
-					tr.appendChild(el('td', tr.id+"Title", '', mypt.hand));
-					for (var j=0; j<mypt.win.length; j++) {
-						var td = el('td', tr.id + j, 'right', mypt.win[j]);
-						tr.appendChild(td); 
-					}
-					paytable.appendChild(tr);
-				}
-			});
-      },
-      newDeck: function() {
-         cdr.deck = [];
-         var suits = ['S', 'C', 'D', 'H'];
-         for (var s=0; s<4; s++) {
-            for (var i=1; i<14; i++) {
-               cdr.deck.push(i + suits[s]);
+        #gameName {
+            display: inline-block;
+            color: #f00;
+            -webkit-text-stroke: 3px #ff0;
+            width: 20vw;
+            position: absolute;
+            left: 0vw;
+            top: 3vh;
+            font-size: 4vw;
+            text-transform: uppercase;
+            text-align: center;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, .8);
+            font-family: "Titan One", cursive;
+        }
+
+        #paybet {
+            background-color: #0af;
+            color: #ff0;
+            border-bottom: 2px solid #fff;
+        }
+
+        #paytable td#paybet1,
+        #paytable td#paybet2,
+        #paytable td#paybet3,
+        #paytable td#paybet4,
+        #paytable td#paybet5 {
+            background-color: #0af;
+            color: #ff0;
+            text-align: center;
+            border-bottom: 2px solid #fff;
+        }
+
+        table#paytable .paybet {
+            background-color: #c00;
+            color: #ff0;
+        }
+
+        #paytable td {
+            text-align: left;
+            border-left: 3px solid #0af;
+            white-space: nowrap;
+            padding: .125em .25em .125em .25em;
+        }
+
+        #paytable td.right {
+            text-align: right;
+        }
+
+        .paybet {
+            background-color: #ff0;
+        }
+
+        #toolbar {
+            display: inline-block;
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+            right: 0px;
+            height: 15%;
+            text-align: center;
+            background-color: rgba(0, 0, 0, .5);
+        }
+
+        button {
+            z-index: 999;
+            margin-top: 1em;
+            font-size: 200%;
+            color: #000;
+            background-color: #cccc00;
+            border: .25em outset #ffff00;
+            width: 7em;
+            height 3em;
+            text-transform: uppercase;
+            height: 3em;
+            font-weight: bold;
+            position: relative;
+            text-shadow: 2px 2px 1px rgba(255, 255, 255, .5);
+        }
+
+        button.disabled {
+            color: #cccc00;
+            text-shadow: none;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .left {
+            text-align: left;
+        }
+
+        h2 {
+            width: 3.3vw;
+            height: 6.1vh;
+            margin: 0;
+            padding: 1.3vw 1.6vw 1.1vw 0.7vw;
+            color: #fff;
+            z-index: 9999;
+            border-radius: 5vw;
+            display: inline-block;
+            border: 0.6vw dashed #fff;
+            font-size: 3vw;
+            top: -1vh;
+            position: relative;
+            letter-spacing: -4px;
+            text-shadow: -1px -2px 0px #000;
+        }
+
+        .status {
+            display: inline-block;
+        }
+
+        #bet {
+            width: 30%;
+            color: #eee;
+            position: absolute;
+            left: 2vw;
+            height: 8vh;
+            font-size: 4vw;
+            top: 5vh;
+            text-align: left;
+        }
+
+        #bet:before {
+            content: "BET: ";
+        }
+
+        #credit {
+            width: 40vw;
+            color: #eef;
+            position: absolute;
+            right: 2vw;
+            height: 8vh;
+            font-size: 4vw;
+            top: 5vh;
+            text-align: right;
+        }
+
+        #credit:before {
+            content: "CREDITS: ";
+        }
+
+        #win {
+            width: 33%;
+            color: #eee;
+            position: absolute;
+            left: 33%;
+            height: 9vh;
+            top: 5vh;
+            font-size: 4vw;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: rotate(0deg) scale(1);
             }
-         }
-         var scnt = Math.floor(Math.random() * 10) + 4;
-         for (var i=0; i<scnt; i++) {
-            cdr.deck = cdr.shuffle(cdr.deck);
-         }
-         return cdr.deck;
-      },
-		login: function(who) {
-			var provider;
-			provider = new firebase.auth.FacebookAuthProvider();
-			db = firebase.database();
 
-			firebase.auth().signInWithPopup(provider).then(function(result) {
-			  var token = result.credential.accessToken;
-			  var user = result.user;
-			  console.dir(user);
-			  writeUserData(user.uid, user.displayName, user.email, user.photoURL);
-			  db.ref("bank/" + firebase.auth().currentUser.uid).on("value", function(snapshot) {
-					var bank = snapshot.val();
-					$$("credit").innerHTML = bank.balance;
-				});
-			}).catch(function(error) {
-			  var errorCode = error.code;
-			  var errorMessage = error.message;
-			  var email = error.email;
-			  var credential = error.credential;
-			});	
-		},
-		writeUserData: function(userId, name, email, imageUrl) {
-			firebase.database().ref('users/' + userId).set({
-				name: name,
-				email: email,
-				profile_picture : imageUrl
-			});
-			setCookie("uid", userId);
-		}
-         
-   };
-   cdr.init();
-})();
-function el(tag, id, classname, content) {
-   var el = document.createElement(tag);
-   if (id) el.id = id;
-   if (classname) el.className = classname;
-   if (content) el.innerHTML = content;
+            10% {
+                transform: rotate(-15deg) scale(1.5);
+            }
 
-   return el;
-}
-function $(str) { return document.querySelector(str); }
-function $$(str) { return document.getElementById(str); }
-function $$$(str) { return document.querySelectorAll(str); }
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-	console.dir(user);
-    // User is signed in.
-    var displayName = user.displayName;
-    var email = user.email;
-    var emailVerified = user.emailVerified;
-    var photoURL = user.photoURL;
-    var isAnonymous = user.isAnonymous;
-    var uid = user.uid;
-    var providerData = user.providerData;
-	 $$("loginButton").innerHTML = "LOGOUT";
-	 
-	 cdr.game.uid = user.uid;
-	 
-	 cdr.updateCredits();
+            20% {
+                transform: rotate(15deg) scale(1);
+            }
 
-  } else {
-    // User is signed out.
-    // ...
-	 $$("loginButton").innerHTML = "LOGIN";
-  }
-});
-</script>
+            30% {
+                transform: rotate(-10deg) scale(1.5);
+            }
+
+            40% {
+                transform: rotate(10deg) scale(1);
+            }
+
+            50% {
+                transform: rotate(-5deg) scale(1.5);
+            }
+
+            60% {
+                transform: rotate(5deg) scale(1);
+            }
+
+            70% {
+                transform: scale(1.5);
+            }
+
+            80% {
+                transform: scale(1);
+            }
+
+            90% {
+                transform: scale(1.5);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        #result {
+            transition: all 1000ms cubic-bezier(.25, .99, .71, 1.23);
+            position: relative;
+            width: 81vw;
+            background-color: rgba(174, 84, 231, 1);
+            color: #fff;
+            border: .25vw solid rgba(107, 36, 154, 1);
+            border-bottom-left-radius: 1vw;
+            border-bottom-right-radius: 1vw;
+            font-weight: bold;
+            top: -7vh;
+            height: 8.5vh;
+            transform: scaleY(0);
+            box-shadow: 0 -0.25vh 0.25vw rgba(0, 0, 0, .4);
+            text-shadow: 2px 2px 2px #000;
+            z-index: 99999;
+            margin: 0 auto;
+            font-size: 4vw;
+        }
+
+        #cards {
+            position: relative;
+        }
+
+        #won {
+            position: absolute;
+            display: inline-block;
+            top: 49%;
+            left: 31%;
+            font-size: 6em;
+            color: #ff0;
+            text-shadow: 2px 2px 0px #000;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, .5);
+            padding: 0 1em;
+            border-radius: 1em;
+            transform: scale(0);
+            animation: bounce 3s 2;
+        }
+
+        table#paytable tr.winner {
+            background-color: #00d8ff;
+            color: #000;
+        }
+
+        td.winner {
+            background-color: #fff;
+            transform: scale(1);
+            text-align: center;
+            animation: throb 2s;
+        }
+
+        #results {
+            margin-top: -2em;
+            display: none;
+        }
+
+        .status {
+            height: 10vh;
+            position: absolute;
+            font-weight: bold;
+            bottom: 18vh;
+            text-shadow: 2px 2px 1px rgba(0, 0, 0, .5);
+            left: 0px;
+            width: 100%;
+        }
+
+        @keyframes throb {
+            0% {
+                transform: scale(2);
+            }
+
+            20% {
+                transform: scale(1);
+            }
+
+            40% {
+                transform: scale(2);
+            }
+
+            60% {
+                transform: scale(1);
+            }
+
+            80% {
+                transform: scale(2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        th {
+            border-bottom: 3px solid #0df;
+            border-right: 3px solid #0df;
+        }
+    </style>
+    <link rel='manifest' href='manifest.json'>
+    <link rel='stylesheet' type='text/css' href='poker.css'>
+    <script src="pokersolver.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-database.js"></script>
+
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDxGzBuvFA2qrOZZPBdTmIjsXAgWpcrmcs",
+            authDomain: "crblackjack-9e220.firebaseapp.com",
+            databaseURL: "https://crblackjack-9e220.firebaseio.com",
+            projectId: "crblackjack-9e220",
+            storageBucket: "crblackjack-9e220.appspot.com",
+            messagingSenderId: "32143422101"
+        };
+        firebase.initializeApp(config);
+    </script>
+
+</head>
+
+<body>
+    <div id='main'>
+        <div id='gameName'>
+            Video<br>
+            Poker
+        </div>
+        <table id='paytable'>
+            <colgroup>
+                <col>
+                <col id='bet1pay'>
+                <col id='bet2pay'>
+                <col id='bet3pay'>
+                <col id='bet4pay'>
+                <col id='bet5pay'>
+            </colgroup>
+        </table>
+        <div id='holds'>
+            <div id='card0-hold' class='hold'>HOLD</div>
+            <div id='card1-hold' class='hold'>HOLD</div>
+            <div id='card2-hold' class='hold'>HOLD</div>
+            <div id='card3-hold' class='hold'>HOLD</div>
+            <div id='card4-hold' class='hold'>HOLD</div>
+        </div>
+        <div id='cards'>
+            <div id='card0' class='cardwrap'>
+                <div class='card card1H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='card1' class='cardwrap'>
+                <div class='card card13H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='card2' class='cardwrap'>
+                <div class='card card12H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='card3' class='cardwrap'>
+                <div class='card card11H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='card4' class='cardwrap'>
+                <div class='card card10H'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+                <div class='cardback'>
+                    <figure class='pic'>&nbsp;</figure>
+                </div>
+            </div>
+            <div id='result' class='result'></div>
+        </div>
+        <div id='status' class='status'>
+            <div id='bet'>0</div>
+            <div id='win'></div>
+            <div id='credit'></div>
+        </div>
+        <div id='won'></div>
+        <div id='gameover'>PLAY 5 CREDITS</div>
+        <div id='toolbar'>
+            <span class='left'>
+                <button onclick='window.close()' id='backButton'>Back...</button>
+                <button onclick='cdr.login()' id='loginButton'>Login</button>
+                <button onclick='cdr.betone()' id='betOne'>Bet 1</button>
+            </span>
+            <h2 id='denom'>$1</h2>
+            <span class='right'>
+                <button onclick='cdr.betmax()' id='betMax'>Bet 5</button>
+                <button id='drawButton' onclick='cdr.draw()' disabled='true' class='disabled'>Draw</button>
+                <button id='dealButton' onclick='cdr.deal()' disabled='true' class='disabled'>Deal</button>
+            </span>
+        </div>
+    </div>
+    <script>
+        (function() {
+            window.cdr = {
+                game: {
+                    type: "poker",
+                    chipColors: ["#dd0", "#0c0", "#c00", "#c0c", "#000", "#0be", "#fa0", "#999", "#0a6", "#69a", "#333", "#000"],
+                    creditValues: [1, 2, 5, 10, 25, 100, 250, 500, 1000, 2000, 5000, 10000],
+                    creditValueIdx: 0,
+                    creditValue: 1,
+                    cards: [],
+                    discards: {},
+                    holds: {},
+                    bet: 0,
+                    credit: 1000,
+                    uid: ""
+                },
+                paytable: {
+                    "RoyalFlush": {
+                        hand: 'Royal Flush',
+                        win: [250, 500, 750, 1000, 4000]
+                    },
+                    "StraightFlush": {
+                        hand: 'Straight Flush',
+                        win: [50, 100, 150, 200, 250]
+                    },
+                    "FourOfAKind": {
+                        hand: 'Four of a Kind',
+                        win: [25, 50, 75, 100, 125]
+                    },
+                    "FullHouse": {
+                        hand: 'Full House',
+                        win: [9, 18, 27, 36, 45]
+                    },
+                    "Flush": {
+                        hand: 'Flush',
+                        win: [6, 12, 18, 24, 30]
+                    },
+                    "Straight": {
+                        hand: 'Straight',
+                        win: [4, 8, 12, 16, 20]
+                    },
+                    "ThreeOfAKind": {
+                        hand: 'Three of a Kind',
+                        win: [3, 6, 9, 12, 15]
+                    },
+                    "TwoPair": {
+                        hand: 'Two Pair',
+                        win: [2, 4, 6, 8, 10]
+                    },
+                    "OnePair": {
+                        hand: 'Jacks or Better',
+                        win: [1, 2, 3, 4, 5]
+                    }
+                },
+                addListener: function(i) {
+                    $$("card" + i).addEventListener("click", function(e) {
+                        cdr.toggleCard("card" + i, 0);
+                    });
+
+                },
+                betone: function() {
+                    if (cdr.game.bet > 0) $(".paybet").classList.remove('paybet');
+                    cdr.game.bet++;
+
+                    if (cdr.game.bet > 5) {
+                        cdr.game.bet = 0;
+                    }
+                    $$("dealButton").removeAttribute("disabled");
+                    $$("dealButton").classList.remove("disabled");
+                    if (cdr.game.bet > 0) {
+                        $$("dealButton").removeAttribute("disabled");
+                        $$("dealButton").classList.remove("disabled");
+                        $$("paytable").className = "paybet" + cdr.game.bet;
+                        if ($(".paybet")) $(".paybet").classList.remove('paybet');
+                        $$("bet" + cdr.game.bet + "pay").classList.add('paybet');
+                    }
+                    $$("bet").innerHTML = cdr.game.bet;
+                },
+                betmax: function() {
+                    cdr.game.bet = 5;
+                    if (cdr.game.bet > 0) {
+                        $$("dealButton").removeAttribute("disabled");
+                        $$("dealButton").classList.remove("disabled");
+                        $$("paytable").className = "paybet" + cdr.game.bet;
+                        if ($(".paybet")) $(".paybet").classList.remove('paybet');
+                        $$("bet" + cdr.game.bet + "pay").classList.add('paybet');
+                    }
+                    $$("bet").innerHTML = cdr.game.bet;
+                    cdr.deal();
+                },
+                init: function() {
+                    if (document.location.hash) {
+                        cdr.game.type = document.location.hash.replace(/^#/, '');
+                        if (cdr.game.type === "dueces") {
+                            $$("main").classList.add('wilds');
+                        }
+                    }
+                    cdr.genPaytable();
+                    var cards = cdr.newDeck();
+
+                    for (var i = 0; i < 5; i++) {
+                        cdr.addListener(i);
+                    }
+
+                    var savedJS = localStorage.getItem("settings");
+                    if (savedJS) {
+                        cdr.settings = JSON.parse(savedJS);
+
+                        for (var i in cdr.settings) {
+                            if (cdr.settings.hasOwnProperty(i)) {
+                                cdr.game[i] = cdr.settings[i];
+                            }
+                        }
+                    }
+                    cdr.updateChip();
+                    $$("denom").addEventListener("click", function(e) {
+                        cdr.game.creditValueIdx++;
+                        if (cdr.game.creditValueIdx > cdr.game.creditValues.length - 1) cdr.game.creditValueIdx = 0;
+                        if (cdr.game.balance / cdr.game.creditValues[cdr.game.creditValueIdx] < 1) cdr.game.creditValueIdx = 0;
+
+                        cdr.game.creditValue = cdr.game.creditValues[cdr.game.creditValueIdx];
+                        cdr.updateChip();
+                        cdr.updateCredits();
+                        localStorage.setItem("settings", JSON.stringify({
+                            "creditValue": cdr.game.creditValue,
+                            "creditValueIdx": cdr.game.creditValueIdx
+                        }));
+                    });
+                },
+                updateChip: function() {
+                    $$("denom").className = "chip" + cdr.game.creditValue;
+                    $$("denom").style.backgroundColor = cdr.game.chipColors[cdr.game.creditValueIdx];
+                    var show = (cdr.game.creditValue > 999) ? (cdr.game.creditValue / 1000) + "K" : cdr.game.creditValue;
+                    $$("denom").innerHTML = "$" + show;
+                },
+                updateCredits: function() {
+                    var uid = cdr.game.uid;
+                    firebase.database().ref("bank/" + uid + "/balance").on("value", function(snapshot) {
+                        var balance = snapshot.val();
+                        cdr.game.balance = balance;
+                        cdr.game.credit = Math.floor(balance / cdr.game.creditValue);
+                        var showCredit = cdr.game.credit;
+                        if (showCredit > 1000000000) {
+                            showCredit = Math.floor(showCredit / 1000000) / 100 + "B";
+                        } else if (showCredit > 1000000) {
+                            showCredit = Math.floor(showCredit / 1000) / 100 + "M";
+                        } else if (showCredit > 1000) {
+                            showCredit = Math.floor(showCredit / 100) / 10 + "K";
+                        }
+                        $$("credit").innerHTML = showCredit;
+
+                        if ((cdr.game.credit < 1) || cdr.game.active) {
+                            $$("betOne").setAttribute("disabled", true);
+                            $$("betOne").classList.add('disabled');
+
+                            $$("betMax").setAttribute("disabled", true);
+                            $$("betMax").classList.add('disabled');
+                        } else if (cdr.game.credit < 5) {
+                            $$("betOne").removeAttribute("disabled");
+                            $$("betOne").classList.remove('disabled');
+
+                            $$("betMax").setAttribute("disabled", true);
+                            $$("betMax").classList.add('disabled');
+                        } else {
+                            $$("betOne").removeAttribute("disabled");
+                            $$("betOne").classList.remove('disabled');
+
+                            $$("betMax").removeAttribute("disabled");
+                            $$("betMax").classList.remove('disabled');
+                        }
+                    });
+                },
+                toggleCard: function(card, delay) {
+                    // setTimeout(function() { $$(card).classList.toggle('flipped'); }, delay * 100);
+                    var current = $$(card + '-hold').style.visibility;
+                    if (current === "hidden") {
+                        $$(card + '-hold').style.visibility = "";
+                        cdr.game.holds[card] = true;
+                    } else {
+                        $$(card + '-hold').style.visibility = "hidden";
+                        delete cdr.game.holds[card];
+                    }
+                    // if (cdr.game.discards[card]) { delete cdr.game.discards[card]; } else { cdr.game.discards[card] = true; }
+                },
+                hideCard: function(card, delay) {
+                    setTimeout(function() {
+                        $$(card).classList.add('flipped');
+                        setTimeout(function() {
+                            $("#" + card + " .card").style.visibility = 'hidden';
+                        }, 200);
+                    }, delay * 50);
+                },
+                showCard: function(card, delay, wait = 500) {
+                    setTimeout(function() {
+                        $("#" + card + " .card").style.visibility = 'visible';
+                        $$(card).classList.remove('flipped');
+                    }, (delay * 50) + wait);
+                },
+                setCard: function(i, draw, delay) {
+                    setTimeout(function() {
+                        $("#card" + i + " .card").className = 'card card' + draw;
+                    }, (delay * 200));
+                },
+                clearHolds: function() {
+                    for (var i = 0; i < 5; i++) {
+                        $$("card" + i + "-hold").style.visibility = "hidden";
+                    }
+                    cdr.game.holds = [];
+                },
+                newCard: function(card, newcard, delay) {
+                    var match = card.match(/card(\d)/);
+                    cdr.game.cards[match[1]] = newcard;
+
+                    setTimeout(function() {
+                        $("#" + card + " .card").className = "card card" + newcard;
+                    }, delay * 100);
+
+                },
+                draw: function() {
+                    var cnt = 0;
+                    var needcards = [];
+                    $$("drawButton").setAttribute("disabled", true);
+                    $$("drawButton").classList.add('disabled');
+                    for (var i = 0; i < 5; i++) {
+                        if (!cdr.game.holds["card" + i]) {
+                            cdr.hideCard('card' + i, cnt);
+                            cnt++;
+                            cdr.game.discards["card" + i] = true;
+                            needcards.push(i);
+                        }
+                    }
+                    var scr = document.createElement('script');
+                    scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/exchangeCards?game=" + cdr.game.type + "&callback=cdr.newCards&uid=" + firebase.auth().currentUser.uid + "&discard=" + needcards.join(',');
+                    document.body.appendChild(scr);
+                },
+                newCards: function(cards) {
+                    setTimeout(function() {
+                        cdr.realNewCards(cards);
+                    }, 500);
+                },
+                realNewCards: function(cards) {
+                    console.log("cards: " + JSON.stringify(cards));
+                    console.dir(cards);
+                    var cnt = 0;
+                    cdr.game.results = cards;
+
+                    var c = cards.hands[0];
+
+                    for (var j = 0; j < c.length; j++) {
+                        if ($$("card" + j).classList.contains('flipped')) {
+                            $("#card" + j + " .card").className = "card card" + c[j];
+                            cdr.showCard("card" + j, cnt, 0);
+                            cnt++;
+                        }
+                    }
+                    if (cards.results[0]) {
+                        $$("result").style.transform = "scaleY(1)";
+                        $$("win").innerHTML = 'WON ' + Math.floor(cards.wins[0] / cdr.game.creditValue);;
+                        $$("result").innerHTML = cards.results[0].replace(/([a-z0-9])([A-Z0-9])/g, '$1 $2').replace(/([A-Z])([A-Z])/g, '$1 $2');
+                        $$("won").style.display = "inline-block";
+                        $$("won").innerHTML = "WON " + Math.floor(cards.wins[0] / cdr.game.creditValue).toString().replace(/(\d)(?=(\d{3})+$)/, "$1,");
+                        cdr.gameoverTimeout = setTimeout(function() {
+                            $$("gameover").innerHTML = "GAME OVER";
+                            $$("gameover").style.transform = "scale(1)";
+                        }, 10000);
+                        cdr.clearWinners();
+                        $$(cards.results[0]).classList.add('winner');
+                        $$(cards.results[0] + (cdr.game.bet - 1)).classList.add('winner');
+                    } else {
+                        cdr.gameoverTimeout = setTimeout(function() {
+                            $$("gameover").innerHTML = "GAME OVER";
+                            $$("gameover").style.transform = "scale(1)";
+                        }, 2000);
+                    }
+                    cdr.resetButtons();
+                    cdr.game.active = false;
+                },
+                checkWin: function() {
+                    var scr = document.createElement('script');
+                    scr.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/checkHand?game=" + cdr.game.type + "&callback=cdr.gotWin&uid=" + firebase.auth().currentUser.uid;
+                    document.body.appendChild(scr);
+                },
+                gotWin: function(hand, won) {
+                    if (hand && won) {
+                        var win = cdr.paytable[hand];
+                        if (win) {
+                            $$("win").innerHTML = win.hand;
+                            $$("won").style.display = "inline-block";
+                            $$("won").innerHTML = "WON " + win.win[cdr.game.bet - 1];
+                            cdr.clearWinners();
+                            $$(hand).classList.add('winner');
+                            $$(hand + (cdr.game.bet - 1)).classList.add('winner');
+                            cdr.gameoverTimeout = setTimeout(function() {
+                                $$("gameover").innerHTML = "GAME OVER";
+                                $$("gameover").style.transform = "scale(1)";
+                            }, 10000);
+                        }
+                    } else {
+                        $$("gameover").innerHTML = "GAME OVER";
+                        $$("gameover").style.transform = "scale(1)";
+                    }
+                    cdr.resetButtons();
+                    cdr.game.active = false;
+                },
+                resetButtons: function() {
+                    $$("betOne").classList.remove('disabled');
+                    $$("betOne").removeAttribute('disabled');
+                    $$("betMax").classList.remove('disabled');
+                    $$("betMax").removeAttribute('disabled');
+                    if (cdr.game.bet) {
+                        $$("dealButton").classList.remove('disabled');
+                        $$("dealButton").removeAttribute('disabled');
+                    } else {
+                        $$("dealButton").classList.add('disabled');
+                        $$("dealButton").setAttribute('disabled');
+                    }
+                    $$("drawButton").classList.add('disabled');
+                    $$("drawButton").setAttribute('disabled', true);
+                },
+                clearWinners: function() {
+                    var els = $$$('.winner');
+                    for (var i = 0; i < els.length; i++) {
+                        els[i].classList.remove('winner');
+                    }
+                },
+                deal: function() {
+                    if (cdr.game.bet == 0) {
+                        $$("gameover").innerHTML = "ADD CREDITS TO PLAY";
+                        return false;
+                    }
+                    if (cdr.gameoverTimeout) {
+                        clearTimeout(cdr.gameoverTimeout);
+                        cdr.gameoverTimeout = 0;
+                    }
+                    $$("result").style.transform = "scaleY(0)";
+                    $$("gameover").style.transform = "scale(0)";
+                    //cdr.game.credit -= cdr.game.bet;
+                    //$$("credit").innerHTML = cdr.game.credit;
+
+                    cdr.game.active = true;
+                    cdr.clearHolds();
+                    cdr.clearWinners();
+                    $$("win").innerHTML = "";
+                    $$("won").innerHTML = "";
+                    $$("won").style.display = "none";
+                    $$("dealButton").classList.add("disabled");
+                    $$("dealButton").setAttribute("disabled", true);
+                    $$("betOne").classList.add("disabled");
+                    $$("betOne").setAttribute("disabled", true);
+                    $$("betMax").classList.add("disabled");
+                    $$("betMax").setAttribute("disabled", true);
+                    $$("drawButton").classList.remove("disabled");
+                    $$("drawButton").removeAttribute("disabled");
+
+                    cdr.game.cards = [];
+                    cdr.game.discards = [];
+                    cdr.newDeck();
+
+                    var func = document.createElement('script');
+                    func.src = "https://us-central1-crblackjack-9e220.cloudfunctions.net/newGame?game=" + cdr.game.type + "&callback=cdr.gotGame&uid=" + firebase.auth().currentUser.uid + "&bet=" + cdr.game.bet * cdr.game.creditValue;
+                    document.body.appendChild(func);
+                },
+                gotGame: function(cards) {
+                    for (var i = 0; i < 5; i++) {
+                        draw = cards[i];
+                        cards.push(draw);
+                        cdr.hideCard("card" + i, i);
+                        cdr.setCard(i, draw, i);
+                        cdr.showCard("card" + i, i + 1);
+                    }
+                    cdr.game.cards = cards;
+                    cdr.game.active = true;
+                    cdr.game.draws = 1;
+                },
+                solve: function() {
+                    var hand = [];
+
+                    for (var i = 0; i < cdr.game.cards.length; i++) {
+                        var card = cdr.game.cards[i].toLowerCase();
+                        var match = card.match(/(\d*)([cdsh])/i);
+                        var num = parseInt(match[1]);
+                        var suit = match[2];
+                        if ((num > 9) || (num == 1)) {
+                            switch (num) {
+                                case 1:
+                                    num = "A";
+                                    break;
+                                case 10:
+                                    num = "T";
+                                    break;
+                                case 11:
+                                    num = "J";
+                                    break;
+                                case 12:
+                                    num = "Q";
+                                    break;
+                                case 13:
+                                    num = "K";
+                                    break;
+                            }
+                        }
+                        hand.push(num + suit);
+                    }
+                    console.log("hand:");
+                    console.dir(hand);
+                    var result = Hand.solve(hand, "jacksbetter", true);
+                    cdr.game.result = result.constructor.name;
+
+                    console.dir(result);
+                    return result;
+                },
+                solveHand: function(hand) {
+                    var suits = [];
+                    var cards = [];
+                    var seen = {};
+                    var suit = '';
+                    var canFlush = 1;
+                    var haveAce = 0;
+                    for (var i = 0; i < hand.length; i++) {
+                        var match = hand[i].match(/^(\d+)([HDSC])/i);
+                        if (match[1] && match[2]) {
+                            if (suit === '') suit = match[2];
+                            if (match[1] == 1) {
+                                haveAce++;
+                            }
+                            if (suit && (suit !== match[2])) {
+                                canFlush = 0;
+                            }
+                            if (!seen[match[1]]) {
+                                seen[match[1]] = 1;
+                            } else {
+                                seen[match[1]]++;
+                            }
+                            cards.push(parseInt(match[1]));
+                            suits.push(match[2]);
+                        }
+                    }
+                    var isFlush = canFlush;
+                    cards = cards.sort(function(a, b) {
+                        return a - b;
+                    });
+                    var lastCard, isStraight = true;
+                    for (var i = 0; i < cards.length - 1; i++) {
+                        if (!lastCard) {
+                            lastCard = parseInt(cards[i]);
+                        } else if ((lastCard + 1) !== parseInt(cards[i])) {
+                            if (isStraight !== false && (lastCard === 1) && (cards[i] === 10)) {
+                                isStraight = true;
+                            } else {
+                                isStraight = false;
+                            }
+                        }
+                        lastCard = parseInt(cards[i]);
+                    }
+                    var isPair = false;
+                    var isTwoPair = false;
+                    var isQualifiedPair = false;
+                    var isThreeOfAKind = false;
+                    var isFourOfAKind = false;
+
+                    for (var i in seen) {
+                        if (seen.hasOwnProperty(i)) {
+                            if (seen[i] > 1) {
+                                switch (seen[i]) {
+                                    case 2:
+                                        if ((i > 10) || (i == 1)) {
+                                            isQualifiedPair = true;
+                                        }
+                                        if (isPair === true) isTwoPair = true;
+                                        isPair = true;
+                                        break;
+                                    case 3:
+                                        isThreeOfAKind = true;
+                                        break;
+                                    case 4:
+                                        isFourOfAKind = true;
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                    if (isStraight && isFlush && (cards[0] === 10)) return "RoyalFlush";
+                    if (isStraight && isFlush) return "StraightFlush";
+                    if (isFourOfAKind) return "FourOfAKind";
+                    if (isThreeOfAKind && isPair) return "FullHouse";
+                    if (isFlush) return "Flush";
+                    if (isStraight) return "Straight";
+                    if (isThreeOfAKind) return "ThreeOfAKind";
+                    if (isTwoPair) return "TwoPair";
+                    if (isQualifiedPair) return "OnePair";
+
+                    return false;
+                },
+                shuffle: function(array) {
+                    var currentIndex = array.length,
+                        temporaryValue, randomIndex;
+
+                    // While there remain elements to shuffle...
+                    while (0 !== currentIndex) {
+
+                        // Pick a remaining element...
+                        randomIndex = Math.floor(Math.random() * currentIndex);
+                        currentIndex -= 1;
+
+                        // And swap it with the current element.
+                        temporaryValue = array[currentIndex];
+                        array[currentIndex] = array[randomIndex];
+                        array[randomIndex] = temporaryValue;
+                    }
+
+                    return array;
+                },
+                genPaytable: function() {
+                    firebase.database().ref("payouts/" + cdr.game.type).once("value", function(snap) {
+                        var pt = snap.val();
+                        var hands = Object.keys(pt.hands);
+                        var newpaytable = {};
+                        var sortable = [];
+                        $$("gameName").innerHTML = pt.name;
+                        for (var i = 0; i < hands.length; i++) {
+                            var name = hands[i];
+                            var displayName = name.replace(/([a-z0-9])([A-Z0-9])/g, "$1 $2").replace(/([A-Z0-9])([A-Z0-9])/g, "$1 $2");
+                            sortable.push([name, pt.hands[name]]);
+
+                            var pay = [];
+                            for (var j = 1; j < 6; j++) {
+                                pay.push(parseInt(pt.hands[name]) * j);
+                            }
+                            newpaytable[name] = {
+                                "hand": displayName,
+                                win: pay
+                            };
+                        }
+                        cdr.paytable = newpaytable;
+                        sortable.sort(function(a, b) {
+                            return b[1] - a[1];
+                        });
+                        cdr.paytable[sortable[0][0]].win[4] = parseInt(pt.jackpot);
+                        console.dir(newpaytable);
+                        console.log("New pay table: " + JSON.stringify(newpaytable));
+                        var paytable = $('#paytable');
+                        var keys = Object.keys(cdr.paytable);
+                        var header = el('tr');
+                        header.appendChild(el('td', 'paybet', '', '&#9660; Hand <span style="float:right;">Bet &#9654;</span>'));
+                        for (var i = 1; i < 6; i++) {
+                            header.appendChild(el('td', 'paybet' + i, '', i));
+                        }
+                        paytable.appendChild(header);
+
+                        for (var i = 0; i < sortable.length; i++) {
+                            var tr = el('tr');
+                            tr.id = sortable[i][0];
+                            var mypt = cdr.paytable[sortable[i][0]];
+
+                            tr.appendChild(el('td', tr.id + "Title", '', mypt.hand));
+                            for (var j = 0; j < mypt.win.length; j++) {
+                                var td = el('td', tr.id + j, 'right', mypt.win[j]);
+                                tr.appendChild(td);
+                            }
+                            paytable.appendChild(tr);
+                        }
+                    });
+                },
+                newDeck: function() {
+                    cdr.deck = [];
+                    var suits = ['S', 'C', 'D', 'H'];
+                    for (var s = 0; s < 4; s++) {
+                        for (var i = 1; i < 14; i++) {
+                            cdr.deck.push(i + suits[s]);
+                        }
+                    }
+                    var scnt = Math.floor(Math.random() * 10) + 4;
+                    for (var i = 0; i < scnt; i++) {
+                        cdr.deck = cdr.shuffle(cdr.deck);
+                    }
+                    return cdr.deck;
+                },
+                login: function(who) {
+                    var provider;
+                    provider = new firebase.auth.FacebookAuthProvider();
+                    db = firebase.database();
+
+                    firebase.auth().signInWithPopup(provider).then(function(result) {
+                        var token = result.credential.accessToken;
+                        var user = result.user;
+                        console.dir(user);
+                        writeUserData(user.uid, user.displayName, user.email, user.photoURL);
+                        db.ref("bank/" + firebase.auth().currentUser.uid).on("value", function(snapshot) {
+                            var bank = snapshot.val();
+                            $$("credit").innerHTML = bank.balance;
+                        });
+                    }).catch(function(error) {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        var email = error.email;
+                        var credential = error.credential;
+                    });
+                },
+                writeUserData: function(userId, name, email, imageUrl) {
+                    firebase.database().ref('users/' + userId).set({
+                        name: name,
+                        email: email,
+                        profile_picture: imageUrl
+                    });
+                    setCookie("uid", userId);
+                }
+
+            };
+            cdr.init();
+        })();
+
+        function el(tag, id, classname, content) {
+            var el = document.createElement(tag);
+            if (id) el.id = id;
+            if (classname) el.className = classname;
+            if (content) el.innerHTML = content;
+
+            return el;
+        }
+
+        function $(str) {
+            return document.querySelector(str);
+        }
+
+        function $$(str) {
+            return document.getElementById(str);
+        }
+
+        function $$$(str) {
+            return document.querySelectorAll(str);
+        }
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                console.dir(user);
+                // User is signed in.
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var photoURL = user.photoURL;
+                var isAnonymous = user.isAnonymous;
+                var uid = user.uid;
+                var providerData = user.providerData;
+                $$("loginButton").innerHTML = "LOGOUT";
+
+                cdr.game.uid = user.uid;
+
+                cdr.updateCredits();
+
+            } else {
+                // User is signed out.
+                // ...
+                $$("loginButton").innerHTML = "LOGIN";
+            }
+        });
+    </script>
 </body>
+
 </html>

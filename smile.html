@@ -1,26 +1,75 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<style>
-		body { background-color:#000; }
 
-		#head { display:inline-block; border-radius:10em; background-color:#ee0; 
-		
-			background: linear-gradient(to bottom, #fde239 0%, #fdb627 100%);
-		box-shadow:1vw 1vw 1vw rgba(255,255,255,.5); height:10vw; width:10vw; }
-		#forehead { display:inline-block; width:8vw; height:2vh; position:relative; }
-		#eyes { display:inline-block; width:8vw; height:4vh; }
-		.eye { position:absolute; display:inline-block; 
-			background: rgb(168,148,0);
-			background: -moz-linear-gradient(top,  rgba(168,148,0,1) 0%, rgba(255,246,0,1) 100%);
-			background: -webkit-linear-gradient(top,  rgba(168,148,0,1) 0%,rgba(255,246,0,1) 100%);
-			background: linear-gradient(to bottom,  rgba(168,148,0,1) 0%,rgba(255,246,0,1) 100%);
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a89400', endColorstr='#fff600',GradientType=0 );
-			height:3.4vw; width:3.7vw; left:2vw; top:3vh; border-radius:5vw; transform: scaleX(0.8); z-index:100; }
-		.eye:after { display:inline-block; height:0.6vw; width:0.6vw; border-radius:1vw; background-color:#000; position:absolute; left:40%; top:30%; content:" "; z-index:50; }
-		.eye.left { left:2vw; }
-		.eye.right { left:5.4vw; }
-		/* .eye:before { display:inline-block; position:absolute; top:-0.4vw; left:-0.4vw; width:2.5vw; height:2.5vw; 
+<head>
+    <style>
+        body {
+            background-color: #000;
+        }
+
+        #head {
+            display: inline-block;
+            border-radius: 10em;
+            background-color: #ee0;
+
+            background: linear-gradient(to bottom, #fde239 0%, #fdb627 100%);
+            box-shadow: 1vw 1vw 1vw rgba(255, 255, 255, .5);
+            height: 10vw;
+            width: 10vw;
+        }
+
+        #forehead {
+            display: inline-block;
+            width: 8vw;
+            height: 2vh;
+            position: relative;
+        }
+
+        #eyes {
+            display: inline-block;
+            width: 8vw;
+            height: 4vh;
+        }
+
+        .eye {
+            position: absolute;
+            display: inline-block;
+            background: rgb(168, 148, 0);
+            background: -moz-linear-gradient(top, rgba(168, 148, 0, 1) 0%, rgba(255, 246, 0, 1) 100%);
+            background: -webkit-linear-gradient(top, rgba(168, 148, 0, 1) 0%, rgba(255, 246, 0, 1) 100%);
+            background: linear-gradient(to bottom, rgba(168, 148, 0, 1) 0%, rgba(255, 246, 0, 1) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a89400', endColorstr='#fff600', GradientType=0);
+            height: 3.4vw;
+            width: 3.7vw;
+            left: 2vw;
+            top: 3vh;
+            border-radius: 5vw;
+            transform: scaleX(0.8);
+            z-index: 100;
+        }
+
+        .eye:after {
+            display: inline-block;
+            height: 0.6vw;
+            width: 0.6vw;
+            border-radius: 1vw;
+            background-color: #000;
+            position: absolute;
+            left: 40%;
+            top: 30%;
+            content: " ";
+            z-index: 50;
+        }
+
+        .eye.left {
+            left: 2vw;
+        }
+
+        .eye.right {
+            left: 5.4vw;
+        }
+
+        /* .eye:before { display:inline-block; position:absolute; top:-0.4vw; left:-0.4vw; width:2.5vw; height:2.5vw; 
 		background: rgb(168,148,0);
 		background: -moz-linear-gradient(top,  rgba(168,148,0,1) 0%, rgba(255,246,0,1) 100%);
 		background: -webkit-linear-gradient(top,  rgba(168,148,0,1) 0%,rgba(255,246,0,1) 100%);
@@ -28,38 +77,61 @@
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a89400', endColorstr='#fff600',GradientType=0 );
 		content:" "; border-radius:5vw; z-index:10; 
 		background-blend-mode: screen; } */
-		#mouth { display:inline-block; background-color:#000; width:5vw; height:0.8vw; top:1.8vw; left:2.5vw; position:relative;  }
-		@keyframes roll { 
-			0% { transform:rotate(45deg); }
-			30% { transform:rotate(45deg); }
-			60% { transform:rotate(270deg); }
-			100% { transform:rotate(45deg); }
-		}
-		.socket { 
-			display:inline-block; 
-			position:absolute; 
-			top:0.4vh; 
-			left:0.3vw; 
-			background-color:#fff; 
-			width:2.8vw; 
-			height:2.8vw; 
-			border-radius:5vw; 
-			box-shadow:-.125vw -.25vw .25vw rgba(0,0,0,.5);
-		}
-	</style>
+        #mouth {
+            display: inline-block;
+            background-color: #000;
+            width: 5vw;
+            height: 0.8vw;
+            top: 1.8vw;
+            left: 2.5vw;
+            position: relative;
+        }
+
+        @keyframes roll {
+            0% {
+                transform: rotate(45deg);
+            }
+
+            30% {
+                transform: rotate(45deg);
+            }
+
+            60% {
+                transform: rotate(270deg);
+            }
+
+            100% {
+                transform: rotate(45deg);
+            }
+        }
+
+        .socket {
+            display: inline-block;
+            position: absolute;
+            top: 0.4vh;
+            left: 0.3vw;
+            background-color: #fff;
+            width: 2.8vw;
+            height: 2.8vw;
+            border-radius: 5vw;
+            box-shadow: -.125vw -.25vw .25vw rgba(0, 0, 0, .5);
+        }
+    </style>
 </head>
+
 <body>
-	<div id='head'>
-		<div id='forehead'>
-			<div class='eyebrow left'></div>
-			<div class='eyebrow right'></div>
-		</div>
-		<div id='eyes'>
-			<div class='eye left'><span class='socket'></span><span class='eyeball'>.</span></div>
-			<div class='eye right'><span class='socket'></span><span class='eyeball'>.</span></div>
-		</div>
-		<div id='nose'></div>
-		<div id='mouth'></div>
-	</div>
+    <div id='head'>
+        <div id='forehead'>
+            <div class='eyebrow left'></div>
+            <div class='eyebrow right'></div>
+        </div>
+        <div id='eyes'>
+            <div class='eye left'><span class='socket'></span><span class='eyeball'>.</span></div>
+            <div class='eye right'><span class='socket'></span><span class='eyeball'>.</span></div>
+        </div>
+        <div id='nose'></div>
+        <div id='mouth'></div>
+    </div>
 </body>
+
 </html>

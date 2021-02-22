@@ -1,246 +1,528 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>CR Casino</title>
-	<link rel='icon' href='favicon.png'>
-	<style>
-		@import url('https://fonts.googleapis.com/css?family=Gravitas+One|Slabo+27px');
-		body { font-family:"Helvetica Neue",Helvetica,sans-serif; font-size:20px; background-color:#000; color:#eee; text-align:center; }
-		.game { display:inline-block; width:15em; height:15em; border: 0.5em solid #c00; padding:0.3em; margin:1em; background-color:#05a; border-radius:10em;}
-		.games { text-align:center; }
-		a { text-decoration:none; color:#ee0; }
-		a:visited { color:#aa0; }
-		a:active { color:#f00; }
-		a:hover { color:#0af; }
-		h1 { font-family:"Gravitas One",cursive; font-weight:100; }
-		.game a { font-weight:900; text-transform:uppercase; font-size:1.5em; color:#fff; text-shadow:2px 2px 0px rgba(0,0,0,.8); }
-		.game img { border:.5em solid rgba(255,255,255,1); border-radius:.25em;  transform: scale(.9); transition:all 250ms  cubic-bezier(.25, .99, .71, 1.23); position:relative; left:-.5em; box-shadow:.25em .25em .25em rgba(0,0,0,.5); }
-		.game a:hover img { transform: scale(1.2); }
-		#main { display:inline-block; width:80%; }
-		.gamename { position:relative; top:-0.7em; transform: scale(1.5) translateY(0.7em); display: inline-block; padding: 0 .5em 0; }
-		#loginOptions { display:inline-block; position:absolute; right:0vw; top:2vh; transition:all 300ms cubic-bezier(.25,.99,.71,1.23); }
-		#loginOptions button { display:block; font-size:1.5vw; width:100%; cursor:pointer; transition:transform 300ms linear; }
-		#providers { display:inline-block; width:100%; height:0vh; transition:all 300ms cubic-bezier(.25,.99,.71,1.23); overflow:hidden;}
-		#loginOptions button:hover { transform: scale(1.3); }
-		#bonusNotification { display:inline-block; position:absolute; z-index:9999; width:33%; height:30%; background-color:rgba(0,0,0,.8); border-radius:1vw; border:.5vw solid #fff; color:#fff; transition:all 300ms cubic-bezier(.25,.99,.71,1.23); left:33%; top:10%; padding:1vh 1vw; transform:scale(0); }
-		.bonus { margin:0 1vw; text-align:left; }
-		#bonusNotification button { font-size:2vw; text-transform:uppercase; margin-top:2vh; font-weight:900; padding:.5vw 1vw; border-radius:3vw; text-shadow:1px 1px 0px #fff; }
-		#bonusMonitor { display:inline-block; position:absolute; width:7vw; height:6.5vh; padding-top:1.5vh; background-color:#ff9; bottom:0px; right:0px; color:#09d; }
-		#bonusMonitor a { color:#09d; }
-		.link:after { content:" | "; }
-		#signup { display:none; height:53vh; width:30vw; position:absolute; left:30vw; top:17vh; padding:1vh 1vw; transform:scale(0); transition:all 300ms cubic-bezier(.25,1,.75,1.25); border:.5vw solid #fff; border-radius:3vw; margin:2vh 2vw; padding:1vh 2vw 2vh 2vw; background-color:rgba(0,200,255,1); color:#000; line-height:2vw; text-align:center; }
-		#signup input, #signup button, #signup label { font-size:2vw; }
-		#signup input { background-color:transparent; border-top:none; border-left:none; border-right:none; border-bottom:.125vw solid #acf; transform:scale(1); transition:all 300ms linear; }
-		#signup input:focus { background-color:#fff; transform:scale(1.2); box-shadow:.25vw .25vw .5vw rgba(0,0,0,.5); }
-		#signup label { display:block; text-align:left; color:#fff; text-shadow:0px 2px 0px #000; margin:2vh 0;}
-		#signup h2 {text-transform: uppercase; color: #ff0; background-color: #06a; font-size: 2.3vw; text-shadow: 2px 2px 0px #000, 0px 4px 0px #000; padding: 2vh 1vw; margin: 0; width: 32vw; left: -2vw; top: -1vh; height: 4vh; position: relative; text-align:center; border-top-left-radius:2.5vw; border-top-right-radius:2.6vw; } 
-		#signup button { margin-top:3vh; padding:1.2vh 2vw; margin-left:2vw; color:#fff; text-shadow:0px -2px 0px #000; border-radius:3vw;
-		background: rgb(191,210,85);
-		background: -moz-linear-gradient(top,  rgba(191,210,85,1) 0%, rgba(142,185,42,1) 50%, rgba(114,170,0,1) 51%, rgba(158,203,45,1) 100%);
-		background: -webkit-linear-gradient(top,  rgba(191,210,85,1) 0%,rgba(142,185,42,1) 50%,rgba(114,170,0,1) 51%,rgba(158,203,45,1) 100%);
-		background: linear-gradient(to bottom,  rgba(191,210,85,1) 0%,rgba(142,185,42,1) 50%,rgba(114,170,0,1) 51%,rgba(158,203,45,1) 100%);
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bfd255', endColorstr='#9ecb2d',GradientType=0 );
-		}
-	</style>
+    <title>CR Casino</title>
+    <link rel='icon' href='favicon.png'>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Gravitas+One|Slabo+27px');
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, sans-serif;
+            font-size: 20px;
+            background-color: #000;
+            color: #eee;
+            text-align: center;
+        }
+
+        .game {
+            display: inline-block;
+            width: 15em;
+            height: 15em;
+            border: 0.5em solid #c00;
+            padding: 0.3em;
+            margin: 1em;
+            background-color: #05a;
+            border-radius: 10em;
+        }
+
+        .games {
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+            color: #ee0;
+        }
+
+        a:visited {
+            color: #aa0;
+        }
+
+        a:active {
+            color: #f00;
+        }
+
+        a:hover {
+            color: #0af;
+        }
+
+        h1 {
+            font-family: "Gravitas One", cursive;
+            font-weight: 100;
+        }
+
+        .game a {
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 1.5em;
+            color: #fff;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, .8);
+        }
+
+        .game img {
+            border: .5em solid rgba(255, 255, 255, 1);
+            border-radius: .25em;
+            transform: scale(.9);
+            transition: all 250ms cubic-bezier(.25, .99, .71, 1.23);
+            position: relative;
+            left: -.5em;
+            box-shadow: .25em .25em .25em rgba(0, 0, 0, .5);
+        }
+
+        .game a:hover img {
+            transform: scale(1.2);
+        }
+
+        #main {
+            display: inline-block;
+            width: 80%;
+        }
+
+        .gamename {
+            position: relative;
+            top: -0.7em;
+            transform: scale(1.5) translateY(0.7em);
+            display: inline-block;
+            padding: 0 .5em 0;
+        }
+
+        #loginOptions {
+            display: inline-block;
+            position: absolute;
+            right: 0vw;
+            top: 2vh;
+            transition: all 300ms cubic-bezier(.25, .99, .71, 1.23);
+        }
+
+        #loginOptions button {
+            display: block;
+            font-size: 1.5vw;
+            width: 100%;
+            cursor: pointer;
+            transition: transform 300ms linear;
+        }
+
+        #providers {
+            display: inline-block;
+            width: 100%;
+            height: 0vh;
+            transition: all 300ms cubic-bezier(.25, .99, .71, 1.23);
+            overflow: hidden;
+        }
+
+        #loginOptions button:hover {
+            transform: scale(1.3);
+        }
+
+        #bonusNotification {
+            display: inline-block;
+            position: absolute;
+            z-index: 9999;
+            width: 33%;
+            height: 30%;
+            background-color: rgba(0, 0, 0, .8);
+            border-radius: 1vw;
+            border: .5vw solid #fff;
+            color: #fff;
+            transition: all 300ms cubic-bezier(.25, .99, .71, 1.23);
+            left: 33%;
+            top: 10%;
+            padding: 1vh 1vw;
+            transform: scale(0);
+        }
+
+        .bonus {
+            margin: 0 1vw;
+            text-align: left;
+        }
+
+        #bonusNotification button {
+            font-size: 2vw;
+            text-transform: uppercase;
+            margin-top: 2vh;
+            font-weight: 900;
+            padding: .5vw 1vw;
+            border-radius: 3vw;
+            text-shadow: 1px 1px 0px #fff;
+        }
+
+        #bonusMonitor {
+            display: inline-block;
+            position: absolute;
+            width: 7vw;
+            height: 6.5vh;
+            padding-top: 1.5vh;
+            background-color: #ff9;
+            bottom: 0px;
+            right: 0px;
+            color: #09d;
+        }
+
+        #bonusMonitor a {
+            color: #09d;
+        }
+
+        .link:after {
+            content: " | ";
+        }
+
+        #signup {
+            display: none;
+            height: 53vh;
+            width: 30vw;
+            position: absolute;
+            left: 30vw;
+            top: 17vh;
+            padding: 1vh 1vw;
+            transform: scale(0);
+            transition: all 300ms cubic-bezier(.25, 1, .75, 1.25);
+            border: .5vw solid #fff;
+            border-radius: 3vw;
+            margin: 2vh 2vw;
+            padding: 1vh 2vw 2vh 2vw;
+            background-color: rgba(0, 200, 255, 1);
+            color: #000;
+            line-height: 2vw;
+            text-align: center;
+        }
+
+        #signup input,
+        #signup button,
+        #signup label {
+            font-size: 2vw;
+        }
+
+        #signup input {
+            background-color: transparent;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            border-bottom: .125vw solid #acf;
+            transform: scale(1);
+            transition: all 300ms linear;
+        }
+
+        #signup input:focus {
+            background-color: #fff;
+            transform: scale(1.2);
+            box-shadow: .25vw .25vw .5vw rgba(0, 0, 0, .5);
+        }
+
+        #signup label {
+            display: block;
+            text-align: left;
+            color: #fff;
+            text-shadow: 0px 2px 0px #000;
+            margin: 2vh 0;
+        }
+
+        #signup h2 {
+            text-transform: uppercase;
+            color: #ff0;
+            background-color: #06a;
+            font-size: 2.3vw;
+            text-shadow: 2px 2px 0px #000, 0px 4px 0px #000;
+            padding: 2vh 1vw;
+            margin: 0;
+            width: 32vw;
+            left: -2vw;
+            top: -1vh;
+            height: 4vh;
+            position: relative;
+            text-align: center;
+            border-top-left-radius: 2.5vw;
+            border-top-right-radius: 2.6vw;
+        }
+
+        #signup button {
+            margin-top: 3vh;
+            padding: 1.2vh 2vw;
+            margin-left: 2vw;
+            color: #fff;
+            text-shadow: 0px -2px 0px #000;
+            border-radius: 3vw;
+            background: rgb(191, 210, 85);
+            background: -moz-linear-gradient(top, rgba(191, 210, 85, 1) 0%, rgba(142, 185, 42, 1) 50%, rgba(114, 170, 0, 1) 51%, rgba(158, 203, 45, 1) 100%);
+            background: -webkit-linear-gradient(top, rgba(191, 210, 85, 1) 0%, rgba(142, 185, 42, 1) 50%, rgba(114, 170, 0, 1) 51%, rgba(158, 203, 45, 1) 100%);
+            background: linear-gradient(to bottom, rgba(191, 210, 85, 1) 0%, rgba(142, 185, 42, 1) 50%, rgba(114, 170, 0, 1) 51%, rgba(158, 203, 45, 1) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bfd255', endColorstr='#9ecb2d', GradientType=0);
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
 </head>
+
 <body>
-<div id='main'>
-	<div id='loginOptions'>
-		<a id='signupLink' class='link' href='#' onclick='return signup()'>Signup</a> 
-		<a id='loginLink' class='link' href='#' onclick='return toggleOptions()'>Login with...</a>
-		<a id='logoutLink' style='display:none;' class='link' href='#' onclick='return logout()'>Logout</a>
-		<a id='collectBonus' href='#' onclick='return collectBonus()'>Collect Bonus</a>
-		<div id='providers'>
-			<button onclick="login('facebook')">Facebook</button>
-			<!--button onclick="login('google')">Google</button>
+    <div id='main'>
+        <div id='loginOptions'>
+            <a id='signupLink' class='link' href='#' onclick='return signup()'>Signup</a>
+            <a id='loginLink' class='link' href='#' onclick='return toggleOptions()'>Login with...</a>
+            <a id='logoutLink' style='display:none;' class='link' href='#' onclick='return logout()'>Logout</a>
+            <a id='collectBonus' href='#' onclick='return collectBonus()'>Collect Bonus</a>
+            <div id='providers'>
+                <button onclick="login('facebook')">Facebook</button>
+                <button onclick="login('email')">Email</button>
+                <button onclick="login('anonymous')">Anonymous</button>
+                <!--button onclick="login('google')">Google</button>
 			<button onclick="login('twitter')">Twitter</button>
 			<button onclick="login('github')">GitHub</button-->
-		</div>
-	</div>
-	<h1>CR CASINO</h1>
-	<hr>
-	<div class='games'>
-		<div class='game'><a href="game.html" target="blackjack"><img src="img/bj.png"><br><span class='gamename'>Single Deck<br>Blackjack</span></a></div>
-		<div class='game'><a href="poker2.html" target="poker"><img src="img/poker.png"><br><span class='gamename'>Jacks or<br> Better</span></a></div>
-		<div class='game'><a href="poker2.html#dueces" target="dueces"><img src="img/dueces.png"><br><span class='gamename'>Dueces<br>Wild</span></a></div>
-		<div class='game'><a href="poker2.html#bonus" target="bonus"><img src="img/bonus.png"><br><span class='gamename'>Bonus<br>Poker</span></a></div>
-		<div class='game'><a href="poker2.html#doublebonus" target="doublebonus"><img src="img/doublebonus.png"><br><span class='gamename'>Double Bonus<br>Poker</span></a></div>
-		<div class='game'><a href="holdem.html" target="holdem"><img src="img/honest-holdem.png"><br><span class='gamename'>Video<br>Hold'em</span></a></div>
-	</div>
-</div>
-<div id='signup'>
-	<h2>Create New Account</h2>
-	<label for='name'>Name:</label>
-	<input type='text' id='name' size='28'><br>
-	<label for='email'>Email:</label>
-	<input type='text' id='email' size='28'><br>
-	<label for='passwd'>Password:</label>
-	<input type='password' id='passwd' size='28'><br>
-	<button onclick="createAccount()">Create Account</button>
-</div>
-<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-	 apiKey: "AIzaSyDxGzBuvFA2qrOZZPBdTmIjsXAgWpcrmcs",
-	 authDomain: "crblackjack-9e220.firebaseapp.com",
-	 databaseURL: "https://crblackjack-9e220.firebaseio.com",
-	 projectId: "crblackjack-9e220",
-	 storageBucket: "crblackjack-9e220.appspot.com",
-	 messagingSenderId: "32143422101"
-  };
-  firebase.initializeApp(config);
-</script>
-<script>
-	firebase.auth().onAuthStateChanged(function(user) {
-	  if (user) {
-		console.dir(user);
-		 // User is signed in.
-		 var displayName = user.displayName;
-		 var email = user.email;
-		 var emailVerified = user.emailVerified;
-		 var photoURL = user.photoURL;
-		 var isAnonymous = user.isAnonymous;
-		 var uid = user.uid;
-		 var providerData = user.providerData;
-		 $$("loginLink").style.display = "none";
-		 $$("logoutLink").style.display = "inline-block";
-		 $$("signupLink").style.display = "none";
-		 
-	  } else {
-		 $$("loginLink").style.display = "inline-block";
-		 $$("logoutLink").style.display = "none";
-		 $$("signupLink").style.display = "inline-block";
-		 // User is signed out.
-		 // ...
-	  }
-	});
-	
-	function logout() {
-		firebase.auth().signOut().then(function() {
-			// Sign-out successful.
-	   }, function(error) {
-			// An error happened.
-		});
-	}
+            </div>
+        </div>
+        <h1>CR CASINO</h1>
+        <hr>
+        <div class='games'>
+            <div class='game'><a href="game.html" target="blackjack"><img src="img/bj.png"><br><span class='gamename'>Single Deck<br>Blackjack</span></a></div>
+            <div class='game'><a href="poker2.html" target="poker"><img src="img/poker.png"><br><span class='gamename'>Jacks or<br> Better</span></a></div>
+            <div class='game'><a href="poker2.html#dueces" target="dueces"><img src="img/dueces.png"><br><span class='gamename'>Dueces<br>Wild</span></a></div>
+            <div class='game'><a href="poker2.html#bonus" target="bonus"><img src="img/bonus.png"><br><span class='gamename'>Bonus<br>Poker</span></a></div>
+            <div class='game'><a href="poker2.html#doublebonus" target="doublebonus"><img src="img/doublebonus.png"><br><span class='gamename'>Double Bonus<br>Poker</span></a></div>
+            <div class='game'><a href="holdem.html" target="holdem"><img src="img/honest-holdem.png"><br><span class='gamename'>Video<br>Hold'em</span></a></div>
+        </div>
+    </div>
+    <div id='signup'>
+        <h2>Create New Account</h2>
+        <label for='name'>Name:</label>
+        <input type='text' id='name' size='28'><br>
+        <label for='email'>Email:</label>
+        <input type='text' id='email' size='28'><br>
+        <label for='passwd'>Password:</label>
+        <input type='password' id='passwd' size='28'><br>
+        <button onclick="createAccount()">Create Account</button>
+    </div>
+    <div id="firebaseui-auth-container"></div>
+    <div id="loader">Loading...</div>
 
-	function signup() {
-		$$("signup").style.display = "inline-block";
-		$$("signup").style.transform = "scale(1)";
-		$$("name").focus();
-	}
-	function createAccount() {
-		var email = $$("email").value;
-		var pw = $$("passwd").value;
-		$$("signup").style.transform = "scale(0)";
-		firebase.auth().createUserWithEmailAndPassword(email, pw).catch(function(error) {
-		  // Handle Errors here.
-		    var errorCode = error.code;
-	  	    var errorMessage = error.message;
-				  // ...
-	   }).then(function(obj) { 
-			var out = {};
-			console.log("New user created: " + JSON.stringify(obj));
-			console.dir(obj);
-			out[obj.uid + '/email'] = $$("email").value;
-			out[obj.uid + '/name'] = $$("name").value;
-			out[obj.uid + '/profile_picture'] = "https://crblackjack.com/img/anonymous.gif";
-			firebase.database().ref("users").update(out);
-		}, function(err) {
-		
-		});
-	}
-	function login(who) {
-		var provider;
-		switch(who) {
-			case "facebook":
-				provider = new firebase.auth.FacebookAuthProvider();
-				break;
-			case "google":
-				provider = new firebase.auth.GoogleAuthProvider();
-				break;
-			case "twitter":
-				provider = new firebase.auth.TwitterAuthProvider();
-				break;
-			case "github":
-				provider = new firebase.auth.GitHubAuthProvider();
-				break;
-		}
-		db = firebase.database();
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-functions.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-database.js"></script>
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
 
-		firebase.auth().signInWithPopup(provider).then(function(result) {
-		  var token = result.credential.accessToken;
-		  var user = result.user;
-		  console.dir(user);
-		  writeUserData(user.uid, user.displayName, user.email, user.photoURL);
-		}).catch(function(error) {
-		  var errorCode = error.code;
-		  var errorMessage = error.message;
-		  var email = error.email;
-		  var credential = error.credential;
-		});	
-	}
-	function writeUserData(userId, name, email, imageUrl) {
-		firebase.database().ref('users/' + userId).set({
-			name: name,
-			email: email,
-			profile_picture : imageUrl
-		});
-		setCookie("uid", userId);
-	}
-	var loginHeight = 0;
-	function toggleOptions() {
-		if (loginHeight===0) {
-			$$("providers").style.height = "20vh";
-			setTimeout(function() { $$("providers").style.overflow = "visible"; }, 300);
-			loginHeight = 20;
-		} else {
-			$$("providers").style.height = "0vh";
-			$$("providers").style.overflow = "hidden";
-			loginHeight = 0;
-		}
-	}
-	function $$(str) { return document.getElementById(str); }
-	function init() {
-		$$("loginOptions").addEventListener("mouseleave", function(e) { 
-			$$("providers").style.overflow = "hidden";
-		$$("providers").style.height = "0px"; loginHeight = 0; });
-	}
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDxGzBuvFA2qrOZZPBdTmIjsXAgWpcrmcs",
+            authDomain: "crblackjack-9e220.firebaseapp.com",
+            databaseURL: "https://crblackjack-9e220.firebaseio.com",
+            projectId: "crblackjack-9e220",
+            storageBucket: "crblackjack-9e220.appspot.com",
+            messagingSenderId: "32143422101",
+            appId: "1:32143422101:web:020f6e950c5b009e68619c"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <script>
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                console.dir(user);
+                // User is signed in.
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var photoURL = user.photoURL;
+                var isAnonymous = user.isAnonymous;
+                var uid = user.uid;
+                var providerData = user.providerData;
+                $$("loginLink").style.display = "none";
+                $$("logoutLink").style.display = "inline-block";
+                $$("signupLink").style.display = "none";
 
-	function collectBonus() {
-		var endpoint = "https://us-central1-crblackjack-9e220.cloudfunctions.net/collectBonus?callback=gotBonus&uid="+firebase.auth().currentUser.uid;
-		var el = document.createElement('script');
-		el.src = endpoint;
-		document.body.appendChild(el);
-	}
+            } else {
+                $$("loginLink").style.display = "inline-block";
+                $$("logoutLink").style.display = "none";
+                $$("signupLink").style.display = "inline-block";
+                // User is signed out.
+                // ...
+            }
+        });
 
-	function gotBonus(obj) {
-		var el = $$("bonusNotification");
-		if (!el) {
-			var el = document.createElement('div');
-			el.id = "bonusNotification";
-			el.className = "bonusNotification";
-			document.body.appendChild(el);
-		} 
-		var out = "";
-		if (obj && (obj.hourlyBonus || obj.dailyBonus)) {
-			out += "<h1>Bonus Collected</h1>";
+        function logout() {
+            firebase.auth().signOut().then(function() {
+                // Sign-out successful.
+            }, function(error) {
+                // An error happened.
+            });
+        }
 
-			out += "<hr>";
-			if (obj.dailyBonus) out += "<div class='bonus'>Daily Bonus: $" + obj.dailyBonus + "</div>";
-			if (obj.hourlyBonus) out += "<div class='bonus'>Hourly Bonus: $" + obj.hourlyBonus + "</div>";
-		} else {
-			
-			out += "<h1>No Bonus Available</h1><hr><div class='bonus'>Next Hourly Bonus: " + Math.floor(((Date.now() - obj.lastHourly) / 1000) / 60) + " minutes<br>Next Daily Bonus: " + (Math.floor(((((Date.now() - obj.lastDaily) / 1000) / 60)/60) * 10) / 10) + " hours</div>";
-		}
-		out += "<hr><button onclick='closeBonus()'>Close</button>";
-		el.innerHTML = out;
-		setTimeout(function() { el.style.transform = "scale(1)"; }, 10);
-	}
-	function closeBonus() {
-		$$('bonusNotification').style.transform = "scale(0)";
-	}
-	init();
-</script>
+        function signup() {
+            $$("signup").style.display = "inline-block";
+            $$("signup").style.transform = "scale(1)";
+            $$("name").focus();
+        }
+
+        function createAccount() {
+            var email = $$("email").value;
+            var pw = $$("passwd").value;
+            $$("signup").style.transform = "scale(0)";
+            firebase.auth().createUserWithEmailAndPassword(email, pw).catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // ...
+            }).then(function(obj) {
+                var out = {};
+                console.log("New user created: " + JSON.stringify(obj));
+                console.dir(obj);
+                out[obj.uid + '/email'] = $$("email").value;
+                out[obj.uid + '/name'] = $$("name").value;
+                out[obj.uid + '/profile_picture'] = "https://crblackjack.com/img/anonymous.gif";
+                firebase.database().ref("users").update(out);
+            }, function(err) {
+
+            });
+        }
+
+        function login(who) {
+            var provider;
+            switch (who) {
+                case "facebook":
+                    provider = new firebase.auth.FacebookAuthProvider();
+                    break;
+                case "google":
+                    provider = new firebase.auth.GoogleAuthProvider();
+                    break;
+                case "twitter":
+                    provider = new firebase.auth.TwitterAuthProvider();
+                    break;
+                case "github":
+                    provider = new firebase.auth.GitHubAuthProvider();
+                    break;
+            }
+            db = firebase.database();
+
+            if (who !== "anonymous") {
+                firebase.auth().signInWithPopup(provider).then(function(result) {
+                    var token = result.credential.accessToken;
+                    var user = result.user;
+                    console.dir(user);
+                    writeUserData(user.uid, user.displayName, user.email, user.photoURL);
+                }).catch(function(error) {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    var email = error.email;
+                    var credential = error.credential;
+                });
+
+            } else {
+                firebase.auth().signInAnonymously().catch(function(error) {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                });
+            }
+        }
+
+        function writeUserData(userId, name, email, imageUrl) {
+            firebase.database().ref('users/' + userId).set({
+                name: name,
+                email: email,
+                profile_picture: imageUrl
+            });
+            setCookie("uid", userId);
+        }
+        var loginHeight = 0;
+
+        function toggleOptions() {
+            if (loginHeight === 0) {
+                $$("providers").style.height = "20vh";
+                setTimeout(function() {
+                    $$("providers").style.overflow = "visible";
+                }, 300);
+                loginHeight = 20;
+            } else {
+                $$("providers").style.height = "0vh";
+                $$("providers").style.overflow = "hidden";
+                loginHeight = 0;
+            }
+        }
+
+        function $$(str) {
+            return document.getElementById(str);
+        }
+
+        function init() {
+            $$("loginOptions").addEventListener("mouseleave", function(e) {
+                $$("providers").style.overflow = "hidden";
+                $$("providers").style.height = "0px";
+                loginHeight = 0;
+            });
+            let ui = new firebaseui.auth.AuthUI(firebase.auth());
+            let uiConfig = {
+                callbacks: {
+                    signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+                        // User successfully signed in.
+                        // Return type determines whether we continue the redirect automatically
+                        // or whether we leave that to developer to handle.
+                        return true;
+                    },
+                    uiShown: function() {
+                        // The widget is rendered.
+                        // Hide the loader.
+                        document.getElementById('loader').style.display = 'none';
+                    }
+                },
+                // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+                signInFlow: 'popup',
+                signInSuccessUrl: 'index.html',
+                signInOptions: [
+                    // Leave the lines as is for the providers you want to offer your users.
+                    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                    firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+                    firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+                    firebase.auth.EmailAuthProvider.PROVIDER_ID
+                ],
+                // Terms of service url.
+                tosUrl: 'tos.html',
+                // Privacy policy url.
+                privacyPolicyUrl: 'privacy.html'
+            };
+            ui.start('#firebaseui-auth-container', uiConfig);
+
+        }
+
+        function collectBonus() {
+            var endpoint = "https://us-central1-crblackjack-9e220.cloudfunctions.net/collectBonus?callback=gotBonus&uid=" + firebase.auth().currentUser.uid;
+            var el = document.createElement('script');
+            el.src = endpoint;
+            document.body.appendChild(el);
+        }
+
+        function gotBonus(obj) {
+            var el = $$("bonusNotification");
+            if (!el) {
+                var el = document.createElement('div');
+                el.id = "bonusNotification";
+                el.className = "bonusNotification";
+                document.body.appendChild(el);
+            }
+            var out = "";
+            if (obj && (obj.hourlyBonus || obj.dailyBonus)) {
+                out += "<h1>Bonus Collected</h1>";
+
+                out += "<hr>";
+                if (obj.dailyBonus) out += "<div class='bonus'>Daily Bonus: $" + obj.dailyBonus + "</div>";
+                if (obj.hourlyBonus) out += "<div class='bonus'>Hourly Bonus: $" + obj.hourlyBonus + "</div>";
+            } else {
+
+                out += "<h1>No Bonus Available</h1><hr><div class='bonus'>Next Hourly Bonus: " + Math.floor(((Date.now() - obj.lastHourly) / 1000) / 60) + " minutes<br>Next Daily Bonus: " + (Math.floor(((((Date.now() - obj.lastDaily) / 1000) / 60) / 60) * 10) / 10) + " hours</div>";
+            }
+            out += "<hr><button onclick='closeBonus()'>Close</button>";
+            el.innerHTML = out;
+            setTimeout(function() {
+                el.style.transform = "scale(1)";
+            }, 10);
+        }
+
+        function closeBonus() {
+            $$('bonusNotification').style.transform = "scale(0)";
+        }
+        init();
+    </script>
 </body>
+
 </html>

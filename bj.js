@@ -1158,10 +1158,16 @@ var bj = {
 			bj.players[key].cards = [];
 
 			$$(key).classList.add('active');
-			$("#" + key + " .info h1").innerHTML = obj.info.name;
+			if (obj && obj.info && obj.info.name) {
+                    $("#" + key + " .info h1").innerHTML = obj.info.name;
+            }
+			if (obj && obj.info && obj.info.profile_picture) {
+			    $("#" + key + " .profilePic").src = obj.info.profile_picture;
+            } else {
+			    $("#" + key + " .profilePic").src = "img/anonymous.gif";
+            }
 			$("#" + key + " .info .bank").innerHTML = "";
 			$("#" + key + " .click").innerHTML = "";
-			$("#" + key + " .profilePic").src = obj.info.profile_picture;
 			
 			if (obj.bet) {
 				bj.bet(key, obj.bet);
