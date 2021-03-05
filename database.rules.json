@@ -1,6 +1,68 @@
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null"
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "bank": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "tables": {
+      "$tbl": {
+        "players": {
+          "$uid": {
+            ".read": "$uid === auth.uid",
+            ".write": "$uid === auth.uid"
+          }
+        }
+      }
+    },
+    "games": {
+      "holdem": {
+        "$uid": {
+          ".read": "$uid === auth.uid",
+          ".write": "$uid === auth.uid"
+        }
+      },
+      "bonus": {
+        "$uid": {
+          ".read": "$uid === auth.uid",
+          ".write": "$uid === auth.uid"
+        }
+      },
+      "doublebonus": {
+        "$uid": {
+          ".read": "$uid === auth.uid",
+          ".write": "$uid === auth.uid"
+        }
+      },
+      "dueces": {
+        "$uid": {
+          ".read": "$uid === auth.uid",
+          ".write": "$uid === auth.uid"
+        }
+      },
+      "poker": {
+        "$uid": {
+          ".read": "$uid === auth.uid",
+          ".write": "$uid === auth.uid"
+        }
+      },
+      "poker5": {
+        "$uid": {
+          ".read": "$uid === auth.uid",
+          ".write": "$uid === auth.uid"
+        }
+      }
+    },
+    "payouts": {
+      ".write": false,
+      ".read": true
+    }
   }
 }

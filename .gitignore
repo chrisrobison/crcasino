@@ -1,3 +1,4 @@
+.vscode
 # Logs
 logs
 *.log
@@ -6,6 +7,7 @@ yarn-debug.log*
 yarn-error.log*
 firebase-debug.log*
 firebase-debug.*.log*
+*/package-lock.json
 
 # Firebase cache
 .firebase/
