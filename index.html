@@ -304,20 +304,7 @@
     <div id="firebaseui-auth-container"></div>
     <div id="loader">Loading...</div>
 
-    <script>
-        // Your web app's Firebase configuration
-        var firebaseConfig = {
-            apiKey: "AIzaSyDxGzBuvFA2qrOZZPBdTmIjsXAgWpcrmcs",
-            authDomain: "crblackjack-9e220.firebaseapp.com",
-            databaseURL: "https://crblackjack-9e220.firebaseio.com",
-            projectId: "crblackjack-9e220",
-            storageBucket: "crblackjack-9e220.appspot.com",
-            messagingSenderId: "32143422101",
-            appId: "1:32143422101:web:020f6e950c5b009e68619c"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-    </script>
+    <script src="fb-config.js"></script>
     <script>
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
