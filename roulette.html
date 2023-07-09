@@ -3,22 +3,50 @@
 <head>
    <title></title>
    <style>
-		body { background-color:#050; background-image:url(img/felt.png); text-align:center; }
+        * { box-sizing: border-box; }
+		body { font-family: "Lexend","Helvetica Neue","Helvetica",sans-serif; background-color:#050; background-image:url(img/felt.png); text-align:center; }
 		#table { display:inline-block; width:80vw; color:#fff; font-size:2vw; }
 		#table table#bets { width:100%; border-collapse:collapse; }
 		#table #bets td.noborder { border:none; }
-		#table #bets td { padding: 1vh .5vw;border: .25vw solid #fff;  height:7vh; width:3vw; }
-		.rot90 { display:inline-block; transform:rotate(-90deg); }
-		.red div, .black div, .green div { display:inline-block; text-align:center; border-radius:5vw; padding-top:1vh; width:3.5vw; height:5vh; border:1px solid #fff;  }
-		.red div { background-color:#c00; color:#fff; }
-		.black div { background-color:#000; color:#fff; }
-		.green div { background-color:#0c0; color:#fff; }
-		#bets table { width:100%; height:100%; }
+		#table #bets td { padding: 1vh .5vw;border: .25vw solid #fff;  height:7vh; width:6vh; }
+        #table #bets td.row { height:12vh;}
+		.rot90 { transform:rotate(-90deg); }
+		.red:before, .black:before , .green:before { display:inline-block; text-align:center; border-radius:5vw; padding-top:1vh; width:5vh; height:5vh; border:1px solid #fff;  }
+		.red:before { background-color:#c00; color:#fff; }
+		.black:before { background-color:#000; color:#fff; }
+		.green:before { background-color:#0c0; color:#fff; }
+		#bets { width:100%;  opacity: .8; }
+        #bets table { height: 100%; width: 100%; border-right: 0px; }
+        #bets table td { border-right: 0px; }
 		#table #bets td.zeros { padding:0; border:none; }
 		#table #bets td.zeros table { border-collapse:collapse; }
+        .green { 	
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="174px" height="174px"><path fill-rule="evenodd" fill="rgb(0, 200, 0)" d="M87.000,0.000 C135.049,0.000 174.000,38.951 174.000,87.000 C174.000,135.049 135.049,174.000 87.000,174.000 C38.951,174.000 0.000,135.049 0.000,87.000 C0.000,38.951 38.951,0.000 87.000,0.000 Z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .red { 	
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="174px" height="174px"><path fill-rule="evenodd" fill="rgb(201, 0, 0)" d="M87.000,0.000 C135.049,0.000 174.000,38.951 174.000,87.000 C174.000,135.049 135.049,174.000 87.000,174.000 C38.951,174.000 0.000,135.049 0.000,87.000 C0.000,38.951 38.951,0.000 87.000,0.000 Z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .black {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="174px" height="174px"><path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M87.000,0.000 C135.049,0.000 174.000,38.951 174.000,87.000 C174.000,135.049 135.049,174.000 87.000,174.000 C38.951,174.000 0.000,135.049 0.000,87.000 C0.000,38.951 38.951,0.000 87.000,0.000 Z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
 		#red { background-color:#c00; }
 		#black { background-color:#000; }
-		.row { font-size:.8em; }
+		.row { font-size:.8em; width: 12vh; }
+        #debug {
+            background-color:#fff;
+            padding: .25rem;
+            height: 2rem;
+            border: 1px inset;
+        }
    </style>
 </head>
 <body>
@@ -27,61 +55,61 @@
 		<table id='bets'>
 			<tr>
 				<td class='noborder'></td>
-				<td id='group1-12' colspan='4'><div>1 - 12</div></td>
-				<td id='group13-24' colspan='4'><div>13 - 24</div></td>
-				<td id='group25-36' colspan='4'><div>25 - 36</div></td>
+				<td id='group1-12' colspan='4'>1 - 12</td>
+				<td id='group13-24' colspan='4'>13 - 24</td>
+				<td id='group25-36' colspan='4'>25 - 36</td>
 				<td class='noborder'></td>
 			</tr>
 			<tr>
 				<td rowspan='3' class='zeros'>
 					<table>
-						<tr><td id='num00' class='green'><div>00</div></td></tr>
-						<tr><td id='num0' class='green'><div>0</div></td></tr>
+						<tr><td id='num00' class='green rot90'>00</td></tr>
+						<tr><td id='num0' class='green rot90'>0</td></tr>
 					</table>
 				</td>
-				<td id='num3' class='red'><div class='rot90'>3</div></td>
-				<td id='num6' class='black'><div class='rot90'>6</div></td>
-				<td id='num9' class='red'><div class='rot90'>9</div></td>
-				<td id='num12' class='red'><div class='rot90'>12</div></td>
-				<td id='num15' class='black'><div class='rot90'>15</div></td>
-				<td id='num18' class='red'><div class='rot90'>18</div></td>
-				<td id='num21' class='red'><div class='rot90'>21</div></td>
-				<td id='num24' class='black'><div class='rot90'>24</div></td>
-				<td id='num27' class='red'><div class='rot90'>27</div></td>
-				<td id='num30' class='red'><div class='rot90'>30</div></td>
-				<td id='num33' class='black'><div class='rot90'>33</div></td>
-				<td id='num36' class='red'><div class='rot90'>36</div></td>
-				<td id='row0' class='row'><div class='rot90'>2 to 1</div></td>
+				<td id='num3' class='red rot90'>3</td>
+				<td id='num6' class='black rot90'>6</td>
+				<td id='num9' class='red rot90'>9</td>
+				<td id='num12' class='red rot90'>12</td>
+				<td id='num15' class='black rot90'>15</td>
+				<td id='num18' class='red rot90'>18</td>
+				<td id='num21' class='red rot90'>21</td>
+				<td id='num24' class='black rot90'>24</td>
+				<td id='num27' class='red rot90'>27</td>
+				<td id='num30' class='red rot90'>30</td>
+				<td id='num33' class='black rot90'>33</td>
+				<td id='num36' class='red rot90'>36</td>
+				<td id='row0' class='row rot90'>2 to 1</td>
 			</tr>
 			<tr>
-				<td id='num2' class='black'><div class='rot90'>2</div></td>
-				<td id='num5' class='red'><div class='rot90'>5</div></td>
-				<td id='num8' class='black'><div class='rot90'>8</div></td>
-				<td id='num11' class='black'><div class='rot90'>11</div></td>
-				<td id='num14' class='red'><div class='rot90'>14</div></td>
-				<td id='num17' class='black'><div class='rot90'>17</div></td>
-				<td id='num20' class='black'><div class='rot90'>20</div></td>
-				<td id='num23' class='red'><div class='rot90'>23</div></td>
-				<td id='num26' class='black'><div class='rot90'>26</div></td>
-				<td id='num29' class='black'><div class='rot90'>29</div></td>
-				<td id='num32' class='red'><div class='rot90'>32</div></td>
-				<td id='num35' class='black'><div class='rot90'>35</div></td>
-				<td id='row1' class='row'><div class='rot90'>2 to 1</div></td>
+				<td id='num2' class='black rot90'>2</td>
+				<td id='num5' class='red rot90'>5</td>
+				<td id='num8' class='black rot90'>8</td>
+				<td id='num11' class='black rot90'>11</td>
+				<td id='num14' class='red rot90'>14</td>
+				<td id='num17' class='black rot90'>17</td>
+				<td id='num20' class='black rot90'>20</td>
+				<td id='num23' class='red rot90'>23</td>
+				<td id='num26' class='black rot90'>26</td>
+				<td id='num29' class='black rot90'>29</td>
+				<td id='num32' class='red rot90'>32</td>
+				<td id='num35' class='black rot90'>35</td>
+				<td id='row1' class='row rot90'>2 to 1</td>
 			</tr>
 			<tr>
-				<td id='num1' class='red'><div class='rot90'>1</div></td>
-				<td id='num4' class='black'><div class='rot90'>4</div></td>
-				<td id='num7' class='red'><div class='rot90'>7</div></td>
-				<td id='num10' class='red'><div class='rot90'>10</div></td>
-				<td id='num13' class='black'><div class='rot90'>13</div></td>
-				<td id='num16' class='red'><div class='rot90'>16</div></td>
-				<td id='num19' class='red'><div class='rot90'>19</div></td>
-				<td id='num22' class='black'><div class='rot90'>22</div></td>
-				<td id='num25' class='red'><div class='rot90'>25</div></td>
-				<td id='num28' class='red'><div class='rot90'>28</div></td>
-				<td id='num31' class='black'><div class='rot90'>31</div></td>
-				<td id='num34' class='red'><div class='rot90'>34</div></td>
-				<td id='row2' class='row'><div class='rot90'>2 to 1</div></td>
+				<td id='num1' class='red rot90'>1</td>
+				<td id='num4' class='black rot90'>4</td>
+				<td id='num7' class='red rot90'>7</td>
+				<td id='num10' class='red rot90'>10</td>
+				<td id='num13' class='black rot90'>13</td>
+				<td id='num16' class='red rot90'>16</td>
+				<td id='num19' class='red rot90'>19</td>
+				<td id='num22' class='black rot90'>22</td>
+				<td id='num25' class='red rot90'>25</td>
+				<td id='num28' class='red rot90'>28</td>
+				<td id='num31' class='black rot90'>31</td>
+				<td id='num34' class='red rot90'>34</td>
+				<td id='row2' class='row rot90'>2 to 1</td>
 			</tr>
 			<tr>
 				<td class='noborder'></td>
@@ -95,9 +123,29 @@
 			</tr>
 		</table>
 	</div>
+    <div id="debug"></div>
 </div>
 <script>
+(function() {
+    const $ = (str) => document.querySelector(str);
+    const $$ = (str) => document.querySelectorAll(str);
 
+    let app = {
+        init: function() {
+            $("#bets").onmouseover = app.mouse;
+        },
+        state: {
+        },
+        mouse: function(evt) {
+            console.dir(evt);
+            if (evt.target) {
+                $("#debug").innerHTML = evt.target;
+            }
+        }
+    };
+    window.app = app;
+    app.init();
+})();
 </script>
 </body>
 </html>
