@@ -1049,7 +1049,8 @@ div#gameselect.open { height:36vh; }
 			  writeUserData(user.uid, user.displayName, user.email, user.photoURL);
 			  db.ref("bank/" + firebase.auth().currentUser.uid).on("value", function(snapshot) {
 					var bank = snapshot.val();
-					$$("credit").innerHTML = bank.balance;
+					$$("credit").innerHTML = bank.balance.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+                        return '&#'+i.charCodeAt(0)+';'; });
 				});
 			}).catch(function(error) {
 			  var errorCode = error.code;

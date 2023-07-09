@@ -1085,7 +1085,9 @@ var bj = {
 				  console.log("[gotSeat] received action: "+JSON.stringify(actions));
 				  console.dir(actions);
 				  if (actions && actions.action && actions.payload) {
-				     bj[actions.action](actions.payload);
+				     if (bj[actions.action] && typeof(bj[actions.action]) == "function") {
+                            bj[actions.action](actions.payload);
+                     }
 				     firebase.database().ref("tables/"+obj.table+"/actions/" + firebase.auth().currentUser.uid + "/" + childKey).remove()
 				  }
 			 });
